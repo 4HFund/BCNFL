@@ -6,10 +6,7 @@
 
   <title>Brooke County NFL Flag Football | 2026 Summer Schedule</title>
 
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- PapaParse for CSV Import -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
   <script>
@@ -17,9 +14,15 @@
       theme: {
         extend: {
           colors: {
-            navy: "#0b1d3a",
+            navy: "#071832",
+            navy2: "#0b1d3a",
             redAccent: "#d32f2f",
-            lightBlue: "#e0f2fe"
+            gold: "#fbbf24",
+            lightBlue: "#e0f2fe",
+            field: "#0f3d2e"
+          },
+          boxShadow: {
+            broadcast: "0 18px 45px rgba(2, 8, 23, 0.18)"
           }
         }
       }
@@ -29,6 +32,9 @@
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(14, 165, 233, 0.16), transparent 32rem),
+        linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
     }
 
     .hidden {
@@ -36,12 +42,12 @@
     }
 
     .fade-in {
-      animation: fadeIn 0.3s ease-in-out;
+      animation: fadeIn 0.25s ease-in-out;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     input,
@@ -51,60 +57,82 @@
       padding: 0.75rem;
       margin-top: 0.25rem;
       border: 1px solid #cbd5e1;
-      border-radius: 0.375rem;
+      border-radius: 0.5rem;
       box-sizing: border-box;
       background: #fff;
+      font-size: 0.95rem;
     }
 
     input:focus,
     select:focus,
     textarea:focus {
-      outline: 2px solid #0b1d3a;
-      border-color: transparent;
+      outline: 3px solid rgba(11, 29, 58, 0.18);
+      border-color: #0b1d3a;
     }
 
     .btn {
       display: inline-block;
-      background-color: #0b1d3a;
+      background: linear-gradient(135deg, #071832, #0b1d3a);
       color: white;
-      font-weight: 600;
+      font-weight: 800;
       padding: 0.75rem 1.5rem;
-      border-radius: 0.375rem;
+      border-radius: 0.5rem;
       cursor: pointer;
       text-align: center;
       border: none;
+      letter-spacing: 0.01em;
+      transition: 0.2s ease;
     }
 
     .btn:hover {
-      background-color: #1e3a8a;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.2);
     }
 
     .btn-red {
-      background-color: #d32f2f;
-    }
-
-    .btn-red:hover {
-      background-color: #b91c1c;
+      background: linear-gradient(135deg, #d32f2f, #991b1b);
     }
 
     .btn-outline {
-      background-color: transparent;
+      background: white;
       color: #0b1d3a;
       border: 2px solid #0b1d3a;
     }
 
     .btn-outline:hover {
-      background-color: #0b1d3a;
+      background: #0b1d3a;
       color: white;
     }
 
-    .badge {
-      padding: 0.25rem 0.75rem;
+    .quick-btn {
+      border: 2px solid #0b1d3a;
+      color: #0b1d3a;
+      background: white;
+      padding: 0.7rem 1.1rem;
       border-radius: 9999px;
-      font-size: 0.75rem;
-      font-weight: 700;
+      font-weight: 900;
+      cursor: pointer;
+      transition: 0.2s ease;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+    }
+
+    .quick-btn:hover,
+    .quick-btn.active {
+      background: linear-gradient(135deg, #071832, #0b1d3a);
+      color: white;
+      border-color: #071832;
+      transform: translateY(-1px);
+    }
+
+    .badge {
+      padding: 0.3rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 900;
       text-transform: uppercase;
       display: inline-block;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
     }
 
     .badge-Updated {
@@ -123,64 +151,208 @@
     }
 
     .badge-Final {
-      background-color: #1e293b;
+      background-color: #111827;
       color: white;
     }
 
     .badge-Scheduled {
-      background-color: #f1f5f9;
-      color: #475569;
+      background-color: #f8fafc;
+      color: #334155;
       border: 1px solid #cbd5e1;
+    }
+
+    .game-card {
+      background: white;
+      border: 1px solid #dbe3ee;
+      border-radius: 1rem;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+      overflow: hidden;
+      position: relative;
+      transition: 0.2s ease;
+    }
+
+    .game-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 38px rgba(15, 23, 42, 0.12);
+    }
+
+    .game-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 5px;
+      width: 100%;
+      background: linear-gradient(90deg, #d32f2f, #fbbf24, #0ea5e9);
     }
 
     .card-Canceled {
       background-color: #fef2f2;
-      opacity: 0.85;
+      opacity: 0.9;
     }
 
     .card-Postponed {
       background-color: #f8fafc;
-      opacity: 0.85;
+      opacity: 0.9;
+    }
+
+    .score-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: center;
+      padding: 0.75rem 0.85rem;
+      border-radius: 0.65rem;
+      background: linear-gradient(180deg, #f8fafc, #eef2f7);
+      font-weight: 900;
+      color: #0b1d3a;
+      border: 1px solid #e2e8f0;
+    }
+
+    .score-number {
+      font-size: 1.6rem;
+      font-weight: 1000;
+      min-width: 2.5rem;
+      text-align: right;
+      line-height: 1;
+    }
+
+    .broadcast-bar {
+      background: linear-gradient(135deg, #071832, #0b1d3a 65%, #d32f2f);
+      color: white;
+      border-radius: 1rem;
+      box-shadow: 0 18px 45px rgba(2, 8, 23, 0.18);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .broadcast-bar::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 28px 28px;
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .league-shield {
+      width: 54px;
+      height: 54px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #ffffff, #dbeafe);
+      color: #0b1d3a;
+      display: grid;
+      place-items: center;
+      font-weight: 1000;
+      box-shadow: inset 0 0 0 3px rgba(11, 29, 58, 0.12);
+    }
+
+    .section-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-transform: uppercase;
+      font-weight: 1000;
+      letter-spacing: 0.08em;
+      font-size: 0.75rem;
+      color: #d32f2f;
+    }
+
+    .section-kicker::before {
+      content: "";
+      width: 2rem;
+      height: 0.25rem;
+      border-radius: 999px;
+      background: #d32f2f;
+      display: inline-block;
+    }
+
+    .stat-pill {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+      padding: 0.45rem 0.8rem;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #e0f2fe;
+    }
+
+    .table-header {
+      background: linear-gradient(135deg, #071832, #0b1d3a);
+      color: white;
     }
   </style>
 </head>
 
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+<body class="text-slate-800 min-h-screen flex flex-col">
 
   <header class="bg-navy text-white shadow-md sticky top-0 z-50">
-    <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-      <div class="text-center sm:text-left">
-        <h1 class="text-2xl font-bold tracking-tight">Brooke County NFL Flag Football</h1>
-        <p class="text-sky-200 text-sm font-medium">2026 Summer Season Schedule</p>
+    <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-3 text-center sm:text-left">
+        <div class="league-shield">BC</div>
+        <div>
+          <h1 class="text-2xl font-black tracking-tight">Brooke County NFL Flag Football</h1>
+          <p class="text-sky-200 text-sm font-bold tracking-wide uppercase">2026 Summer Season Schedule</p>
+        </div>
       </div>
 
-      <nav class="flex gap-4">
-        <a href="#public" class="text-white hover:text-sky-200 font-semibold transition">Schedule</a>
-        <a href="#admin" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-md font-semibold transition">Admin</a>
+      <nav class="flex gap-3">
+        <a href="#public" class="text-white hover:text-sky-200 font-bold transition">Schedule</a>
+        <a href="#admin" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-md font-bold transition">Admin</a>
       </nav>
     </div>
   </header>
 
-  <main class="flex-grow max-w-5xl mx-auto w-full px-4 py-8">
+  <main class="flex-grow max-w-6xl mx-auto w-full px-4 py-8">
 
-    <!-- PUBLIC VIEW -->
     <section id="public-view" class="fade-in">
 
-      <div class="mb-8 text-center sm:text-left">
-        <h2 class="text-3xl font-bold text-navy mb-2">2026 Summer Season Schedule Hub</h2>
-        <p class="text-slate-600 max-w-3xl">
-          Welcome to the official 2026 Summer Season Schedule Hub for Brooke County NFL Flag Football.
-          Use the filters below to quickly find games by date, division, team, field, or status.
-        </p>
+      <div class="broadcast-bar p-6 sm:p-8 mb-8">
+        <div class="relative z-10 flex flex-col lg:flex-row justify-between gap-6">
+          <div>
+            <div class="section-kicker text-sky-200 mb-3">Official League Hub</div>
+            <h2 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+              2026 Summer Schedule
+            </h2>
+            <p class="text-slate-200 max-w-3xl mt-3 text-base sm:text-lg">
+              Game times, field assignments, scores, standings, weather updates, and schedule changes for Brooke County NFL Flag Football.
+            </p>
+          </div>
+
+          <div class="flex flex-wrap lg:flex-col gap-2 lg:items-end justify-start">
+            <div class="stat-pill">Peewee</div>
+            <div class="stat-pill">Junior</div>
+            <div class="stat-pill">Senior</div>
+            <div class="stat-pill">Field 1 + Field 2</div>
+          </div>
+        </div>
       </div>
 
       <div id="connectionError" class="hidden bg-red-100 border-l-4 border-redAccent text-red-800 p-4 rounded mb-6 text-sm"></div>
 
       <div id="alertsContainer" class="space-y-4 mb-8"></div>
 
-      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-8">
-        <h3 class="font-semibold text-slate-700 mb-3 flex items-center gap-2">
-          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 mb-6">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <div class="section-kicker mb-1">Game Center</div>
+            <h3 class="font-black text-2xl text-navy">Quick View</h3>
+          </div>
+
+          <div class="flex flex-wrap gap-3">
+            <button id="btnViewNext" class="quick-btn active">Next Games</button>
+            <button id="btnViewFull" class="quick-btn">Full Schedule</button>
+            <button id="btnViewStandings" class="quick-btn">Standings</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="filtersSection" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 mb-8">
+        <h3 class="font-black text-navy mb-3 flex items-center gap-2">
+          <svg class="w-5 h-5 text-redAccent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z">
             </path>
@@ -223,18 +395,19 @@
         <div class="text-center text-slate-500 py-12">Loading schedule from database...</div>
       </div>
 
-      <div class="mt-12 bg-lightBlue p-6 rounded-xl border border-sky-200">
-        <h3 class="text-xl font-bold text-navy mb-4">Field Information & Directions</h3>
+      <div class="mt-12 bg-lightBlue p-6 rounded-2xl border border-sky-200 shadow-sm">
+        <div class="section-kicker mb-2">Location</div>
+        <h3 class="text-2xl font-black text-navy mb-4">Field Information & Directions</h3>
 
         <div class="grid md:grid-cols-2 gap-6 text-slate-700">
-          <div>
+          <div class="bg-white/70 p-4 rounded-xl border border-sky-100">
             <ul class="space-y-2">
               <li><strong>Field 1:</strong> Peewee / Front Field</li>
               <li><strong>Field 2:</strong> Junior/Senior / Back Field</li>
             </ul>
           </div>
 
-          <div class="bg-white/60 p-4 rounded-lg text-sm">
+          <div class="bg-white/70 p-4 rounded-xl text-sm border border-sky-100">
             <p>
               <strong>Location Note:</strong>
               Please use the official <em>Wellsburg Riverfront Fields / 4th Ward Park area</em> for directions.
@@ -249,22 +422,25 @@
       </div>
     </section>
 
-    <!-- ADMIN VIEW -->
     <section id="admin-view" class="hidden fade-in">
 
-      <div id="loginSection" class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-md border border-slate-200 mt-12">
-        <h2 class="text-2xl font-bold text-navy mb-6 text-center">Admin Login</h2>
+      <div id="loginSection" class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-broadcast border border-slate-200 mt-12">
+        <div class="text-center mb-6">
+          <div class="league-shield mx-auto mb-3">BC</div>
+          <h2 class="text-2xl font-black text-navy">Admin Login</h2>
+          <p class="text-sm text-slate-500 mt-1">Manage games, scores, alerts, and standings.</p>
+        </div>
 
         <div id="loginError" class="hidden bg-red-100 text-red-700 p-3 rounded mb-4 text-sm"></div>
 
         <div class="space-y-4">
           <div>
-            <label class="block text-sm font-medium text-slate-700">Email</label>
+            <label class="block text-sm font-bold text-slate-700">Email</label>
             <input type="email" id="adminEmail" placeholder="admin@example.com" />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-slate-700">Password</label>
+            <label class="block text-sm font-bold text-slate-700">Password</label>
             <input type="password" id="adminPassword" placeholder="••••••••" />
           </div>
 
@@ -273,30 +449,33 @@
       </div>
 
       <div id="dashboardSection" class="hidden">
-        <div class="flex flex-col sm:flex-row justify-between items-center mb-8 border-b border-slate-200 pb-4">
-          <div>
-            <h2 class="text-3xl font-bold text-navy">Admin Dashboard</h2>
-            <p class="text-slate-500 text-sm">Manage schedule and site updates.</p>
-          </div>
+        <div class="broadcast-bar p-6 mb-8">
+          <div class="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <div class="section-kicker text-sky-200 mb-2">Control Room</div>
+              <h2 class="text-3xl font-black">Admin Dashboard</h2>
+              <p class="text-slate-200 text-sm mt-1">Manage schedule, scores, standings, and site updates.</p>
+            </div>
 
-          <button id="btnLogout" class="btn btn-outline mt-4 sm:mt-0">Logout</button>
+            <button id="btnLogout" class="btn btn-outline">Logout</button>
+          </div>
         </div>
 
         <div class="grid lg:grid-cols-3 gap-8">
 
           <div class="lg:col-span-1 space-y-8">
 
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-              <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">Site Alerts</h3>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+              <h3 class="text-lg font-black text-navy mb-4 border-b pb-2">Site Alerts</h3>
 
               <div class="space-y-4">
                 <div>
-                  <label class="block text-sm font-medium text-slate-700">Schedule Alert</label>
+                  <label class="block text-sm font-bold text-slate-700">Schedule Alert</label>
                   <textarea id="editScheduleAlert" rows="3"></textarea>
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-slate-700">Weather/Cancellation Update</label>
+                  <label class="block text-sm font-bold text-slate-700">Weather/Cancellation Update</label>
                   <textarea id="editWeatherUpdate" rows="3"></textarea>
                 </div>
 
@@ -304,26 +483,26 @@
               </div>
             </div>
 
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-              <h3 id="gameFormTitle" class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">Add New Game</h3>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+              <h3 id="gameFormTitle" class="text-lg font-black text-navy mb-4 border-b pb-2">Add New Game</h3>
 
               <input type="hidden" id="gameId" />
 
               <div class="space-y-3">
                 <div class="grid grid-cols-2 gap-3">
                   <div>
-                    <label class="block text-sm font-medium text-slate-700">Date</label>
+                    <label class="block text-sm font-bold text-slate-700">Date</label>
                     <input type="date" id="gameDate" />
                   </div>
 
                   <div>
-                    <label class="block text-sm font-medium text-slate-700">Time</label>
+                    <label class="block text-sm font-bold text-slate-700">Time</label>
                     <input type="text" id="gameTime" placeholder="1:00 PM" />
                   </div>
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-slate-700">Division</label>
+                  <label class="block text-sm font-bold text-slate-700">Division</label>
                   <select id="gameDivision">
                     <option value="Peewee">Peewee</option>
                     <option value="Junior">Junior</option>
@@ -332,7 +511,7 @@
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-slate-700">Field</label>
+                  <label class="block text-sm font-bold text-slate-700">Field</label>
                   <select id="gameField">
                     <option value="Field 1 — Peewee / Front Field">Field 1 — Peewee / Front Field</option>
                     <option value="Field 2 — Junior/Senior / Back Field">Field 2 — Junior/Senior / Back Field</option>
@@ -341,18 +520,30 @@
 
                 <div class="grid grid-cols-2 gap-3">
                   <div>
-                    <label class="block text-sm font-medium text-slate-700">Away Team</label>
+                    <label class="block text-sm font-bold text-slate-700">Away Team</label>
                     <input type="text" id="awayTeam" placeholder="Away" />
                   </div>
 
                   <div>
-                    <label class="block text-sm font-medium text-slate-700">Home Team</label>
+                    <label class="block text-sm font-bold text-slate-700">Home Team</label>
                     <input type="text" id="homeTeam" placeholder="Home" />
                   </div>
                 </div>
 
+                <div class="grid grid-cols-2 gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                  <div>
+                    <label class="block text-sm font-bold text-slate-700">Away Score</label>
+                    <input type="number" id="awayScore" placeholder="0" min="0" />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-bold text-slate-700">Home Score</label>
+                    <input type="number" id="homeScore" placeholder="0" min="0" />
+                  </div>
+                </div>
+
                 <div>
-                  <label class="block text-sm font-medium text-slate-700">Status</label>
+                  <label class="block text-sm font-bold text-slate-700">Status</label>
                   <select id="gameStatus">
                     <option value="Scheduled">Scheduled</option>
                     <option value="Updated">Updated</option>
@@ -363,7 +554,7 @@
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-slate-700">Notes</label>
+                  <label class="block text-sm font-bold text-slate-700">Notes</label>
                   <input type="text" id="gameNotes" placeholder="Optional note" />
                 </div>
 
@@ -374,42 +565,44 @@
               </div>
             </div>
 
-            <div class="bg-indigo-50 p-6 rounded-xl shadow-sm border border-indigo-200">
-              <h3 class="text-lg font-bold text-indigo-900 mb-2 border-b border-indigo-200 pb-2">Bulk Import CSV</h3>
-              <p class="text-xs text-indigo-700 mb-4">
-                CSV columns should be: Date, Day, Time, Field, Division, Away, Home
+            <div class="bg-indigo-50 p-6 rounded-2xl shadow-sm border border-indigo-200">
+              <h3 class="text-lg font-black text-indigo-900 mb-2 border-b border-indigo-200 pb-2">Bulk Import CSV</h3>
+              <p class="text-xs text-indigo-700 mb-4 leading-relaxed">
+                Old CSV: Date, Day, Time, Field, Division, Away, Home<br>
+                New CSV: Date, Day, Time, Field, Division, Away, Home, Away Score, Home Score, Status, Notes
               </p>
 
               <input type="file" id="csvFileInput" accept=".csv" class="mb-3 text-sm" />
               <button id="btnImportCsv" class="btn w-full !bg-indigo-700 hover:!bg-indigo-800">Import Games</button>
-              <div id="importStatus" class="mt-3 text-sm font-semibold text-center"></div>
+              <div id="importStatus" class="mt-3 text-sm font-bold text-center"></div>
             </div>
           </div>
 
           <div class="lg:col-span-2">
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
               <div class="flex justify-between items-center mb-4 border-b pb-2">
-                <h3 class="text-lg font-bold text-slate-800">Manage Games</h3>
-                <button id="btnDeleteAll" class="text-sm text-red-600 hover:text-red-800 font-medium hidden">
+                <h3 class="text-lg font-black text-navy">Manage Games</h3>
+                <button id="btnDeleteAll" class="text-sm text-red-600 hover:text-red-800 font-black hidden">
                   Delete All Games
                 </button>
               </div>
 
               <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm whitespace-nowrap">
-                  <thead class="bg-slate-50 text-slate-600">
+                  <thead class="table-header">
                     <tr>
-                      <th class="p-3">Date/Time</th>
+                      <th class="p-3 rounded-tl-lg">Date/Time</th>
                       <th class="p-3">Teams</th>
+                      <th class="p-3">Score</th>
                       <th class="p-3">Div/Field</th>
                       <th class="p-3">Status</th>
-                      <th class="p-3 text-right">Actions</th>
+                      <th class="p-3 text-right rounded-tr-lg">Actions</th>
                     </tr>
                   </thead>
 
                   <tbody id="adminGameList" class="divide-y divide-slate-100">
                     <tr>
-                      <td colspan="5" class="p-4 text-center text-slate-500">Loading games...</td>
+                      <td colspan="6" class="p-4 text-center text-slate-500">Loading games...</td>
                     </tr>
                   </tbody>
                 </table>
@@ -423,7 +616,7 @@
   </main>
 
   <footer class="bg-navy text-white py-6 mt-auto">
-    <div class="max-w-5xl mx-auto px-4 text-center text-sm text-slate-400">
+    <div class="max-w-6xl mx-auto px-4 text-center text-sm text-slate-400">
       &copy; 2026 Brooke County NFL Flag Football. All rights reserved.
     </div>
   </footer>
@@ -462,6 +655,7 @@
     let auth;
 
     let allGames = [];
+    let publicMode = "next";
     let siteUpdateData = {
       scheduleAlert: "All games originally scheduled for Sunday, May 3, 2026 have been moved to Sunday, May 17, 2026.",
       weatherUpdate: "All games are currently scheduled as planned."
@@ -472,6 +666,10 @@
     const adminView = document.getElementById("admin-view");
     const scheduleContainer = document.getElementById("scheduleContainer");
     const connectionError = document.getElementById("connectionError");
+    const filtersSection = document.getElementById("filtersSection");
+
+    const allowedStatuses = ["Scheduled", "Updated", "Postponed", "Canceled", "Final"];
+    const allowedDivisions = ["Peewee", "Junior", "Senior"];
 
     function showConnectionError(message) {
       connectionError.textContent = message;
@@ -494,7 +692,69 @@
     }
 
     function safeText(value) {
-      return String(value || "").trim();
+      return String(value ?? "").trim();
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function safeStatus(value) {
+      const status = safeText(value || "Scheduled");
+      return allowedStatuses.includes(status) ? status : "Scheduled";
+    }
+
+    function isValidScore(value) {
+      if (value === null || value === undefined || value === "") return false;
+      return !Number.isNaN(Number(value)) && Number(value) >= 0;
+    }
+
+    function scoreNumber(value) {
+      return Number(value);
+    }
+
+    function parseTimeToMinutes(timeText) {
+      const value = safeText(timeText).toUpperCase();
+      const match = value.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/);
+      if (!match) return 9999;
+
+      let hours = Number(match[1]);
+      const minutes = Number(match[2]);
+      const ampm = match[3];
+
+      if (ampm === "PM" && hours !== 12) hours += 12;
+      if (ampm === "AM" && hours === 12) hours = 0;
+
+      return hours * 60 + minutes;
+    }
+
+    function todayIso() {
+      const d = new Date();
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, "0");
+      const dd = String(d.getDate()).padStart(2, "0");
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    function parseCsvDate(value) {
+      const raw = safeText(value);
+
+      if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
+
+      const slashMatch = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+      if (slashMatch) {
+        const month = slashMatch[1].padStart(2, "0");
+        const day = slashMatch[2].padStart(2, "0");
+        const year = slashMatch[3];
+        return `${year}-${month}-${day}`;
+      }
+
+      return raw;
     }
 
     function handleRoute() {
@@ -511,24 +771,42 @@
     window.addEventListener("hashchange", handleRoute);
     handleRoute();
 
+    function setMode(mode) {
+      publicMode = mode;
+
+      document.getElementById("btnViewNext").classList.toggle("active", mode === "next");
+      document.getElementById("btnViewFull").classList.toggle("active", mode === "full");
+      document.getElementById("btnViewStandings").classList.toggle("active", mode === "standings");
+
+      if (filtersSection) {
+        filtersSection.classList.toggle("hidden", mode === "standings");
+      }
+
+      renderPublicGames();
+
+      if (mode === "standings") {
+        scheduleContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
     function renderAlerts() {
       const container = document.getElementById("alertsContainer");
       container.innerHTML = "";
 
       if (safeText(siteUpdateData.scheduleAlert)) {
         container.innerHTML += `
-          <div class="bg-red-50 border-l-4 border-redAccent p-4 rounded-r-md shadow-sm">
-            <h3 class="text-sm font-bold text-red-800">Important Schedule Alert</h3>
-            <p class="mt-2 text-sm text-red-700">${siteUpdateData.scheduleAlert}</p>
+          <div class="bg-red-50 border-l-4 border-redAccent p-4 rounded-xl shadow-sm">
+            <h3 class="text-sm font-black text-red-800 uppercase tracking-wide">Important Schedule Alert</h3>
+            <p class="mt-2 text-sm text-red-700">${escapeHtml(siteUpdateData.scheduleAlert)}</p>
           </div>
         `;
       }
 
       if (safeText(siteUpdateData.weatherUpdate)) {
         container.innerHTML += `
-          <div class="bg-sky-50 border-l-4 border-sky-400 p-4 rounded-r-md shadow-sm">
-            <h3 class="text-sm font-bold text-sky-800">Weather & Update Center</h3>
-            <p class="mt-2 text-sm text-sky-700">${siteUpdateData.weatherUpdate}</p>
+          <div class="bg-sky-50 border-l-4 border-sky-400 p-4 rounded-xl shadow-sm">
+            <h3 class="text-sm font-black text-sky-800 uppercase tracking-wide">Weather & Update Center</h3>
+            <p class="mt-2 text-sm text-sky-700">${escapeHtml(siteUpdateData.weatherUpdate)}</p>
           </div>
         `;
       }
@@ -540,7 +818,7 @@
       const d = new Date(dateValue + "T12:00:00");
 
       if (isNaN(d.getTime())) {
-        return dateValue;
+        return escapeHtml(dateValue);
       }
 
       return d.toLocaleDateString("en-US", {
@@ -561,7 +839,7 @@
 
       uniqueDates.forEach(date => {
         const label = formatDate(date);
-        dateSelect.innerHTML += `<option value="${date}">${label}</option>`;
+        dateSelect.innerHTML += `<option value="${escapeHtml(date)}">${label}</option>`;
       });
 
       dateSelect.value = currentValue;
@@ -579,7 +857,7 @@
         const away = safeText(g.awayTeam).toLowerCase();
         const division = safeText(g.division);
         const field = safeText(g.field);
-        const status = safeText(g.status || "Scheduled");
+        const status = safeStatus(g.status);
         const date = safeText(g.date);
 
         if (sSearch && !home.includes(sSearch) && !away.includes(sSearch) && !field.toLowerCase().includes(sSearch)) return false;
@@ -592,92 +870,131 @@
       });
     }
 
+    function getNextGames(games) {
+      const dates = [...new Set(games.map(g => safeText(g.date)).filter(Boolean))].sort();
+      if (dates.length === 0) return { date: "", games: [], concluded: false };
+
+      const today = todayIso();
+      const upcomingDate = dates.find(date => date >= today);
+
+      if (upcomingDate) {
+        return {
+          date: upcomingDate,
+          games: games.filter(g => safeText(g.date) === upcomingDate),
+          concluded: false
+        };
+      }
+
+      const latestDate = dates[dates.length - 1];
+
+      return {
+        date: latestDate,
+        games: games.filter(g => safeText(g.date) === latestDate),
+        concluded: true
+      };
+    }
+
     function renderPublicGames() {
       if (!scheduleContainer) return;
       if (window.location.hash === "#admin") return;
 
-      const filtered = getFilteredGames();
+      if (publicMode === "standings") {
+        renderStandings();
+        return;
+      }
+
+      let filtered = getFilteredGames();
+
+      if (publicMode === "next") {
+        const nextData = getNextGames(filtered);
+        filtered = nextData.games;
+
+        scheduleContainer.innerHTML = "";
+
+        if (filtered.length === 0) {
+          renderEmptyState();
+          return;
+        }
+
+        const message = nextData.concluded
+          ? "The regular season schedule has concluded. Showing the most recent completed game date."
+          : "Showing the next upcoming scheduled game date.";
+
+        scheduleContainer.innerHTML = `
+          <div class="broadcast-bar p-5">
+            <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <div class="section-kicker text-sky-200 mb-1">Featured Date</div>
+                <h3 class="text-2xl font-black">Next Games</h3>
+                <p class="text-slate-200 mt-1">${escapeHtml(message)}</p>
+              </div>
+              <button id="btnInlineFullSchedule" class="btn btn-outline">View Full Schedule</button>
+            </div>
+          </div>
+        `;
+
+        renderGroupedGames(filtered, true);
+        return;
+      }
 
       scheduleContainer.innerHTML = "";
 
       if (filtered.length === 0) {
-        scheduleContainer.innerHTML = `
-          <div class="bg-white p-8 rounded-xl border border-slate-200 text-center shadow-sm">
-            <div class="text-5xl mb-4 text-slate-300">☹</div>
-            <h3 class="mt-2 text-lg font-medium text-slate-900">No games found</h3>
-            <p class="mt-1 text-slate-500">
-              The database is currently empty or no games match your filters.
-            </p>
-            <button id="btnClearFilters" class="mt-4 text-sky-600 hover:text-sky-800 font-medium">
-              Clear Filters
-            </button>
-          </div>
-        `;
+        renderEmptyState();
         return;
       }
 
+      scheduleContainer.innerHTML = `
+        <div class="broadcast-bar p-5">
+          <div class="relative z-10">
+            <div class="section-kicker text-sky-200 mb-1">Complete Slate</div>
+            <h3 class="text-2xl font-black">Full Schedule</h3>
+            <p class="text-slate-200 mt-1">All games grouped by date.</p>
+          </div>
+        </div>
+      `;
+
+      renderGroupedGames(filtered, true);
+    }
+
+    function renderEmptyState() {
+      scheduleContainer.innerHTML = `
+        <div class="bg-white p-8 rounded-2xl border border-slate-200 text-center shadow-sm">
+          <div class="text-5xl mb-4 text-slate-300">🏈</div>
+          <h3 class="mt-2 text-xl font-black text-slate-900">No games found</h3>
+          <p class="mt-1 text-slate-500">
+            The database is currently empty or no games match your filters.
+          </p>
+          <button id="btnClearFilters" class="mt-4 text-sky-600 hover:text-sky-800 font-black">
+            Clear Filters
+          </button>
+        </div>
+      `;
+    }
+
+    function renderGroupedGames(gamesToRender, append = false) {
       const grouped = {};
 
-      filtered.forEach(g => {
+      gamesToRender.forEach(g => {
         const date = safeText(g.date) || "Date TBD";
         if (!grouped[date]) grouped[date] = [];
         grouped[date].push(g);
       });
 
       Object.keys(grouped).sort().forEach(date => {
-        const games = grouped[date];
+        const games = grouped[date].sort((a, b) => parseTimeToMinutes(a.time) - parseTimeToMinutes(b.time));
 
         let groupHTML = `
-          <div class="mb-8">
-            <h3 class="text-xl font-bold text-navy mb-4 border-b-2 border-slate-200 pb-2">${formatDate(date)}</h3>
+          <div class="mb-8 fade-in">
+            <div class="flex items-center justify-between mb-4 border-b-2 border-slate-200 pb-2">
+              <h3 class="text-xl sm:text-2xl font-black text-navy">${formatDate(date)}</h3>
+              <span class="text-xs font-black uppercase tracking-wide text-slate-500">${games.length} game${games.length === 1 ? "" : "s"}</span>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         `;
 
         games.forEach(g => {
-          const status = safeText(g.status || "Scheduled");
-          const statusClass = `badge-${status}`;
-          const cardClass = status === "Canceled" || status === "Postponed"
-            ? `card-${status}`
-            : "bg-white shadow-sm border-slate-200";
-
-          const field = safeText(g.field);
-          const shortField = field.includes("—") ? field.split("—")[0].trim() : field;
-
-          const notesHtml = safeText(g.notes)
-            ? `<div class="mt-3 text-sm text-red-600 bg-red-50 p-2 rounded border border-red-100"><strong>Note:</strong> ${g.notes}</div>`
-            : "";
-
-          groupHTML += `
-            <div class="${cardClass} border rounded-xl p-5 hover:shadow-md transition relative overflow-hidden">
-              <div class="flex justify-between items-start mb-3 gap-3">
-                <div>
-                  <span class="text-slate-500 text-sm font-semibold">${safeText(g.time) || "Time TBD"}</span>
-                  <span class="mx-2 text-slate-300">|</span>
-                  <span class="text-sky-700 text-sm font-bold">${safeText(g.division) || "Division TBD"}</span>
-                </div>
-
-                <span class="badge ${statusClass}">${status}</span>
-              </div>
-
-              <div class="flex flex-col gap-1 my-4">
-                <div class="flex justify-between items-center bg-slate-50 p-2 rounded text-lg font-bold text-navy gap-3">
-                  <span>Away:</span>
-                  <span class="text-slate-600 text-right">${safeText(g.awayTeam) || "Away Team"}</span>
-                </div>
-
-                <div class="flex justify-between items-center bg-slate-50 p-2 rounded text-lg font-bold text-navy gap-3">
-                  <span>Home:</span>
-                  <span class="text-right">${safeText(g.homeTeam) || "Home Team"}</span>
-                </div>
-              </div>
-
-              <div class="text-sm text-slate-500">
-                📍 ${shortField || "Field TBD"}
-              </div>
-
-              ${notesHtml}
-            </div>
-          `;
+          groupHTML += renderGameCard(g);
         });
 
         groupHTML += `
@@ -685,8 +1002,270 @@
           </div>
         `;
 
-        scheduleContainer.innerHTML += groupHTML;
+        if (append) {
+          scheduleContainer.innerHTML += groupHTML;
+        } else {
+          scheduleContainer.innerHTML = groupHTML;
+        }
       });
+    }
+
+    function renderGameCard(g) {
+      const status = safeStatus(g.status);
+      const statusClass = `badge-${status}`;
+      const cardClass = status === "Canceled" || status === "Postponed"
+        ? `game-card card-${status}`
+        : "game-card";
+
+      const field = safeText(g.field);
+      const shortField = field.includes("—") ? field.split("—")[0].trim() : field;
+
+      const awayHasScore = isValidScore(g.awayScore);
+      const homeHasScore = isValidScore(g.homeScore);
+      const showScoreboard = status === "Final" || awayHasScore || homeHasScore;
+
+      const awayTeam = escapeHtml(safeText(g.awayTeam) || "Away Team");
+      const homeTeam = escapeHtml(safeText(g.homeTeam) || "Home Team");
+
+      const notesHtml = safeText(g.notes)
+        ? `<div class="mt-3 text-sm text-red-700 bg-red-50 p-3 rounded-xl border border-red-100"><strong>Note:</strong> ${escapeHtml(g.notes)}</div>`
+        : "";
+
+      const matchupHtml = showScoreboard
+        ? `
+          <div class="flex flex-col gap-2 my-4">
+            <div class="score-row">
+              <span>${awayTeam}</span>
+              <span class="score-number">${awayHasScore ? escapeHtml(g.awayScore) : "-"}</span>
+            </div>
+
+            <div class="score-row">
+              <span>${homeTeam}</span>
+              <span class="score-number">${homeHasScore ? escapeHtml(g.homeScore) : "-"}</span>
+            </div>
+          </div>
+        `
+        : `
+          <div class="flex flex-col gap-2 my-4">
+            <div class="score-row">
+              <span class="text-slate-500 text-sm uppercase tracking-wide">Away</span>
+              <span class="text-right truncate">${awayTeam}</span>
+            </div>
+
+            <div class="score-row">
+              <span class="text-slate-500 text-sm uppercase tracking-wide">Home</span>
+              <span class="text-right truncate">${homeTeam}</span>
+            </div>
+          </div>
+        `;
+
+      return `
+        <div class="${cardClass} p-5">
+          <div class="flex justify-between items-start mb-3 gap-3">
+            <div>
+              <div class="text-slate-500 text-xs font-black uppercase tracking-wide">Kickoff</div>
+              <span class="text-navy text-lg font-black">${escapeHtml(safeText(g.time) || "Time TBD")}</span>
+              <span class="mx-2 text-slate-300">|</span>
+              <span class="text-sky-700 text-sm font-black uppercase">${escapeHtml(safeText(g.division) || "Division TBD")}</span>
+            </div>
+
+            <span class="badge ${statusClass}">${escapeHtml(status)}</span>
+          </div>
+
+          ${matchupHtml}
+
+          <div class="text-sm text-slate-500 font-semibold">
+            📍 ${escapeHtml(shortField || "Field TBD")}
+          </div>
+
+          ${notesHtml}
+        </div>
+      `;
+    }
+
+    function calculateStandings() {
+      const standings = {
+        Peewee: {},
+        Junior: {},
+        Senior: {}
+      };
+
+      allGames.forEach(g => {
+        const status = safeStatus(g.status);
+        const division = safeText(g.division);
+        const awayTeam = safeText(g.awayTeam);
+        const homeTeam = safeText(g.homeTeam);
+
+        if (status !== "Final") return;
+        if (!standings[division]) return;
+        if (!awayTeam || !homeTeam) return;
+        if (!isValidScore(g.awayScore) || !isValidScore(g.homeScore)) return;
+        if (awayTeam.toLowerCase() === "tbd" || homeTeam.toLowerCase() === "tbd") return;
+
+        const awayScore = scoreNumber(g.awayScore);
+        const homeScore = scoreNumber(g.homeScore);
+
+        if (!standings[division][awayTeam]) standings[division][awayTeam] = createStandingRow(awayTeam);
+        if (!standings[division][homeTeam]) standings[division][homeTeam] = createStandingRow(homeTeam);
+
+        const away = standings[division][awayTeam];
+        const home = standings[division][homeTeam];
+
+        away.gp += 1;
+        home.gp += 1;
+
+        away.pf += awayScore;
+        away.pa += homeScore;
+
+        home.pf += homeScore;
+        home.pa += awayScore;
+
+        if (awayScore > homeScore) {
+          away.w += 1;
+          home.l += 1;
+        } else if (homeScore > awayScore) {
+          home.w += 1;
+          away.l += 1;
+        } else {
+          away.t += 1;
+          home.t += 1;
+        }
+
+        away.diff = away.pf - away.pa;
+        home.diff = home.pf - home.pa;
+      });
+
+      return standings;
+    }
+
+    function createStandingRow(team) {
+      return {
+        team,
+        w: 0,
+        l: 0,
+        t: 0,
+        gp: 0,
+        pf: 0,
+        pa: 0,
+        diff: 0
+      };
+    }
+
+    function sortStandings(rows) {
+      return rows.sort((a, b) => {
+        if (b.w !== a.w) return b.w - a.w;
+        if (b.t !== a.t) return b.t - a.t;
+        if (b.diff !== a.diff) return b.diff - a.diff;
+        if (b.pf !== a.pf) return b.pf - a.pf;
+        return a.team.localeCompare(b.team);
+      });
+    }
+
+    function renderStandings() {
+      const standings = calculateStandings();
+      const divisions = allowedDivisions;
+
+      let html = `
+        <div class="broadcast-bar p-5">
+          <div class="relative z-10">
+            <div class="section-kicker text-sky-200 mb-1">League Table</div>
+            <h3 class="text-2xl font-black">Standings</h3>
+            <p class="text-slate-200 mt-1">
+              Standings update automatically when games are marked Final with valid scores.
+            </p>
+          </div>
+        </div>
+      `;
+
+      divisions.forEach(division => {
+        const rows = sortStandings(Object.values(standings[division]));
+
+        html += `
+          <div class="bg-white border border-slate-200 shadow-sm rounded-2xl p-5">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-xl font-black text-navy">${escapeHtml(division)} Standings</h3>
+              <span class="badge badge-Scheduled">${rows.length} Teams</span>
+            </div>
+        `;
+
+        if (rows.length === 0) {
+          html += `
+            <div class="text-slate-500 bg-slate-50 rounded-xl p-4 border border-slate-200">
+              No final scores have been entered for this division yet.
+            </div>
+          `;
+        } else {
+          html += `
+            <div class="hidden md:block overflow-x-auto">
+              <table class="w-full text-left text-sm">
+                <thead class="table-header">
+                  <tr>
+                    <th class="p-3 rounded-tl-lg">Team</th>
+                    <th class="p-3 text-center">W</th>
+                    <th class="p-3 text-center">L</th>
+                    <th class="p-3 text-center">T</th>
+                    <th class="p-3 text-center">GP</th>
+                    <th class="p-3 text-center">PF</th>
+                    <th class="p-3 text-center">PA</th>
+                    <th class="p-3 text-center rounded-tr-lg">DIFF</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+          `;
+
+          rows.forEach((row, index) => {
+            html += `
+              <tr class="${index === 0 ? "bg-amber-50" : "bg-white"}">
+                <td class="p-3 font-black text-navy">
+                  <span class="text-slate-400 mr-2">${index + 1}.</span>${escapeHtml(row.team)}
+                </td>
+                <td class="p-3 text-center font-black">${row.w}</td>
+                <td class="p-3 text-center">${row.l}</td>
+                <td class="p-3 text-center">${row.t}</td>
+                <td class="p-3 text-center">${row.gp}</td>
+                <td class="p-3 text-center">${row.pf}</td>
+                <td class="p-3 text-center">${row.pa}</td>
+                <td class="p-3 text-center font-black">${row.diff > 0 ? "+" : ""}${row.diff}</td>
+              </tr>
+            `;
+          });
+
+          html += `
+                </tbody>
+              </table>
+            </div>
+
+            <div class="md:hidden space-y-3">
+          `;
+
+          rows.forEach((row, index) => {
+            html += `
+              <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+                <div class="font-black text-navy text-lg">
+                  <span class="text-slate-400 mr-2">${index + 1}.</span>${escapeHtml(row.team)}
+                </div>
+                <div class="grid grid-cols-4 gap-2 mt-3 text-center text-sm">
+                  <div><div class="font-black">${row.w}</div><div class="text-slate-500">W</div></div>
+                  <div><div class="font-black">${row.l}</div><div class="text-slate-500">L</div></div>
+                  <div><div class="font-black">${row.t}</div><div class="text-slate-500">T</div></div>
+                  <div><div class="font-black">${row.gp}</div><div class="text-slate-500">GP</div></div>
+                </div>
+                <div class="grid grid-cols-3 gap-2 mt-3 text-center text-sm">
+                  <div><div class="font-black">${row.pf}</div><div class="text-slate-500">PF</div></div>
+                  <div><div class="font-black">${row.pa}</div><div class="text-slate-500">PA</div></div>
+                  <div><div class="font-black">${row.diff > 0 ? "+" : ""}${row.diff}</div><div class="text-slate-500">DIFF</div></div>
+                </div>
+              </div>
+            `;
+          });
+
+          html += `</div>`;
+        }
+
+        html += `</div>`;
+      });
+
+      scheduleContainer.innerHTML = html;
     }
 
     function renderAdminGames() {
@@ -699,7 +1278,7 @@
         btnDeleteAll.classList.add("hidden");
         tbody.innerHTML = `
           <tr>
-            <td colspan="5" class="p-4 text-center text-slate-500">
+            <td colspan="6" class="p-4 text-center text-slate-500">
               No games found. Add one or import a CSV.
             </td>
           </tr>
@@ -710,32 +1289,42 @@
       btnDeleteAll.classList.remove("hidden");
 
       allGames.forEach(g => {
+        const status = safeStatus(g.status);
+
+        const scoreText = isValidScore(g.awayScore) || isValidScore(g.homeScore)
+          ? `${escapeHtml(safeText(g.awayScore) || "-")} - ${escapeHtml(safeText(g.homeScore) || "-")}`
+          : "—";
+
         const tr = document.createElement("tr");
 
         tr.innerHTML = `
           <td class="p-3 border-t border-slate-100">
-            <div class="font-medium text-navy">${safeText(g.date)}</div>
-            <div class="text-xs text-slate-500">${safeText(g.time)}</div>
+            <div class="font-black text-navy">${escapeHtml(g.date)}</div>
+            <div class="text-xs text-slate-500">${escapeHtml(g.time)}</div>
           </td>
 
-          <td class="p-3 border-t border-slate-100 font-semibold">
-            <span class="text-slate-600">${safeText(g.awayTeam)}</span>
-            @
-            <span class="text-navy">${safeText(g.homeTeam)}</span>
+          <td class="p-3 border-t border-slate-100 font-bold">
+            <span class="text-slate-600">${escapeHtml(g.awayTeam)}</span>
+            <span class="text-slate-400 mx-1">@</span>
+            <span class="text-navy">${escapeHtml(g.homeTeam)}</span>
+          </td>
+
+          <td class="p-3 border-t border-slate-100 font-black">
+            ${scoreText}
           </td>
 
           <td class="p-3 border-t border-slate-100">
-            <div>${safeText(g.division)}</div>
-            <div class="text-xs text-slate-500 truncate max-w-[150px]">${safeText(g.field)}</div>
+            <div class="font-bold">${escapeHtml(g.division)}</div>
+            <div class="text-xs text-slate-500 truncate max-w-[150px]">${escapeHtml(g.field)}</div>
           </td>
 
           <td class="p-3 border-t border-slate-100">
-            <span class="badge badge-${safeText(g.status || "Scheduled")}">${safeText(g.status || "Scheduled")}</span>
+            <span class="badge badge-${status}">${escapeHtml(status)}</span>
           </td>
 
           <td class="p-3 border-t border-slate-100 text-right space-x-2">
-            <button class="text-sky-600 hover:underline font-medium text-sm btn-edit">Edit</button>
-            <button class="text-redAccent hover:underline font-medium text-sm btn-delete">Delete</button>
+            <button class="text-sky-600 hover:underline font-black text-sm btn-edit">Edit</button>
+            <button class="text-redAccent hover:underline font-black text-sm btn-delete">Delete</button>
           </td>
         `;
 
@@ -755,7 +1344,9 @@
       document.getElementById("gameField").value = safeText(g.field) || "Field 2 — Junior/Senior / Back Field";
       document.getElementById("homeTeam").value = safeText(g.homeTeam);
       document.getElementById("awayTeam").value = safeText(g.awayTeam);
-      document.getElementById("gameStatus").value = safeText(g.status) || "Scheduled";
+      document.getElementById("awayScore").value = safeText(g.awayScore);
+      document.getElementById("homeScore").value = safeText(g.homeScore);
+      document.getElementById("gameStatus").value = safeStatus(g.status);
       document.getElementById("gameNotes").value = safeText(g.notes);
 
       document.getElementById("btnSaveGame").textContent = "Save Changes";
@@ -772,6 +1363,8 @@
       document.getElementById("gameField").value = "Field 1 — Peewee / Front Field";
       document.getElementById("homeTeam").value = "";
       document.getElementById("awayTeam").value = "";
+      document.getElementById("awayScore").value = "";
+      document.getElementById("homeScore").value = "";
       document.getElementById("gameStatus").value = "Scheduled";
       document.getElementById("gameNotes").value = "";
 
@@ -797,6 +1390,10 @@
         document.getElementById(id).addEventListener("input", renderPublicGames);
       });
 
+      document.getElementById("btnViewNext").addEventListener("click", () => setMode("next"));
+      document.getElementById("btnViewFull").addEventListener("click", () => setMode("full"));
+      document.getElementById("btnViewStandings").addEventListener("click", () => setMode("standings"));
+
       scheduleContainer.addEventListener("click", event => {
         if (event.target && event.target.id === "btnClearFilters") {
           document.getElementById("filterSearch").value = "";
@@ -805,6 +1402,10 @@
           document.getElementById("filterStatus").value = "";
           document.getElementById("filterDate").value = "";
           renderPublicGames();
+        }
+
+        if (event.target && event.target.id === "btnInlineFullSchedule") {
+          setMode("full");
         }
       });
 
@@ -819,6 +1420,7 @@
 
         try {
           await signInWithEmailAndPassword(auth, email, pass);
+          document.getElementById("adminPassword").value = "";
           errDiv.classList.add("hidden");
         } catch (error) {
           errDiv.textContent = error.message;
@@ -856,6 +1458,9 @@
         if (!currentUser) return;
 
         const gameId = document.getElementById("gameId").value;
+        const status = safeStatus(document.getElementById("gameStatus").value);
+        const awayScore = document.getElementById("awayScore").value;
+        const homeScore = document.getElementById("homeScore").value;
 
         const gameData = {
           date: document.getElementById("gameDate").value,
@@ -864,13 +1469,21 @@
           field: document.getElementById("gameField").value,
           homeTeam: document.getElementById("homeTeam").value,
           awayTeam: document.getElementById("awayTeam").value,
-          status: document.getElementById("gameStatus").value,
+          awayScore,
+          homeScore,
+          status,
+          isFinal: status === "Final",
           notes: document.getElementById("gameNotes").value,
           updatedAt: serverTimestamp()
         };
 
         if (!gameData.date || !gameData.time || !gameData.homeTeam || !gameData.awayTeam) {
           alert("Please fill in Date, Time, Home Team, and Away Team.");
+          return;
+        }
+
+        if (status === "Final" && (!isValidScore(awayScore) || !isValidScore(homeScore))) {
+          alert("Please enter both scores before marking a game Final.");
           return;
         }
 
@@ -890,7 +1503,7 @@
           console.error(error);
           alert("Failed to save game.");
         } finally {
-          btn.textContent = gameId ? "Save Changes" : "Save Game";
+          btn.textContent = document.getElementById("gameId").value ? "Save Changes" : "Save Game";
         }
       });
 
@@ -905,56 +1518,62 @@
 
         if (!file) {
           statusDiv.textContent = "Please select a CSV file first.";
-          statusDiv.className = "mt-3 text-sm font-semibold text-red-600 text-center";
+          statusDiv.className = "mt-3 text-sm font-bold text-red-600 text-center";
           return;
         }
 
         statusDiv.textContent = "Parsing CSV...";
-        statusDiv.className = "mt-3 text-sm font-semibold text-indigo-600 text-center";
+        statusDiv.className = "mt-3 text-sm font-bold text-indigo-600 text-center";
 
         Papa.parse(file, {
           skipEmptyLines: true,
           complete: async results => {
             const rows = results.data;
             let importCount = 0;
+            let skippedCount = 0;
 
             for (let i = 0; i < rows.length; i++) {
               const row = rows[i];
+              const timeCell = safeText(row[2]).toUpperCase();
 
-              if (row.length >= 7 && row[2] && (String(row[2]).includes("PM") || String(row[2]).includes("AM"))) {
-                let formattedDate = "";
-
-                try {
-                  const d = new Date(row[0]);
-                  formattedDate = !isNaN(d.getTime()) ? d.toISOString().split("T")[0] : row[0];
-                } catch (error) {
-                  formattedDate = row[0];
-                }
+              if (row.length >= 7 && timeCell && (timeCell.includes("PM") || timeCell.includes("AM"))) {
+                const status = safeStatus(row[9] || "Scheduled");
 
                 const gameData = {
-                  date: safeText(formattedDate),
+                  date: parseCsvDate(row[0]),
                   time: safeText(row[2]),
                   field: safeText(row[3]),
                   division: safeText(row[4]),
                   awayTeam: safeText(row[5]),
                   homeTeam: safeText(row[6]),
-                  status: "Scheduled",
-                  notes: "",
+                  awayScore: safeText(row[7]),
+                  homeScore: safeText(row[8]),
+                  status,
+                  isFinal: status === "Final",
+                  notes: safeText(row[10]),
                   createdAt: serverTimestamp(),
                   updatedAt: serverTimestamp()
                 };
+
+                if (status === "Final" && (!isValidScore(gameData.awayScore) || !isValidScore(gameData.homeScore))) {
+                  skippedCount++;
+                  continue;
+                }
 
                 try {
                   await addDoc(collection(db, "games"), gameData);
                   importCount++;
                 } catch (error) {
                   console.error("Error adding row", i, error);
+                  skippedCount++;
                 }
+              } else {
+                skippedCount++;
               }
             }
 
-            statusDiv.textContent = `Success! Imported ${importCount} games.`;
-            statusDiv.className = "mt-3 text-sm font-semibold text-green-600 text-center";
+            statusDiv.textContent = `Success! Imported ${importCount} games.${skippedCount ? ` Skipped ${skippedCount} row(s).` : ""}`;
+            statusDiv.className = "mt-3 text-sm font-bold text-green-600 text-center";
             fileInput.value = "";
           }
         });
@@ -963,7 +1582,8 @@
       document.getElementById("btnDeleteAll").addEventListener("click", async () => {
         if (!currentUser) return;
 
-        if (!confirm("Are you sure you want to delete ALL games? This cannot be undone.")) return;
+        const confirmText = prompt("Type DELETE ALL to delete every game.");
+        if (confirmText !== "DELETE ALL") return;
 
         const btn = document.getElementById("btnDeleteAll");
         btn.textContent = "Deleting...";
@@ -1022,7 +1642,7 @@
           allGames.sort((a, b) => {
             const dateCompare = safeText(a.date).localeCompare(safeText(b.date));
             if (dateCompare !== 0) return dateCompare;
-            return safeText(a.time).localeCompare(safeText(b.time));
+            return parseTimeToMinutes(a.time) - parseTimeToMinutes(b.time);
           });
 
           populateDateFilter();
@@ -1033,8 +1653,8 @@
           console.error("games read error:", error);
           showConnectionError("Could not read games from Firestore. Check Firestore rules and make sure the games collection exists.");
           scheduleContainer.innerHTML = `
-            <div class="bg-white p-8 rounded-xl border border-slate-200 text-center shadow-sm">
-              <h3 class="text-lg font-medium text-slate-900">Could not load schedule</h3>
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 text-center shadow-sm">
+              <h3 class="text-lg font-black text-slate-900">Could not load schedule</h3>
               <p class="mt-1 text-slate-500">Check Firebase config, Firestore rules, and the games collection.</p>
             </div>
           `;
