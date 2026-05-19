@@ -14,7 +14,7 @@
       theme: {
         extend: {
           colors: {
-            ink: "#061225",
+            ink: "#050b18",
             navy: "#071832",
             navy2: "#0b1d3a",
             redAccent: "#d32f2f",
@@ -24,7 +24,8 @@
           },
           boxShadow: {
             soft: "0 20px 60px rgba(15, 23, 42, 0.10)",
-            glow: "0 24px 90px rgba(211, 47, 47, 0.18)"
+            glow: "0 24px 90px rgba(211, 47, 47, 0.18)",
+            stadium: "0 30px 90px rgba(2, 8, 23, 0.28)"
           }
         }
       }
@@ -33,11 +34,15 @@
 
   <style>
     :root {
+      --ink: #050b18;
       --navy: #071832;
       --navy2: #0b1d3a;
       --red: #d32f2f;
       --gold: #fbbf24;
+      --sky: #0ea5e9;
       --slate: #64748b;
+      --line: #dbe3ee;
+      --card: rgba(255, 255, 255, 0.92);
     }
 
     * {
@@ -49,12 +54,26 @@
     }
 
     body {
+      margin: 0;
+      min-height: 100vh;
       font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background:
-        radial-gradient(circle at top left, rgba(14, 165, 233, 0.13), transparent 36rem),
-        radial-gradient(circle at top right, rgba(211, 47, 47, 0.10), transparent 34rem),
-        linear-gradient(180deg, #f8fafc 0%, #edf2f7 100%);
+        radial-gradient(circle at top left, rgba(14, 165, 233, 0.16), transparent 36rem),
+        radial-gradient(circle at top right, rgba(211, 47, 47, 0.13), transparent 34rem),
+        radial-gradient(circle at 50% -12rem, rgba(251, 191, 36, 0.15), transparent 32rem),
+        linear-gradient(180deg, #f8fafc 0%, #edf2f7 58%, #e5ebf3 100%);
       color: #0f172a;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
     }
 
     .hidden {
@@ -68,7 +87,7 @@
     @keyframes fadeIn {
       from {
         opacity: 0;
-        transform: translateY(6px);
+        transform: translateY(8px);
       }
 
       to {
@@ -77,32 +96,75 @@
       }
     }
 
+    .page-shell {
+      position: relative;
+      isolation: isolate;
+    }
+
+    .page-shell::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(15, 23, 42, 0.035) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(to bottom, black 0%, transparent 70%);
+    }
+
     input,
     select,
     textarea {
       width: 100%;
-      padding: 0.82rem 0.9rem;
+      padding: 0.85rem 0.95rem;
       margin-top: 0.25rem;
       border: 1px solid #d5deea;
-      border-radius: 0.9rem;
+      border-radius: 1rem;
       background: #ffffff;
       color: #0f172a;
       font-size: 0.95rem;
-      transition: 0.18s ease;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
     }
 
     input:focus,
     select:focus,
     textarea:focus {
-      outline: 3px solid rgba(11, 29, 58, 0.14);
+      outline: none;
       border-color: #0b1d3a;
+      box-shadow: 0 0 0 4px rgba(11, 29, 58, 0.13);
+    }
+
+    label {
+      letter-spacing: -0.01em;
     }
 
     .glass {
       background: rgba(255, 255, 255, 0.82);
       backdrop-filter: blur(18px);
-      border: 1px solid rgba(226, 232, 240, 0.88);
+      border: 1px solid rgba(226, 232, 240, 0.9);
       box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+    }
+
+    .premium-border {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .premium-border::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      padding: 1px;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(211,47,47,0.45), rgba(251,191,36,0.45), rgba(14,165,233,0.35));
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
     }
 
     .btn {
@@ -112,35 +174,63 @@
       gap: 0.45rem;
       background: linear-gradient(135deg, #071832, #0b1d3a);
       color: white;
-      font-weight: 900;
-      padding: 0.78rem 1.15rem;
-      border-radius: 0.9rem;
+      font-weight: 950;
+      padding: 0.78rem 1.12rem;
+      border-radius: 1rem;
       cursor: pointer;
       text-align: center;
       border: none;
-      letter-spacing: 0.01em;
-      transition: 0.18s ease;
+      letter-spacing: -0.01em;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
       min-height: 44px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.15);
     }
 
     .btn:hover {
       transform: translateY(-1px);
-      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.20);
+      box-shadow: 0 16px 34px rgba(15, 23, 42, 0.22);
+    }
+
+    .btn:active {
+      transform: translateY(0);
     }
 
     .btn-red {
       background: linear-gradient(135deg, #d32f2f, #991b1b);
     }
 
+    .btn-gold {
+      background: linear-gradient(135deg, #fbbf24, #f97316);
+      color: #111827;
+    }
+
     .btn-outline {
       background: #ffffff;
       color: #071832;
-      border: 1px solid rgba(7, 24, 50, 0.22);
+      border: 1px solid rgba(7, 24, 50, 0.18);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
     }
 
     .btn-outline:hover {
       background: #071832;
       color: #ffffff;
+    }
+
+    .btn-danger-link {
+      background: transparent;
+      border: none;
+      color: #dc2626;
+      font-weight: 950;
+      cursor: pointer;
+      padding: 0.35rem 0.15rem;
+    }
+
+    .site-header {
+      background:
+        radial-gradient(circle at 10% 0%, rgba(14, 165, 233, 0.18), transparent 18rem),
+        radial-gradient(circle at 80% 0%, rgba(211, 47, 47, 0.22), transparent 18rem),
+        linear-gradient(135deg, #050b18, #071832 56%, #0b1d3a);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .top-nav-btn {
@@ -151,18 +241,119 @@
       padding: 0.62rem 1rem;
       border-radius: 999px;
       font-weight: 950;
-      color: rgba(255, 255, 255, 0.86);
+      color: rgba(255, 255, 255, 0.84);
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.12);
       transition: 0.18s ease;
       white-space: nowrap;
       font-size: 0.9rem;
+      cursor: pointer;
     }
 
     .top-nav-btn:hover,
     .top-nav-btn.active {
       background: #ffffff;
       color: #071832;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
+    }
+
+    .league-shield {
+      width: 50px;
+      height: 50px;
+      border-radius: 16px;
+      background:
+        linear-gradient(135deg, #ffffff, #dbeafe 52%, #fef3c7);
+      color: #071832;
+      display: grid;
+      place-items: center;
+      font-weight: 1000;
+      letter-spacing: -0.05em;
+      box-shadow:
+        inset 0 0 0 3px rgba(11, 29, 58, 0.10),
+        0 14px 30px rgba(0, 0, 0, 0.20);
+      flex: 0 0 auto;
+      position: relative;
+    }
+
+    .league-shield::after {
+      content: "";
+      position: absolute;
+      inset: 7px;
+      border-radius: 11px;
+      border: 1px solid rgba(7, 24, 50, 0.14);
+      pointer-events: none;
+    }
+
+    .hero-card {
+      background:
+        radial-gradient(circle at 85% 28%, rgba(251, 191, 36, 0.27), transparent 19rem),
+        radial-gradient(circle at 18% 8%, rgba(14, 165, 233, 0.20), transparent 22rem),
+        linear-gradient(135deg, rgba(5, 11, 24, 0.995), rgba(7, 24, 50, 0.985) 52%, rgba(211, 47, 47, 0.92));
+      color: white;
+      border-radius: 1.7rem;
+      box-shadow: 0 32px 95px rgba(2, 8, 23, 0.26);
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 42px 42px;
+      opacity: 0.34;
+      pointer-events: none;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -10% -50% -10%;
+      height: 55%;
+      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.09), transparent 68%);
+      pointer-events: none;
+    }
+
+    .stat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.11);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: rgba(255,255,255,0.88);
+      font-weight: 900;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+
+    .section-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      text-transform: uppercase;
+      font-weight: 950;
+      letter-spacing: 0.09em;
+      font-size: 0.72rem;
+      color: #d32f2f;
+    }
+
+    .section-kicker::before {
+      content: "";
+      width: 2rem;
+      height: 0.24rem;
+      border-radius: 999px;
+      background: currentColor;
+      display: inline-block;
+    }
+
+    .section-kicker-light {
+      color: #bae6fd;
     }
 
     .quick-btn,
@@ -177,6 +368,7 @@
       transition: 0.18s ease;
       box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
       min-height: 42px;
+      white-space: nowrap;
     }
 
     .quick-btn:hover,
@@ -201,9 +393,12 @@
       font-size: 0.70rem;
       font-weight: 950;
       text-transform: uppercase;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       letter-spacing: 0.05em;
       white-space: nowrap;
+      min-height: 26px;
     }
 
     .badge-Updated {
@@ -232,83 +427,26 @@
       border: 1px solid #cbd5e1;
     }
 
-    .hero-card {
-      background:
-        radial-gradient(circle at 85% 30%, rgba(251, 191, 36, 0.24), transparent 20rem),
-        radial-gradient(circle at 20% 10%, rgba(14, 165, 233, 0.18), transparent 22rem),
-        linear-gradient(135deg, rgba(7, 24, 50, 0.99), rgba(11, 29, 58, 0.98) 58%, rgba(211, 47, 47, 0.92));
-      color: white;
-      border-radius: 1.6rem;
-      box-shadow: 0 28px 90px rgba(2, 8, 23, 0.24);
-      overflow: hidden;
-      position: relative;
-      border: 1px solid rgba(255, 255, 255, 0.10);
-    }
-
-    .hero-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px),
-        linear-gradient(180deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-      background-size: 42px 42px;
-      opacity: 0.35;
-      pointer-events: none;
-    }
-
-    .section-kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.55rem;
-      text-transform: uppercase;
-      font-weight: 950;
-      letter-spacing: 0.09em;
-      font-size: 0.72rem;
-      color: #d32f2f;
-    }
-
-    .section-kicker::before {
-      content: "";
-      width: 2rem;
-      height: 0.24rem;
-      border-radius: 999px;
-      background: currentColor;
-      display: inline-block;
-    }
-
-    .section-kicker-light {
-      color: #bae6fd;
-    }
-
-    .league-shield {
-      width: 48px;
-      height: 48px;
-      border-radius: 15px;
-      background: linear-gradient(135deg, #ffffff, #dbeafe);
-      color: #071832;
-      display: grid;
-      place-items: center;
-      font-weight: 1000;
-      box-shadow:
-        inset 0 0 0 3px rgba(11, 29, 58, 0.10),
-        0 10px 25px rgba(0, 0, 0, 0.15);
-      flex: 0 0 auto;
+    .badge-TBD {
+      background-color: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
     }
 
     .game-card {
       background: rgba(255, 255, 255, 0.96);
       border: 1px solid #dbe3ee;
-      border-radius: 1.25rem;
+      border-radius: 1.35rem;
       box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
       overflow: hidden;
       position: relative;
-      transition: 0.18s ease;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
     }
 
     .game-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 22px 48px rgba(15, 23, 42, 0.13);
+      box-shadow: 0 24px 54px rgba(15, 23, 42, 0.13);
+      border-color: rgba(7, 24, 50, 0.18);
     }
 
     .game-card::before {
@@ -334,8 +472,8 @@
       grid-template-columns: 1fr auto;
       gap: 1rem;
       align-items: center;
-      padding: 0.84rem 0.92rem;
-      border-radius: 0.9rem;
+      padding: 0.88rem 0.95rem;
+      border-radius: 1rem;
       background: linear-gradient(180deg, #f8fafc, #eef2f7);
       font-weight: 950;
       color: #071832;
@@ -343,7 +481,7 @@
     }
 
     .score-number {
-      font-size: 1.65rem;
+      font-size: 1.7rem;
       font-weight: 1000;
       min-width: 2.5rem;
       text-align: right;
@@ -356,17 +494,59 @@
     }
 
     .soft-card {
-      background: rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.92);
       border: 1px solid rgba(226,232,240,0.95);
-      border-radius: 1.1rem;
+      border-radius: 1.15rem;
       box-shadow: 0 14px 34px rgba(15,23,42,0.06);
     }
 
+    .mobile-bottom-nav {
+      display: none;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
     @media (max-width: 760px) {
-      .top-nav-btn {
-        padding: 0.55rem 0.78rem;
-        min-height: 38px;
-        font-size: 0.8rem;
+      body {
+        padding-bottom: 82px;
+      }
+
+      .desktop-nav {
+        display: none;
+      }
+
+      .mobile-bottom-nav {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+        position: fixed;
+        left: 0.75rem;
+        right: 0.75rem;
+        bottom: 0.75rem;
+        z-index: 60;
+        padding: 0.55rem;
+        border-radius: 1.25rem;
+        background: rgba(5, 11, 24, 0.92);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255,255,255,0.12);
+        box-shadow: 0 20px 60px rgba(2, 8, 23, 0.35);
+      }
+
+      .mobile-bottom-nav button {
+        min-height: 48px;
+        border-radius: 0.95rem;
+        font-size: 0.78rem;
+        padding: 0.55rem 0.4rem;
       }
 
       .league-shield {
@@ -376,18 +556,27 @@
       }
 
       .hero-card {
-        border-radius: 1.2rem;
+        border-radius: 1.25rem;
+      }
+
+      .filter-chip,
+      .quick-btn {
+        width: 100%;
+      }
+
+      .score-row {
+        grid-template-columns: 1fr auto;
       }
     }
   </style>
 </head>
 
-<body class="min-h-screen flex flex-col">
+<body class="page-shell min-h-screen flex flex-col">
 
-  <header class="bg-ink text-white shadow-lg sticky top-0 z-50">
+  <header class="site-header text-white shadow-lg sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-4 py-3">
       <div class="flex items-center justify-between gap-3">
-        <a href="#public" class="flex items-center gap-3 min-w-0" id="brandHome">
+        <button id="brandHome" type="button" class="flex items-center gap-3 min-w-0 text-left">
           <div class="league-shield">BC</div>
           <div class="min-w-0">
             <h1 class="text-base sm:text-2xl font-black leading-tight tracking-tight truncate">
@@ -397,63 +586,79 @@
               Schedule & Standings
             </p>
           </div>
-        </a>
+        </button>
 
-        <nav class="flex items-center gap-2 shrink-0 overflow-x-auto">
-          <a id="navSchedule" href="#public" class="top-nav-btn active">Schedule</a>
-          <a id="navStandings" href="#public" class="top-nav-btn">Standings</a>
-          <a id="navAdmin" href="#admin" class="top-nav-btn">Admin</a>
+        <nav class="desktop-nav flex items-center gap-2 shrink-0 overflow-x-auto" aria-label="Primary navigation">
+          <button id="navSchedule" type="button" class="top-nav-btn active">Schedule</button>
+          <button id="navStandings" type="button" class="top-nav-btn">Standings</button>
+          <button id="navAdmin" type="button" class="top-nav-btn">Admin</button>
         </nav>
       </div>
     </div>
   </header>
 
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <button id="mobileNavSchedule" type="button" class="top-nav-btn active">Schedule</button>
+    <button id="mobileNavStandings" type="button" class="top-nav-btn">Standings</button>
+    <button id="mobileNavAdmin" type="button" class="top-nav-btn">Admin</button>
+  </nav>
+
   <main class="flex-grow max-w-6xl mx-auto w-full px-4 py-6 sm:py-8">
+
+    <div id="connectionError" class="hidden bg-red-100 border-l-4 border-redAccent text-red-800 p-4 rounded-2xl mb-6 text-sm" role="alert"></div>
 
     <section id="public-view" class="fade-in">
 
-      <div class="hero-card p-5 sm:p-8 mb-7">
+      <div class="hero-card premium-border p-5 sm:p-8 mb-7">
         <div class="relative z-10">
           <div class="section-kicker section-kicker-light mb-3">Schedule & Standings</div>
 
-          <h2 class="text-3xl sm:text-5xl font-black tracking-tight leading-[1.05]">
-            2026 Summer Season
-          </h2>
+          <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
+            <div>
+              <h2 class="text-3xl sm:text-5xl font-black tracking-tight leading-[1.05]">
+                2026 Summer Season
+              </h2>
 
-          <p class="text-slate-200 max-w-3xl mt-4 text-base sm:text-lg leading-relaxed">
-            View upcoming games, field assignments, scores, schedule updates, and division standings.
-          </p>
+              <p class="text-slate-200 max-w-3xl mt-4 text-base sm:text-lg leading-relaxed">
+                View upcoming games, field assignments, live schedule updates, scores, and division standings.
+              </p>
+            </div>
 
-          <div class="flex flex-wrap gap-2 mt-5">
-            <button class="filter-chip filter-chip-red hero-division-chip" data-division="Peewee">Peewee</button>
-            <button class="filter-chip filter-chip-red hero-division-chip" data-division="Junior">Junior</button>
-            <button class="filter-chip filter-chip-red hero-division-chip" data-division="Senior">Senior</button>
-            <button class="filter-chip hero-field-chip" data-field="Field 1">Field 1</button>
-            <button class="filter-chip hero-field-chip" data-field="Field 2">Field 2</button>
+            <div class="flex flex-wrap gap-2">
+              <span id="heroGameCount" class="stat-pill">0 Games</span>
+              <span id="heroTeamCount" class="stat-pill">0 Teams</span>
+              <span class="stat-pill">3 Divisions</span>
+            </div>
+          </div>
+
+          <div class="grid sm:flex sm:flex-wrap gap-2 mt-6">
+            <button class="filter-chip filter-chip-red hero-division-chip" type="button" data-division="Peewee">Peewee</button>
+            <button class="filter-chip filter-chip-red hero-division-chip" type="button" data-division="Junior">Junior</button>
+            <button class="filter-chip filter-chip-red hero-division-chip" type="button" data-division="Senior">Senior</button>
+            <button class="filter-chip hero-field-chip" type="button" data-field="Field 1">Field 1 · Front</button>
+            <button class="filter-chip hero-field-chip" type="button" data-field="Field 2">Field 2 · Back</button>
           </div>
         </div>
       </div>
 
-      <div id="connectionError" class="hidden bg-red-100 border-l-4 border-redAccent text-red-800 p-4 rounded-2xl mb-6 text-sm"></div>
+      <div id="alertsContainer" class="space-y-4 mb-7" aria-live="polite"></div>
 
-      <div id="alertsContainer" class="space-y-4 mb-7"></div>
-
-      <div class="glass p-4 sm:p-5 rounded-2xl mb-5">
+      <div class="glass premium-border p-4 sm:p-5 rounded-2xl mb-5">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
             <div class="section-kicker mb-1">Game Center</div>
             <h3 class="font-black text-2xl text-navy">Quick View</h3>
           </div>
 
-          <div class="flex flex-wrap gap-2">
-            <button id="btnViewNext" class="quick-btn active">Next Games</button>
-            <button id="btnViewFull" class="quick-btn">Full Schedule</button>
-            <button id="btnViewStandings" class="quick-btn">Standings</button>
+          <div class="grid grid-cols-1 sm:flex sm:flex-wrap gap-2">
+            <button id="btnViewNext" type="button" class="quick-btn active">Next Games</button>
+            <button id="btnViewFull" type="button" class="quick-btn">Full Schedule</button>
+            <button id="btnViewStandings" type="button" class="quick-btn">Standings</button>
           </div>
         </div>
       </div>
 
-      <div id="filtersSection" class="glass p-4 sm:p-5 rounded-2xl mb-7">
+      <div id="filtersSection" class="glass premium-border p-4 sm:p-5 rounded-2xl mb-7">
         <div class="flex flex-col gap-4">
           <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div>
@@ -461,14 +666,16 @@
               <h3 class="font-black text-xl text-navy">Find Your Game</h3>
             </div>
 
-            <button id="btnClearAllFilters" class="btn btn-outline text-sm w-full md:w-auto">
+            <button id="btnClearAllFilters" type="button" class="btn btn-outline text-sm w-full md:w-auto">
               Clear Filters
             </button>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+            <label class="sr-only" for="filterSearch">Search teams</label>
             <input type="text" id="filterSearch" placeholder="Search teams..." class="lg:col-span-2" />
 
+            <label class="sr-only" for="filterDivision">Filter by division</label>
             <select id="filterDivision">
               <option value="">All Divisions</option>
               <option value="Peewee">Peewee</option>
@@ -476,12 +683,14 @@
               <option value="Senior">Senior</option>
             </select>
 
+            <label class="sr-only" for="filterField">Filter by field</label>
             <select id="filterField">
               <option value="">All Fields</option>
-              <option value="Field 1">Field 1</option>
-              <option value="Field 2">Field 2</option>
+              <option value="Field 1">Field 1 - Front Field</option>
+              <option value="Field 2">Field 2 - Back Field</option>
             </select>
 
+            <label class="sr-only" for="filterStatus">Filter by status</label>
             <select id="filterStatus">
               <option value="">All Statuses</option>
               <option value="Scheduled">Scheduled</option>
@@ -491,6 +700,7 @@
               <option value="Final">Final</option>
             </select>
 
+            <label class="sr-only" for="filterDate">Filter by date</label>
             <select id="filterDate">
               <option value="">All Dates</option>
             </select>
@@ -498,11 +708,11 @@
         </div>
       </div>
 
-      <div id="scheduleContainer" class="space-y-8 min-h-[300px]">
+      <div id="scheduleContainer" class="space-y-8 min-h-[300px]" aria-live="polite">
         <div class="text-center text-slate-500 py-12">Loading schedule from database...</div>
       </div>
 
-      <div class="mt-12 glass p-6 rounded-2xl">
+      <div class="mt-12 glass premium-border p-6 rounded-2xl">
         <div class="section-kicker mb-2">Location</div>
         <h3 class="text-2xl font-black text-navy mb-4">Field Information</h3>
 
@@ -536,38 +746,38 @@
       </div>
 
       <div class="text-center mt-8">
-        <button id="btnBackToTop" class="btn btn-outline text-sm">↑ Back to Top</button>
+        <button id="btnBackToTop" type="button" class="btn btn-outline text-sm">↑ Back to Top</button>
       </div>
     </section>
 
     <section id="admin-view" class="hidden fade-in">
 
-      <div id="loginSection" class="max-w-md mx-auto glass p-7 sm:p-8 rounded-2xl mt-8">
+      <div id="loginSection" class="max-w-md mx-auto glass premium-border p-7 sm:p-8 rounded-2xl mt-8">
         <div class="text-center mb-6">
           <div class="league-shield mx-auto mb-3">BC</div>
-          <h2 class="text-2xl font-black text-navy">Admin Login</h2>
+          <h2 class="text-2xl font-black text-navy">League Admin Login</h2>
           <p class="text-sm text-slate-500 mt-1">Manage games, scores, alerts, and standings.</p>
         </div>
 
-        <div id="loginError" class="hidden bg-red-100 text-red-700 p-3 rounded-xl mb-4 text-sm"></div>
+        <div id="loginError" class="hidden bg-red-100 text-red-700 p-3 rounded-xl mb-4 text-sm" role="alert"></div>
 
         <div class="space-y-4">
           <div>
-            <label class="block text-sm font-bold text-slate-700">Email</label>
+            <label class="block text-sm font-bold text-slate-700" for="adminEmail">Email</label>
             <input type="email" id="adminEmail" placeholder="admin@example.com" autocomplete="username" />
           </div>
 
           <div>
-            <label class="block text-sm font-bold text-slate-700">Password</label>
+            <label class="block text-sm font-bold text-slate-700" for="adminPassword">Password</label>
             <input type="password" id="adminPassword" placeholder="••••••••" autocomplete="current-password" />
           </div>
 
-          <button id="btnLogin" class="btn w-full mt-4">Log In</button>
+          <button id="btnLogin" type="button" class="btn w-full mt-4">Log In</button>
         </div>
       </div>
 
       <div id="dashboardSection" class="hidden">
-        <div class="hero-card p-5 sm:p-6 mb-8">
+        <div class="hero-card premium-border p-5 sm:p-6 mb-8">
           <div class="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
               <div class="section-kicker section-kicker-light mb-2">Control Room</div>
@@ -575,7 +785,7 @@
               <p class="text-slate-200 text-sm mt-1">Manage schedule, scores, standings, and site updates.</p>
             </div>
 
-            <button id="btnLogout" class="btn btn-outline">Logout</button>
+            <button id="btnLogout" type="button" class="btn btn-outline">Logout</button>
           </div>
         </div>
 
@@ -583,25 +793,25 @@
 
           <div class="lg:col-span-1 space-y-6">
 
-            <div class="glass p-6 rounded-2xl">
+            <div class="glass premium-border p-6 rounded-2xl">
               <h3 class="text-lg font-black text-navy mb-4 border-b pb-2">Site Alerts</h3>
 
               <div class="space-y-4">
                 <div>
-                  <label class="block text-sm font-bold text-slate-700">Schedule Alert</label>
+                  <label class="block text-sm font-bold text-slate-700" for="editScheduleAlert">Schedule Alert</label>
                   <textarea id="editScheduleAlert" rows="3"></textarea>
                 </div>
 
                 <div>
-                  <label class="block text-sm font-bold text-slate-700">Weather/Cancellation Update</label>
+                  <label class="block text-sm font-bold text-slate-700" for="editWeatherUpdate">Weather/Cancellation Update</label>
                   <textarea id="editWeatherUpdate" rows="3"></textarea>
                 </div>
 
-                <button id="btnSaveAlerts" class="btn w-full">Update Alerts</button>
+                <button id="btnSaveAlerts" type="button" class="btn w-full">Update Alerts</button>
               </div>
             </div>
 
-            <div class="glass p-6 rounded-2xl">
+            <div class="glass premium-border p-6 rounded-2xl">
               <h3 id="gameFormTitle" class="text-lg font-black text-navy mb-4 border-b pb-2">Add New Game</h3>
 
               <input type="hidden" id="gameId" />
@@ -609,18 +819,18 @@
               <div class="space-y-3">
                 <div class="grid grid-cols-2 gap-3">
                   <div>
-                    <label class="block text-sm font-bold text-slate-700">Date</label>
+                    <label class="block text-sm font-bold text-slate-700" for="gameDate">Date</label>
                     <input type="date" id="gameDate" />
                   </div>
 
                   <div>
-                    <label class="block text-sm font-bold text-slate-700">Time</label>
+                    <label class="block text-sm font-bold text-slate-700" for="gameTime">Time</label>
                     <input type="text" id="gameTime" placeholder="1:00 PM" />
                   </div>
                 </div>
 
                 <div>
-                  <label class="block text-sm font-bold text-slate-700">Division</label>
+                  <label class="block text-sm font-bold text-slate-700" for="gameDivision">Division</label>
                   <select id="gameDivision">
                     <option value="Peewee">Peewee</option>
                     <option value="Junior">Junior</option>
@@ -629,39 +839,40 @@
                 </div>
 
                 <div>
-                  <label class="block text-sm font-bold text-slate-700">Field</label>
+                  <label class="block text-sm font-bold text-slate-700" for="gameField">Field</label>
                   <select id="gameField">
                     <option value="Field 1">Field 1 - Front Field</option>
                     <option value="Field 2">Field 2 - Back Field</option>
+                    <option value="Field TBD">Field TBD</option>
                   </select>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                   <div>
-                    <label class="block text-sm font-bold text-slate-700">Away Team</label>
+                    <label class="block text-sm font-bold text-slate-700" for="awayTeam">Away Team</label>
                     <input type="text" id="awayTeam" placeholder="Away" />
                   </div>
 
                   <div>
-                    <label class="block text-sm font-bold text-slate-700">Home Team</label>
+                    <label class="block text-sm font-bold text-slate-700" for="homeTeam">Home Team</label>
                     <input type="text" id="homeTeam" placeholder="Home" />
                   </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
                   <div>
-                    <label class="block text-sm font-bold text-slate-700">Away Score</label>
+                    <label class="block text-sm font-bold text-slate-700" for="awayScore">Away Score</label>
                     <input type="number" id="awayScore" placeholder="0" min="0" />
                   </div>
 
                   <div>
-                    <label class="block text-sm font-bold text-slate-700">Home Score</label>
+                    <label class="block text-sm font-bold text-slate-700" for="homeScore">Home Score</label>
                     <input type="number" id="homeScore" placeholder="0" min="0" />
                   </div>
                 </div>
 
                 <div>
-                  <label class="block text-sm font-bold text-slate-700">Status</label>
+                  <label class="block text-sm font-bold text-slate-700" for="gameStatus">Status</label>
                   <select id="gameStatus">
                     <option value="Scheduled">Scheduled</option>
                     <option value="Updated">Updated</option>
@@ -672,13 +883,13 @@
                 </div>
 
                 <div>
-                  <label class="block text-sm font-bold text-slate-700">Notes</label>
+                  <label class="block text-sm font-bold text-slate-700" for="gameNotes">Notes</label>
                   <input type="text" id="gameNotes" placeholder="Optional note" />
                 </div>
 
                 <div class="pt-2 flex gap-2">
-                  <button id="btnSaveGame" class="btn flex-1">Save Game</button>
-                  <button id="btnCancelEdit" class="btn btn-outline hidden">Cancel</button>
+                  <button id="btnSaveGame" type="button" class="btn flex-1">Save Game</button>
+                  <button id="btnCancelEdit" type="button" class="btn btn-outline hidden">Cancel</button>
                 </div>
               </div>
             </div>
@@ -689,15 +900,15 @@
               </h3>
 
               <p class="text-xs text-indigo-700 mb-4 leading-relaxed">
-                Expected columns: Date, Day, Time, Field, Division, Away, Home, Away Score, Home Score, Status, Notes.
-                Re-importing the same game updates it instead of creating duplicates.
+                Header-based import is supported. Recommended columns:
+                Date, Day, Time, Field, Division, Away, Home, Away Score, Home Score, Status, Notes.
               </p>
 
               <input type="file" id="csvFileInput" accept=".csv" class="mb-3 text-sm" />
-              <button id="btnImportCsv" class="btn w-full !bg-indigo-700 hover:!bg-indigo-800">
+              <button id="btnImportCsv" type="button" class="btn w-full !bg-indigo-700 hover:!bg-indigo-800">
                 Import / Update Games
               </button>
-              <div id="importStatus" class="mt-3 text-sm font-bold text-center"></div>
+              <div id="importStatus" class="mt-3 text-sm font-bold text-center" aria-live="polite"></div>
             </div>
 
             <div class="bg-amber-50 p-6 rounded-2xl shadow-soft border border-amber-200">
@@ -705,15 +916,15 @@
               <p class="text-xs text-amber-800 mb-4 leading-relaxed">
                 Download a backup before major imports or deleting all games.
               </p>
-              <button id="btnDownloadBackup" class="btn btn-outline w-full">Download Games Backup</button>
+              <button id="btnDownloadBackup" type="button" class="btn btn-outline w-full">Download Games Backup</button>
             </div>
           </div>
 
           <div class="lg:col-span-2">
-            <div class="glass p-5 sm:p-6 rounded-2xl">
+            <div class="glass premium-border p-5 sm:p-6 rounded-2xl">
               <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4 border-b pb-3">
                 <h3 class="text-lg font-black text-navy">Manage Games</h3>
-                <button id="btnDeleteAll" class="text-sm text-red-600 hover:text-red-800 font-black hidden">
+                <button id="btnDeleteAll" type="button" class="btn-danger-link hidden">
                   Delete All Games
                 </button>
               </div>
@@ -742,9 +953,9 @@
 
             <div class="mt-6 bg-slate-900 text-slate-100 rounded-2xl p-5 text-sm">
               <h3 class="font-black text-white mb-2">Firebase Rules Reminder</h3>
-              <p class="text-slate-300">
+              <p class="text-slate-300 leading-relaxed">
                 Public visitors should only be able to read. Only approved admins should be able to write.
-                The real protection must be in Firestore Rules.
+                The real protection must be in Firestore Rules, not just this page.
               </p>
             </div>
           </div>
@@ -777,58 +988,79 @@
       setDoc,
       deleteDoc,
       serverTimestamp,
-      onSnapshot
+      onSnapshot,
+      writeBatch
     } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAX09dEYmWX3ex4QBBdKCmSi-69vBf7HnQ",
-      authDomain: "bcnfl-dd46b.firebaseapp.com",
-      projectId: "bcnfl-dd46b",
-      storageBucket: "bcnfl-dd46b.firebasestorage.app",
-      messagingSenderId: "386684761741",
-      appId: "1:386684761741:web:3db2b172232551a88214c4"
+    const APP = {
+      firebaseConfig: {
+        apiKey: "AIzaSyAX09dEYmWX3ex4QBBdKCmSi-69vBf7HnQ",
+        authDomain: "bcnfl-dd46b.firebaseapp.com",
+        projectId: "bcnfl-dd46b",
+        storageBucket: "bcnfl-dd46b.firebasestorage.app",
+        messagingSenderId: "386684761741",
+        appId: "1:386684761741:web:3db2b172232551a88214c4"
+      },
+
+      collections: {
+        games: "games",
+        updates: "siteUpdates"
+      },
+
+      updateDocId: "main",
+
+      allowedStatuses: ["Scheduled", "Updated", "Postponed", "Canceled", "Final"],
+      allowedDivisions: ["Peewee", "Junior", "Senior"],
+      allowedFields: ["Field 1", "Field 2", "Field TBD"],
+
+      fieldLabels: {
+        "Field 1": "Field 1 - Front Field",
+        "Field 2": "Field 2 - Back Field",
+        "Field TBD": "Field TBD"
+      },
+
+      defaultSiteUpdate: {
+        scheduleAlert: "All games originally scheduled for Sunday, May 3, 2026 have been moved to Sunday, May 17, 2026.",
+        weatherUpdate: "All games are currently scheduled as planned."
+      }
     };
 
-    let app;
-    let db;
-    let auth;
-
-    let allGames = [];
-    let publicMode = "next";
-    let currentUser = null;
-
-    let siteUpdateData = {
-      scheduleAlert: "All games originally scheduled for Sunday, May 3, 2026 have been moved to Sunday, May 17, 2026.",
-      weatherUpdate: "All games are currently scheduled as planned."
+    const state = {
+      app: null,
+      db: null,
+      auth: null,
+      allGames: [],
+      publicMode: "next",
+      currentUser: null,
+      siteUpdateData: { ...APP.defaultSiteUpdate }
     };
 
-    const allowedStatuses = ["Scheduled", "Updated", "Postponed", "Canceled", "Final"];
-    const allowedDivisions = ["Peewee", "Junior", "Senior"];
-    const allowedFields = ["Field 1", "Field 2"];
+    const $ = id => document.getElementById(id);
 
-    const fieldLabels = {
-      "Field 1": "Field 1 - Front Field",
-      "Field 2": "Field 2 - Back Field"
+    const dom = {
+      publicView: $("public-view"),
+      adminView: $("admin-view"),
+      scheduleContainer: $("scheduleContainer"),
+      connectionError: $("connectionError"),
+      filtersSection: $("filtersSection"),
+      alertsContainer: $("alertsContainer"),
+
+      navSchedule: $("navSchedule"),
+      navStandings: $("navStandings"),
+      navAdmin: $("navAdmin"),
+      mobileNavSchedule: $("mobileNavSchedule"),
+      mobileNavStandings: $("mobileNavStandings"),
+      mobileNavAdmin: $("mobileNavAdmin"),
+
+      heroGameCount: $("heroGameCount"),
+      heroTeamCount: $("heroTeamCount"),
+
+      loginSection: $("loginSection"),
+      dashboardSection: $("dashboardSection"),
+      loginError: $("loginError"),
+      adminGameList: $("adminGameList"),
+      importStatus: $("importStatus")
     };
-
-    const publicView = document.getElementById("public-view");
-    const adminView = document.getElementById("admin-view");
-    const scheduleContainer = document.getElementById("scheduleContainer");
-    const connectionError = document.getElementById("connectionError");
-    const filtersSection = document.getElementById("filtersSection");
-    const navSchedule = document.getElementById("navSchedule");
-    const navStandings = document.getElementById("navStandings");
-    const navAdmin = document.getElementById("navAdmin");
-
-    try {
-      app = initializeApp(firebaseConfig);
-      db = getFirestore(app);
-      auth = getAuth(app);
-      hideConnectionError();
-    } catch (error) {
-      console.error("Firebase initialization error:", error);
-      showConnectionError("Firebase did not connect. Check your firebaseConfig in the code.");
-    }
 
     function safeText(value) {
       return String(value ?? "").trim();
@@ -844,52 +1076,42 @@
     }
 
     function showConnectionError(message) {
-      connectionError.textContent = message;
-      connectionError.classList.remove("hidden");
+      dom.connectionError.textContent = message;
+      dom.connectionError.classList.remove("hidden");
     }
 
     function hideConnectionError() {
-      connectionError.classList.add("hidden");
-      connectionError.textContent = "";
+      dom.connectionError.classList.add("hidden");
+      dom.connectionError.textContent = "";
     }
 
     function safeStatus(value) {
       const status = safeText(value || "Scheduled");
-      return allowedStatuses.includes(status) ? status : "Scheduled";
+      return APP.allowedStatuses.includes(status) ? status : "Scheduled";
     }
 
     function safeDivision(value) {
       const division = safeText(value);
-      return allowedDivisions.includes(division) ? division : "Junior";
+      return APP.allowedDivisions.includes(division) ? division : "Junior";
     }
 
     function normalizeField(value) {
       const raw = safeText(value);
 
-      if (!raw) return "Field 1";
+      if (!raw) return "Field TBD";
 
       const lowered = raw.toLowerCase();
 
-      if (
-        lowered.includes("field 2") ||
-        lowered.includes("back")
-      ) {
-        return "Field 2";
-      }
+      if (lowered.includes("field 2") || lowered.includes("back")) return "Field 2";
+      if (lowered.includes("field 1") || lowered.includes("front")) return "Field 1";
+      if (lowered.includes("tbd") || lowered.includes("unknown")) return "Field TBD";
 
-      if (
-        lowered.includes("field 1") ||
-        lowered.includes("front")
-      ) {
-        return "Field 1";
-      }
-
-      return allowedFields.includes(raw) ? raw : raw;
+      return APP.allowedFields.includes(raw) ? raw : "Field TBD";
     }
 
     function displayField(value) {
       const field = normalizeField(value);
-      return fieldLabels[field] || field || "Field TBD";
+      return APP.fieldLabels[field] || "Field TBD";
     }
 
     function isValidScore(value) {
@@ -906,12 +1128,12 @@
 
     function parseTimeToMinutes(timeText) {
       const value = safeText(timeText).toUpperCase();
-      const match = value.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/);
+      const match = value.match(/(\d{1,2})(?::(\d{2}))?\s*(AM|PM)/);
 
       if (!match) return 9999;
 
       let hours = Number(match[1]);
-      const minutes = Number(match[2]);
+      const minutes = Number(match[2] || 0);
       const ampm = match[3];
 
       if (ampm === "PM" && hours !== 12) hours += 12;
@@ -931,6 +1153,7 @@
     function parseCsvDate(value) {
       const raw = safeText(value);
 
+      if (!raw) return "";
       if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
 
       const slashMatch = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
@@ -943,6 +1166,14 @@
         if (year.length === 2) year = `20${year}`;
 
         return `${year}-${month}-${day}`;
+      }
+
+      const parsed = new Date(raw);
+      if (!isNaN(parsed.getTime())) {
+        const yyyy = parsed.getFullYear();
+        const mm = String(parsed.getMonth() + 1).padStart(2, "0");
+        const dd = String(parsed.getDate()).padStart(2, "0");
+        return `${yyyy}-${mm}-${dd}`;
       }
 
       return raw;
@@ -966,124 +1197,15 @@
         gameData.homeTeam
       ];
 
-      return slugify(parts.join("-")) || crypto.randomUUID();
-    }
+      const slug = slugify(parts.join("-"));
 
-    function updateTopNav() {
-      const isAdmin = window.location.hash === "#admin";
+      if (slug) return slug;
 
-      navSchedule.classList.toggle("active", !isAdmin && publicMode !== "standings");
-      navStandings.classList.toggle("active", !isAdmin && publicMode === "standings");
-      navAdmin.classList.toggle("active", isAdmin);
-    }
-
-    function handleRoute() {
-      const isAdmin = window.location.hash === "#admin";
-
-      publicView.classList.toggle("hidden", isAdmin);
-      adminView.classList.toggle("hidden", !isAdmin);
-
-      updateTopNav();
-
-      if (!isAdmin) renderPublicGames();
-    }
-
-    window.addEventListener("hashchange", handleRoute);
-    handleRoute();
-
-    function setMode(mode) {
-      publicMode = mode;
-
-      document.getElementById("btnViewNext").classList.toggle("active", mode === "next");
-      document.getElementById("btnViewFull").classList.toggle("active", mode === "full");
-      document.getElementById("btnViewStandings").classList.toggle("active", mode === "standings");
-
-      filtersSection.classList.toggle("hidden", mode === "standings");
-
-      updateTopNav();
-      renderPublicGames();
-
-      if (mode === "standings") {
-        scheduleContainer.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    }
-
-    function clearAllFilters() {
-      document.getElementById("filterSearch").value = "";
-      document.getElementById("filterDivision").value = "";
-      document.getElementById("filterField").value = "";
-      document.getElementById("filterStatus").value = "";
-      document.getElementById("filterDate").value = "";
-
-      document.querySelectorAll(".hero-division-chip, .hero-field-chip").forEach(button => {
-        button.classList.remove("active");
-      });
-
-      renderPublicGames();
-    }
-
-    function applyDivisionFilter(division) {
-      setMode("full");
-
-      const filter = document.getElementById("filterDivision");
-      filter.value = filter.value === division ? "" : division;
-
-      document.querySelectorAll(".hero-division-chip").forEach(button => {
-        button.classList.toggle("active", button.dataset.division === filter.value);
-      });
-
-      renderPublicGames();
-      scheduleContainer.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-
-    function applyFieldFilter(field) {
-      setMode("full");
-
-      const filter = document.getElementById("filterField");
-      filter.value = filter.value === field ? "" : field;
-
-      document.querySelectorAll(".hero-field-chip").forEach(button => {
-        button.classList.toggle("active", button.dataset.field === filter.value);
-      });
-
-      renderPublicGames();
-      scheduleContainer.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-
-    function syncHeroFilterButtons() {
-      const division = document.getElementById("filterDivision").value;
-      const field = document.getElementById("filterField").value;
-
-      document.querySelectorAll(".hero-division-chip").forEach(button => {
-        button.classList.toggle("active", button.dataset.division === division);
-      });
-
-      document.querySelectorAll(".hero-field-chip").forEach(button => {
-        button.classList.toggle("active", button.dataset.field === field);
-      });
-    }
-
-    function renderAlerts() {
-      const container = document.getElementById("alertsContainer");
-      container.innerHTML = "";
-
-      if (safeText(siteUpdateData.scheduleAlert)) {
-        container.innerHTML += `
-          <div class="bg-red-50 border-l-4 border-redAccent p-4 sm:p-5 rounded-2xl shadow-soft">
-            <h3 class="text-sm font-black text-red-800 uppercase tracking-[0.18em]">Important Schedule Alert</h3>
-            <p class="mt-2 text-red-700 leading-relaxed">${escapeHtml(siteUpdateData.scheduleAlert)}</p>
-          </div>
-        `;
+      if (window.crypto && typeof window.crypto.randomUUID === "function") {
+        return window.crypto.randomUUID();
       }
 
-      if (safeText(siteUpdateData.weatherUpdate)) {
-        container.innerHTML += `
-          <div class="bg-sky-50 border-l-4 border-sky-400 p-4 sm:p-5 rounded-2xl shadow-soft">
-            <h3 class="text-sm font-black text-sky-800 uppercase tracking-[0.18em]">Weather & Update Center</h3>
-            <p class="mt-2 text-sky-700 leading-relaxed">${escapeHtml(siteUpdateData.weatherUpdate)}</p>
-          </div>
-        `;
-      }
+      return `game-${Date.now()}-${Math.floor(Math.random() * 100000)}`;
     }
 
     function formatDate(dateValue) {
@@ -1101,11 +1223,163 @@
       });
     }
 
+    function getUniqueTeams() {
+      const teams = new Set();
+
+      state.allGames.forEach(game => {
+        const away = safeText(game.awayTeam);
+        const home = safeText(game.homeTeam);
+
+        if (away && away.toLowerCase() !== "tbd") teams.add(away);
+        if (home && home.toLowerCase() !== "tbd") teams.add(home);
+      });
+
+      return teams;
+    }
+
+    function updateHeroStats() {
+      const teams = getUniqueTeams();
+
+      dom.heroGameCount.textContent = `${state.allGames.length} Game${state.allGames.length === 1 ? "" : "s"}`;
+      dom.heroTeamCount.textContent = `${teams.size} Team${teams.size === 1 ? "" : "s"}`;
+    }
+
+    function setRoute(route) {
+      if (route === "admin") {
+        window.location.hash = "admin";
+      } else {
+        window.location.hash = "public";
+      }
+
+      handleRoute();
+    }
+
+    function isAdminRoute() {
+      return window.location.hash === "#admin";
+    }
+
+    function updateTopNav() {
+      const admin = isAdminRoute();
+      const standings = !admin && state.publicMode === "standings";
+
+      const navPairs = [
+        [dom.navSchedule, !admin && !standings],
+        [dom.navStandings, standings],
+        [dom.navAdmin, admin],
+        [dom.mobileNavSchedule, !admin && !standings],
+        [dom.mobileNavStandings, standings],
+        [dom.mobileNavAdmin, admin]
+      ];
+
+      navPairs.forEach(([button, active]) => {
+        if (button) button.classList.toggle("active", active);
+      });
+    }
+
+    function handleRoute() {
+      const admin = isAdminRoute();
+
+      dom.publicView.classList.toggle("hidden", admin);
+      dom.adminView.classList.toggle("hidden", !admin);
+
+      updateTopNav();
+
+      if (!admin) renderPublicGames();
+    }
+
+    function setMode(mode) {
+      state.publicMode = mode;
+
+      $("btnViewNext").classList.toggle("active", mode === "next");
+      $("btnViewFull").classList.toggle("active", mode === "full");
+      $("btnViewStandings").classList.toggle("active", mode === "standings");
+
+      dom.filtersSection.classList.toggle("hidden", mode === "standings");
+
+      updateTopNav();
+      renderPublicGames();
+
+      if (mode === "standings") {
+        dom.scheduleContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    function clearAllFilters() {
+      $("filterSearch").value = "";
+      $("filterDivision").value = "";
+      $("filterField").value = "";
+      $("filterStatus").value = "";
+      $("filterDate").value = "";
+
+      document.querySelectorAll(".hero-division-chip, .hero-field-chip").forEach(button => {
+        button.classList.remove("active");
+      });
+
+      renderPublicGames();
+    }
+
+    function applyDivisionFilter(division) {
+      setMode("full");
+
+      const filter = $("filterDivision");
+      filter.value = filter.value === division ? "" : division;
+
+      syncHeroFilterButtons();
+      renderPublicGames();
+      dom.scheduleContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function applyFieldFilter(field) {
+      setMode("full");
+
+      const filter = $("filterField");
+      filter.value = filter.value === field ? "" : field;
+
+      syncHeroFilterButtons();
+      renderPublicGames();
+      dom.scheduleContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function syncHeroFilterButtons() {
+      const division = $("filterDivision").value;
+      const field = $("filterField").value;
+
+      document.querySelectorAll(".hero-division-chip").forEach(button => {
+        button.classList.toggle("active", button.dataset.division === division);
+      });
+
+      document.querySelectorAll(".hero-field-chip").forEach(button => {
+        button.classList.toggle("active", button.dataset.field === field);
+      });
+    }
+
+    function renderAlerts() {
+      dom.alertsContainer.innerHTML = "";
+
+      if (safeText(state.siteUpdateData.scheduleAlert)) {
+        dom.alertsContainer.innerHTML += `
+          <div class="bg-red-50 border-l-4 border-redAccent p-4 sm:p-5 rounded-2xl shadow-soft">
+            <h3 class="text-sm font-black text-red-800 uppercase tracking-[0.18em]">Important Schedule Alert</h3>
+            <p class="mt-2 text-red-700 leading-relaxed">${escapeHtml(state.siteUpdateData.scheduleAlert)}</p>
+          </div>
+        `;
+      }
+
+      if (safeText(state.siteUpdateData.weatherUpdate)) {
+        dom.alertsContainer.innerHTML += `
+          <div class="bg-sky-50 border-l-4 border-sky-400 p-4 sm:p-5 rounded-2xl shadow-soft">
+            <h3 class="text-sm font-black text-sky-800 uppercase tracking-[0.18em]">Weather & Update Center</h3>
+            <p class="mt-2 text-sky-700 leading-relaxed">${escapeHtml(state.siteUpdateData.weatherUpdate)}</p>
+          </div>
+        `;
+      }
+    }
+
     function populateDateFilter() {
-      const dateSelect = document.getElementById("filterDate");
+      const dateSelect = $("filterDate");
       const currentValue = dateSelect.value;
 
-      const uniqueDates = [...new Set(allGames.map(g => safeText(g.date)).filter(Boolean))].sort();
+      const uniqueDates = [...new Set(state.allGames.map(g => safeText(g.date)).filter(Boolean))].sort();
 
       dateSelect.innerHTML = `<option value="">All Dates</option>`;
 
@@ -1113,29 +1387,31 @@
         dateSelect.innerHTML += `<option value="${escapeHtml(date)}">${formatDate(date)}</option>`;
       });
 
-      dateSelect.value = currentValue;
+      dateSelect.value = uniqueDates.includes(currentValue) ? currentValue : "";
     }
 
     function getFilteredGames() {
-      const sSearch = safeText(document.getElementById("filterSearch").value).toLowerCase();
-      const sDiv = document.getElementById("filterDivision").value;
-      const sField = document.getElementById("filterField").value;
-      const sStatus = document.getElementById("filterStatus").value;
-      const sDate = document.getElementById("filterDate").value;
+      const search = safeText($("filterSearch").value).toLowerCase();
+      const divisionFilter = $("filterDivision").value;
+      const fieldFilter = $("filterField").value;
+      const statusFilter = $("filterStatus").value;
+      const dateFilter = $("filterDate").value;
 
-      return allGames.filter(g => {
-        const home = safeText(g.homeTeam).toLowerCase();
-        const away = safeText(g.awayTeam).toLowerCase();
-        const division = safeDivision(g.division);
-        const field = normalizeField(g.field);
-        const status = safeStatus(g.status);
-        const date = safeText(g.date);
+      return state.allGames.filter(game => {
+        const home = safeText(game.homeTeam).toLowerCase();
+        const away = safeText(game.awayTeam).toLowerCase();
+        const division = safeDivision(game.division);
+        const field = normalizeField(game.field);
+        const status = safeStatus(game.status);
+        const date = safeText(game.date);
 
-        if (sSearch && !home.includes(sSearch) && !away.includes(sSearch) && !field.toLowerCase().includes(sSearch)) return false;
-        if (sDiv && division !== sDiv) return false;
-        if (sField && field !== sField) return false;
-        if (sStatus && status !== sStatus) return false;
-        if (sDate && date !== sDate) return false;
+        const searchable = [home, away, field.toLowerCase(), division.toLowerCase(), status.toLowerCase()].join(" ");
+
+        if (search && !searchable.includes(search)) return false;
+        if (divisionFilter && division !== divisionFilter) return false;
+        if (fieldFilter && field !== fieldFilter) return false;
+        if (statusFilter && status !== statusFilter) return false;
+        if (dateFilter && date !== dateFilter) return false;
 
         return true;
       });
@@ -1170,24 +1446,25 @@
     }
 
     function renderPublicGames() {
-      if (!scheduleContainer) return;
-      if (window.location.hash === "#admin") return;
+      if (!dom.scheduleContainer) return;
+      if (isAdminRoute()) return;
 
       syncHeroFilterButtons();
       updateTopNav();
+      updateHeroStats();
 
-      if (publicMode === "standings") {
+      if (state.publicMode === "standings") {
         renderStandings();
         return;
       }
 
       let filtered = getFilteredGames();
 
-      if (publicMode === "next") {
+      if (state.publicMode === "next") {
         const nextData = getNextGames(filtered);
         filtered = nextData.games;
 
-        scheduleContainer.innerHTML = "";
+        dom.scheduleContainer.innerHTML = "";
 
         if (filtered.length === 0) {
           renderEmptyState();
@@ -1198,15 +1475,15 @@
           ? "The regular season schedule has concluded. Showing the most recent completed game date."
           : "Showing the next upcoming game date.";
 
-        scheduleContainer.innerHTML = `
-          <div class="hero-card p-5">
+        dom.scheduleContainer.innerHTML = `
+          <div class="hero-card premium-border p-5">
             <div class="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
                 <div class="section-kicker section-kicker-light mb-1">Featured Date</div>
                 <h3 class="text-2xl font-black">Next Games</h3>
                 <p class="text-slate-200 mt-1">${escapeHtml(message)}</p>
               </div>
-              <button id="btnInlineFullSchedule" class="btn btn-outline">View Full Schedule</button>
+              <button id="btnInlineFullSchedule" type="button" class="btn btn-outline">View Full Schedule</button>
             </div>
           </div>
         `;
@@ -1215,15 +1492,15 @@
         return;
       }
 
-      scheduleContainer.innerHTML = "";
+      dom.scheduleContainer.innerHTML = "";
 
       if (filtered.length === 0) {
         renderEmptyState();
         return;
       }
 
-      scheduleContainer.innerHTML = `
-        <div class="hero-card p-5">
+      dom.scheduleContainer.innerHTML = `
+        <div class="hero-card premium-border p-5">
           <div class="relative z-10">
             <div class="section-kicker section-kicker-light mb-1">Complete Slate</div>
             <h3 class="text-2xl font-black">Full Schedule</h3>
@@ -1236,14 +1513,14 @@
     }
 
     function renderEmptyState() {
-      scheduleContainer.innerHTML = `
-        <div class="glass p-8 rounded-2xl text-center">
+      dom.scheduleContainer.innerHTML = `
+        <div class="glass premium-border p-8 rounded-2xl text-center">
           <div class="text-5xl mb-4 text-slate-300">🏈</div>
           <h3 class="mt-2 text-xl font-black text-slate-900">No games found</h3>
           <p class="mt-1 text-slate-500">
             The database is currently empty or no games match your filters.
           </p>
-          <button id="btnClearFilters" class="mt-4 btn btn-outline">
+          <button id="btnClearFilters" type="button" class="mt-4 btn btn-outline">
             Clear Filters
           </button>
         </div>
@@ -1253,10 +1530,10 @@
     function renderGroupedGames(gamesToRender, append = false) {
       const grouped = {};
 
-      gamesToRender.forEach(g => {
-        const date = safeText(g.date) || "Date TBD";
+      gamesToRender.forEach(game => {
+        const date = safeText(game.date) || "Date TBD";
         if (!grouped[date]) grouped[date] = [];
-        grouped[date].push(g);
+        grouped[date].push(game);
       });
 
       Object.keys(grouped).sort().forEach(date => {
@@ -1273,8 +1550,8 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         `;
 
-        games.forEach(g => {
-          groupHTML += renderGameCard(g);
+        games.forEach(game => {
+          groupHTML += renderGameCard(game);
         });
 
         groupHTML += `
@@ -1283,31 +1560,30 @@
         `;
 
         if (append) {
-          scheduleContainer.innerHTML += groupHTML;
+          dom.scheduleContainer.innerHTML += groupHTML;
         } else {
-          scheduleContainer.innerHTML = groupHTML;
+          dom.scheduleContainer.innerHTML = groupHTML;
         }
       });
     }
 
-    function renderGameCard(g) {
-      const status = safeStatus(g.status);
+    function renderGameCard(game) {
+      const status = safeStatus(game.status);
       const statusClass = `badge-${status}`;
 
       const cardClass = status === "Canceled" || status === "Postponed"
         ? `game-card card-${status}`
         : "game-card";
 
-      const awayHasScore = isValidScore(g.awayScore);
-      const homeHasScore = isValidScore(g.homeScore);
+      const awayHasScore = isValidScore(game.awayScore);
+      const homeHasScore = isValidScore(game.homeScore);
       const showScoreboard = status === "Final" || awayHasScore || homeHasScore;
 
-      const awayTeam = escapeHtml(safeText(g.awayTeam) || "Away Team");
-      const homeTeam = escapeHtml(safeText(g.homeTeam) || "Home Team");
-      const field = normalizeField(g.field);
+      const awayTeam = escapeHtml(safeText(game.awayTeam) || "Away Team");
+      const homeTeam = escapeHtml(safeText(game.homeTeam) || "Home Team");
 
-      const notesHtml = safeText(g.notes)
-        ? `<div class="mt-3 text-sm text-red-700 bg-red-50 p-3 rounded-xl border border-red-100"><strong>Note:</strong> ${escapeHtml(g.notes)}</div>`
+      const notesHtml = safeText(game.notes)
+        ? `<div class="mt-3 text-sm text-red-700 bg-red-50 p-3 rounded-xl border border-red-100"><strong>Note:</strong> ${escapeHtml(game.notes)}</div>`
         : "";
 
       const matchupHtml = showScoreboard
@@ -1315,37 +1591,43 @@
           <div class="flex flex-col gap-2 my-4">
             <div class="score-row">
               <span>${awayTeam}</span>
-              <span class="score-number">${awayHasScore ? escapeHtml(g.awayScore) : "-"}</span>
+              <span class="score-number">${awayHasScore ? escapeHtml(game.awayScore) : "-"}</span>
             </div>
 
             <div class="score-row">
               <span>${homeTeam}</span>
-              <span class="score-number">${homeHasScore ? escapeHtml(g.homeScore) : "-"}</span>
+              <span class="score-number">${homeHasScore ? escapeHtml(game.homeScore) : "-"}</span>
             </div>
           </div>
         `
         : `
           <div class="flex flex-col gap-2 my-4">
             <div class="score-row">
-              <span class="text-slate-500 text-sm uppercase tracking-wide">Away</span>
-              <span class="text-right truncate">${awayTeam}</span>
+              <span>
+                <span class="text-slate-500 text-xs uppercase tracking-wide block">Away</span>
+                <span class="block truncate">${awayTeam}</span>
+              </span>
+              <span class="text-slate-400 font-black">@</span>
             </div>
 
             <div class="score-row">
-              <span class="text-slate-500 text-sm uppercase tracking-wide">Home</span>
-              <span class="text-right truncate">${homeTeam}</span>
+              <span>
+                <span class="text-slate-500 text-xs uppercase tracking-wide block">Home</span>
+                <span class="block truncate">${homeTeam}</span>
+              </span>
+              <span class="text-slate-400 font-black">—</span>
             </div>
           </div>
         `;
 
       return `
-        <div class="${cardClass} p-5">
+        <article class="${cardClass} p-5">
           <div class="flex justify-between items-start mb-3 gap-3">
             <div>
               <div class="text-slate-500 text-xs font-black uppercase tracking-wide">Kickoff</div>
-              <span class="text-navy text-lg font-black">${escapeHtml(safeText(g.time) || "Time TBD")}</span>
+              <span class="text-navy text-lg font-black">${escapeHtml(safeText(game.time) || "Time TBD")}</span>
               <span class="mx-2 text-slate-300">|</span>
-              <span class="text-sky-700 text-sm font-black uppercase">${escapeHtml(safeDivision(g.division))}</span>
+              <span class="text-sky-700 text-sm font-black uppercase">${escapeHtml(safeDivision(game.division))}</span>
             </div>
 
             <span class="badge ${statusClass}">${escapeHtml(status)}</span>
@@ -1353,12 +1635,12 @@
 
           ${matchupHtml}
 
-          <div class="text-sm text-slate-500 font-semibold" title="${escapeHtml(displayField(g.field))}">
-            📍 ${escapeHtml(field || "Field TBD")}
+          <div class="text-sm text-slate-500 font-semibold" title="${escapeHtml(displayField(game.field))}">
+            📍 ${escapeHtml(displayField(game.field))}
           </div>
 
           ${notesHtml}
-        </div>
+        </article>
       `;
     }
 
@@ -1375,6 +1657,18 @@
       };
     }
 
+    function addTeamToStandings(standings, division, teamName) {
+      const team = safeText(teamName);
+
+      if (!team) return;
+      if (team.toLowerCase() === "tbd") return;
+      if (!standings[division]) return;
+
+      if (!standings[division][team]) {
+        standings[division][team] = createStandingRow(team);
+      }
+    }
+
     function calculateStandings() {
       const standings = {
         Peewee: {},
@@ -1382,23 +1676,29 @@
         Senior: {}
       };
 
-      allGames.forEach(g => {
-        const status = safeStatus(g.status);
-        const division = safeDivision(g.division);
-        const awayTeam = safeText(g.awayTeam);
-        const homeTeam = safeText(g.homeTeam);
+      state.allGames.forEach(game => {
+        const division = safeDivision(game.division);
+        addTeamToStandings(standings, division, game.awayTeam);
+        addTeamToStandings(standings, division, game.homeTeam);
+      });
+
+      state.allGames.forEach(game => {
+        const status = safeStatus(game.status);
+        const division = safeDivision(game.division);
+        const awayTeam = safeText(game.awayTeam);
+        const homeTeam = safeText(game.homeTeam);
 
         if (status !== "Final") return;
         if (!standings[division]) return;
         if (!awayTeam || !homeTeam) return;
-        if (!isValidScore(g.awayScore) || !isValidScore(g.homeScore)) return;
+        if (!isValidScore(game.awayScore) || !isValidScore(game.homeScore)) return;
         if (awayTeam.toLowerCase() === "tbd" || homeTeam.toLowerCase() === "tbd") return;
 
-        const awayScore = Number(g.awayScore);
-        const homeScore = Number(g.homeScore);
+        const awayScore = Number(game.awayScore);
+        const homeScore = Number(game.homeScore);
 
-        if (!standings[division][awayTeam]) standings[division][awayTeam] = createStandingRow(awayTeam);
-        if (!standings[division][homeTeam]) standings[division][homeTeam] = createStandingRow(homeTeam);
+        addTeamToStandings(standings, division, awayTeam);
+        addTeamToStandings(standings, division, homeTeam);
 
         const away = standings[division][awayTeam];
         const home = standings[division][homeTeam];
@@ -1432,10 +1732,15 @@
 
     function sortStandings(rows) {
       return rows.sort((a, b) => {
+        const aWinPct = a.gp ? (a.w + a.t * 0.5) / a.gp : 0;
+        const bWinPct = b.gp ? (b.w + b.t * 0.5) / b.gp : 0;
+
+        if (bWinPct !== aWinPct) return bWinPct - aWinPct;
         if (b.w !== a.w) return b.w - a.w;
         if (b.t !== a.t) return b.t - a.t;
         if (b.diff !== a.diff) return b.diff - a.diff;
         if (b.pf !== a.pf) return b.pf - a.pf;
+
         return a.team.localeCompare(b.team);
       });
     }
@@ -1444,22 +1749,22 @@
       const standings = calculateStandings();
 
       let html = `
-        <div class="hero-card p-5">
+        <div class="hero-card premium-border p-5">
           <div class="relative z-10">
             <div class="section-kicker section-kicker-light mb-1">League Table</div>
             <h3 class="text-2xl font-black">Standings</h3>
             <p class="text-slate-200 mt-1">
-              Standings update automatically when games are marked Final with valid scores.
+              Teams appear once they are listed on the schedule. Records update when games are marked Final with valid scores.
             </p>
           </div>
         </div>
       `;
 
-      allowedDivisions.forEach(division => {
+      APP.allowedDivisions.forEach(division => {
         const rows = sortStandings(Object.values(standings[division]));
 
         html += `
-          <div class="glass rounded-2xl p-5">
+          <section class="glass premium-border rounded-2xl p-5">
             <div class="flex justify-between items-center mb-4">
               <h3 class="text-xl font-black text-navy">${escapeHtml(division)} Standings</h3>
               <span class="badge badge-Scheduled">${rows.length} Teams</span>
@@ -1469,7 +1774,7 @@
         if (rows.length === 0) {
           html += `
             <div class="text-slate-500 bg-slate-50 rounded-xl p-4 border border-slate-200">
-              No final scores have been entered for this division yet.
+              No teams have been added for this division yet.
             </div>
           `;
         } else {
@@ -1493,7 +1798,7 @@
 
           rows.forEach((row, index) => {
             html += `
-              <tr class="${index === 0 ? "bg-amber-50" : "bg-white"}">
+              <tr class="${index === 0 && row.gp > 0 ? "bg-amber-50" : "bg-white"}">
                 <td class="p-3 font-black text-navy">
                   <span class="text-slate-400 mr-2">${index + 1}.</span>${escapeHtml(row.team)}
                 </td>
@@ -1518,20 +1823,25 @@
 
           rows.forEach((row, index) => {
             html += `
-              <div class="bg-white rounded-xl p-4 border border-slate-200">
-                <div class="font-black text-navy text-lg">
-                  <span class="text-slate-400 mr-2">${index + 1}.</span>${escapeHtml(row.team)}
+              <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-soft">
+                <div class="flex justify-between items-start gap-3">
+                  <div class="font-black text-navy text-lg">
+                    <span class="text-slate-400 mr-2">${index + 1}.</span>${escapeHtml(row.team)}
+                  </div>
+                  ${index === 0 && row.gp > 0 ? `<span class="badge badge-TBD">Leader</span>` : ""}
                 </div>
+
                 <div class="grid grid-cols-4 gap-2 mt-3 text-center text-sm">
-                  <div><div class="font-black">${row.w}</div><div class="text-slate-500">W</div></div>
-                  <div><div class="font-black">${row.l}</div><div class="text-slate-500">L</div></div>
-                  <div><div class="font-black">${row.t}</div><div class="text-slate-500">T</div></div>
-                  <div><div class="font-black">${row.gp}</div><div class="text-slate-500">GP</div></div>
+                  <div class="bg-slate-50 rounded-lg p-2"><div class="font-black">${row.w}</div><div class="text-slate-500">W</div></div>
+                  <div class="bg-slate-50 rounded-lg p-2"><div class="font-black">${row.l}</div><div class="text-slate-500">L</div></div>
+                  <div class="bg-slate-50 rounded-lg p-2"><div class="font-black">${row.t}</div><div class="text-slate-500">T</div></div>
+                  <div class="bg-slate-50 rounded-lg p-2"><div class="font-black">${row.gp}</div><div class="text-slate-500">GP</div></div>
                 </div>
-                <div class="grid grid-cols-3 gap-2 mt-3 text-center text-sm">
-                  <div><div class="font-black">${row.pf}</div><div class="text-slate-500">PF</div></div>
-                  <div><div class="font-black">${row.pa}</div><div class="text-slate-500">PA</div></div>
-                  <div><div class="font-black">${row.diff > 0 ? "+" : ""}${row.diff}</div><div class="text-slate-500">DIFF</div></div>
+
+                <div class="grid grid-cols-3 gap-2 mt-2 text-center text-sm">
+                  <div class="bg-slate-50 rounded-lg p-2"><div class="font-black">${row.pf}</div><div class="text-slate-500">PF</div></div>
+                  <div class="bg-slate-50 rounded-lg p-2"><div class="font-black">${row.pa}</div><div class="text-slate-500">PA</div></div>
+                  <div class="bg-slate-50 rounded-lg p-2"><div class="font-black">${row.diff > 0 ? "+" : ""}${row.diff}</div><div class="text-slate-500">DIFF</div></div>
                 </div>
               </div>
             `;
@@ -1540,57 +1850,105 @@
           html += `</div>`;
         }
 
-        html += `</div>`;
+        html += `</section>`;
       });
 
-      scheduleContainer.innerHTML = html;
+      dom.scheduleContainer.innerHTML = html;
     }
 
     function buildGameDataFromForm() {
-      const status = safeStatus(document.getElementById("gameStatus").value);
+      const status = safeStatus($("gameStatus").value);
 
       return {
-        date: document.getElementById("gameDate").value,
-        time: safeText(document.getElementById("gameTime").value),
-        division: safeDivision(document.getElementById("gameDivision").value),
-        field: normalizeField(document.getElementById("gameField").value),
-        homeTeam: safeText(document.getElementById("homeTeam").value),
-        awayTeam: safeText(document.getElementById("awayTeam").value),
-        awayScore: normalizeScore(document.getElementById("awayScore").value),
-        homeScore: normalizeScore(document.getElementById("homeScore").value),
+        date: $("gameDate").value,
+        time: safeText($("gameTime").value),
+        division: safeDivision($("gameDivision").value),
+        field: normalizeField($("gameField").value),
+        homeTeam: safeText($("homeTeam").value),
+        awayTeam: safeText($("awayTeam").value),
+        awayScore: normalizeScore($("awayScore").value),
+        homeScore: normalizeScore($("homeScore").value),
         status,
         isFinal: status === "Final",
-        notes: safeText(document.getElementById("gameNotes").value),
+        notes: safeText($("gameNotes").value),
         updatedAt: serverTimestamp()
       };
     }
 
-    function buildGameDataFromCsvRow(row) {
-      const status = safeStatus(row[9] || "Scheduled");
+    function normalizeHeader(value) {
+      return safeText(value)
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "");
+    }
+
+    function getCsvValue(row, possibleHeaders, fallbackIndex, originalRow = []) {
+      for (const header of possibleHeaders) {
+        const normalized = normalizeHeader(header);
+        if (Object.prototype.hasOwnProperty.call(row, normalized)) {
+          return row[normalized];
+        }
+      }
+
+      return originalRow[fallbackIndex] ?? "";
+    }
+
+    function buildGameDataFromCsvObject(row, originalRow = []) {
+      const date = getCsvValue(row, ["date", "game date"], 0, originalRow);
+      const time = getCsvValue(row, ["time", "game time", "kickoff"], 2, originalRow);
+      const field = getCsvValue(row, ["field", "location"], 3, originalRow);
+      const division = getCsvValue(row, ["division", "age group"], 4, originalRow);
+      const away = getCsvValue(row, ["away", "away team", "visitor", "visitor team"], 5, originalRow);
+      const home = getCsvValue(row, ["home", "home team"], 6, originalRow);
+      const awayScore = getCsvValue(row, ["away score", "awayscore", "visitor score"], 7, originalRow);
+      const homeScore = getCsvValue(row, ["home score", "homescore"], 8, originalRow);
+      const status = getCsvValue(row, ["status", "game status"], 9, originalRow);
+      const notes = getCsvValue(row, ["notes", "note", "comments"], 10, originalRow);
+
+      const cleanStatus = safeStatus(status || "Scheduled");
 
       return {
-        date: parseCsvDate(row[0]),
-        time: safeText(row[2]),
-        field: normalizeField(row[3]),
-        division: safeDivision(row[4]),
-        awayTeam: safeText(row[5]),
-        homeTeam: safeText(row[6]),
-        awayScore: normalizeScore(row[7]),
-        homeScore: normalizeScore(row[8]),
-        status,
-        isFinal: status === "Final",
-        notes: safeText(row[10]),
+        date: parseCsvDate(date),
+        time: safeText(time),
+        field: normalizeField(field),
+        division: safeDivision(division),
+        awayTeam: safeText(away),
+        homeTeam: safeText(home),
+        awayScore: normalizeScore(awayScore),
+        homeScore: normalizeScore(homeScore),
+        status: cleanStatus,
+        isFinal: cleanStatus === "Final",
+        notes: safeText(notes),
         updatedAt: serverTimestamp()
       };
+    }
+
+    function isLikelyGameRow(gameData) {
+      if (!gameData.date || !gameData.time || !gameData.awayTeam || !gameData.homeTeam) return false;
+
+      const timeCell = safeText(gameData.time).toUpperCase();
+
+      return timeCell.includes("PM") || timeCell.includes("AM");
+    }
+
+    function validateGameData(gameData) {
+      if (!gameData.date || !gameData.time || !gameData.homeTeam || !gameData.awayTeam) {
+        return "Please fill in Date, Time, Home Team, and Away Team.";
+      }
+
+      if (gameData.status === "Final" && (!isValidScore(gameData.awayScore) || !isValidScore(gameData.homeScore))) {
+        return "Please enter both scores before marking a game Final.";
+      }
+
+      return "";
     }
 
     function renderAdminGames() {
-      const tbody = document.getElementById("adminGameList");
-      const btnDeleteAll = document.getElementById("btnDeleteAll");
+      const tbody = dom.adminGameList;
+      const btnDeleteAll = $("btnDeleteAll");
 
       tbody.innerHTML = "";
 
-      if (allGames.length === 0) {
+      if (state.allGames.length === 0) {
         btnDeleteAll.classList.add("hidden");
 
         tbody.innerHTML = `
@@ -1606,32 +1964,32 @@
 
       btnDeleteAll.classList.remove("hidden");
 
-      allGames.forEach(g => {
-        const status = safeStatus(g.status);
+      state.allGames.forEach(game => {
+        const status = safeStatus(game.status);
 
-        const scoreText = isValidScore(g.awayScore) || isValidScore(g.homeScore)
-          ? `${escapeHtml(g.awayScore ?? "-")} - ${escapeHtml(g.homeScore ?? "-")}`
+        const scoreText = isValidScore(game.awayScore) || isValidScore(game.homeScore)
+          ? `${escapeHtml(game.awayScore ?? "-")} - ${escapeHtml(game.homeScore ?? "-")}`
           : "—";
 
         const tr = document.createElement("tr");
 
         tr.innerHTML = `
           <td class="p-3 border-t border-slate-100">
-            <div class="font-black text-navy">${escapeHtml(g.date)}</div>
-            <div class="text-xs text-slate-500">${escapeHtml(g.time)}</div>
+            <div class="font-black text-navy">${escapeHtml(game.date)}</div>
+            <div class="text-xs text-slate-500">${escapeHtml(game.time)}</div>
           </td>
 
           <td class="p-3 border-t border-slate-100 font-bold">
-            <span class="text-slate-600">${escapeHtml(g.awayTeam)}</span>
+            <span class="text-slate-600">${escapeHtml(game.awayTeam)}</span>
             <span class="text-slate-400 mx-1">@</span>
-            <span class="text-navy">${escapeHtml(g.homeTeam)}</span>
+            <span class="text-navy">${escapeHtml(game.homeTeam)}</span>
           </td>
 
           <td class="p-3 border-t border-slate-100 font-black">${scoreText}</td>
 
           <td class="p-3 border-t border-slate-100">
-            <div class="font-bold">${escapeHtml(safeDivision(g.division))}</div>
-            <div class="text-xs text-slate-500 truncate max-w-[160px]">${escapeHtml(displayField(g.field))}</div>
+            <div class="font-bold">${escapeHtml(safeDivision(game.division))}</div>
+            <div class="text-xs text-slate-500 truncate max-w-[160px]">${escapeHtml(displayField(game.field))}</div>
           </td>
 
           <td class="p-3 border-t border-slate-100">
@@ -1639,62 +1997,61 @@
           </td>
 
           <td class="p-3 border-t border-slate-100 text-right space-x-2">
-            <button class="text-sky-600 hover:underline font-black text-sm btn-edit">Edit</button>
-            <button class="text-redAccent hover:underline font-black text-sm btn-delete">Delete</button>
+            <button class="text-sky-600 hover:underline font-black text-sm btn-edit" type="button">Edit</button>
+            <button class="text-redAccent hover:underline font-black text-sm btn-delete" type="button">Delete</button>
           </td>
         `;
 
-        tr.querySelector(".btn-edit").addEventListener("click", () => loadGameIntoForm(g));
-        tr.querySelector(".btn-delete").addEventListener("click", () => deleteGame(g.id));
+        tr.querySelector(".btn-edit").addEventListener("click", () => loadGameIntoForm(game));
+        tr.querySelector(".btn-delete").addEventListener("click", () => deleteGame(game.id));
 
         tbody.appendChild(tr);
       });
     }
 
-    function loadGameIntoForm(g) {
-      document.getElementById("gameFormTitle").textContent = "Edit Game";
-      document.getElementById("gameId").value = g.id;
-      document.getElementById("gameDate").value = safeText(g.date);
-      document.getElementById("gameTime").value = safeText(g.time);
-      document.getElementById("gameDivision").value = safeDivision(g.division);
-      document.getElementById("gameField").value = normalizeField(g.field);
-      document.getElementById("homeTeam").value = safeText(g.homeTeam);
-      document.getElementById("awayTeam").value = safeText(g.awayTeam);
-      document.getElementById("awayScore").value = g.awayScore ?? "";
-      document.getElementById("homeScore").value = g.homeScore ?? "";
-      document.getElementById("gameStatus").value = safeStatus(g.status);
-      document.getElementById("gameNotes").value = safeText(g.notes);
+    function loadGameIntoForm(game) {
+      $("gameFormTitle").textContent = "Edit Game";
+      $("gameId").value = game.id;
+      $("gameDate").value = safeText(game.date);
+      $("gameTime").value = safeText(game.time);
+      $("gameDivision").value = safeDivision(game.division);
+      $("gameField").value = normalizeField(game.field);
+      $("homeTeam").value = safeText(game.homeTeam);
+      $("awayTeam").value = safeText(game.awayTeam);
+      $("awayScore").value = game.awayScore ?? "";
+      $("homeScore").value = game.homeScore ?? "";
+      $("gameStatus").value = safeStatus(game.status);
+      $("gameNotes").value = safeText(game.notes);
 
-      document.getElementById("btnSaveGame").textContent = "Save Changes";
-      document.getElementById("btnCancelEdit").classList.remove("hidden");
-      document.getElementById("gameFormTitle").scrollIntoView({ behavior: "smooth" });
+      $("btnSaveGame").textContent = "Save Changes";
+      $("btnCancelEdit").classList.remove("hidden");
+      $("gameFormTitle").scrollIntoView({ behavior: "smooth" });
     }
 
     function resetGameForm() {
-      document.getElementById("gameFormTitle").textContent = "Add New Game";
-      document.getElementById("gameId").value = "";
-      document.getElementById("gameDate").value = "";
-      document.getElementById("gameTime").value = "";
-      document.getElementById("gameDivision").value = "Peewee";
-      document.getElementById("gameField").value = "Field 1";
-      document.getElementById("homeTeam").value = "";
-      document.getElementById("awayTeam").value = "";
-      document.getElementById("awayScore").value = "";
-      document.getElementById("homeScore").value = "";
-      document.getElementById("gameStatus").value = "Scheduled";
-      document.getElementById("gameNotes").value = "";
+      $("gameFormTitle").textContent = "Add New Game";
+      $("gameId").value = "";
+      $("gameDate").value = "";
+      $("gameTime").value = "";
+      $("gameDivision").value = "Peewee";
+      $("gameField").value = "Field 1";
+      $("homeTeam").value = "";
+      $("awayTeam").value = "";
+      $("awayScore").value = "";
+      $("homeScore").value = "";
+      $("gameStatus").value = "Scheduled";
+      $("gameNotes").value = "";
 
-      document.getElementById("btnSaveGame").textContent = "Save Game";
-      document.getElementById("btnCancelEdit").classList.add("hidden");
+      $("btnSaveGame").textContent = "Save Game";
+      $("btnCancelEdit").classList.add("hidden");
     }
 
     async function deleteGame(id) {
-      if (!currentUser) return;
-
+      if (!state.currentUser) return;
       if (!confirm("Are you sure you want to delete this game?")) return;
 
       try {
-        await deleteDoc(doc(db, "games", id));
+        await deleteDoc(doc(state.db, APP.collections.games, id));
       } catch (error) {
         console.error(error);
         alert("Failed to delete game.");
@@ -1704,8 +2061,8 @@
     function downloadGamesBackup() {
       const backup = {
         createdAt: new Date().toISOString(),
-        totalGames: allGames.length,
-        games: allGames
+        totalGames: state.allGames.length,
+        games: state.allGames
       };
 
       const blob = new Blob([JSON.stringify(backup, null, 2)], {
@@ -1725,8 +2082,19 @@
       URL.revokeObjectURL(url);
     }
 
+    async function commitInBatches(operations, batchSize = 450) {
+      for (let i = 0; i < operations.length; i += batchSize) {
+        const batch = writeBatch(state.db);
+        const chunk = operations.slice(i, i + batchSize);
+
+        chunk.forEach(operation => operation(batch));
+
+        await batch.commit();
+      }
+    }
+
     async function deleteAllGames() {
-      if (!currentUser) return;
+      if (!state.currentUser) return;
 
       const backupFirst = confirm("Download a backup before deleting all games?");
       if (backupFirst) downloadGamesBackup();
@@ -1735,47 +2103,189 @@
 
       if (confirmText !== "DELETE ALL GAMES") return;
 
-      const btn = document.getElementById("btnDeleteAll");
+      const btn = $("btnDeleteAll");
       btn.textContent = "Deleting...";
 
       try {
-        for (const g of allGames) {
-          await deleteDoc(doc(db, "games", g.id));
-        }
+        const operations = state.allGames.map(game => batch => {
+          batch.delete(doc(state.db, APP.collections.games, game.id));
+        });
+
+        await commitInBatches(operations);
       } catch (error) {
         console.error(error);
         alert("Some games may not have deleted.");
+      } finally {
+        btn.textContent = "Delete All Games";
+      }
+    }
+
+    function parseCsvFile(file) {
+      return new Promise((resolve, reject) => {
+        Papa.parse(file, {
+          skipEmptyLines: true,
+          header: true,
+          transformHeader: header => normalizeHeader(header),
+          complete: results => resolve(results),
+          error: error => reject(error)
+        });
+      });
+    }
+
+    function parseCsvFileNoHeader(file) {
+      return new Promise((resolve, reject) => {
+        Papa.parse(file, {
+          skipEmptyLines: true,
+          header: false,
+          complete: results => resolve(results),
+          error: error => reject(error)
+        });
+      });
+    }
+
+    async function importCsv() {
+      if (!state.currentUser) return;
+
+      const fileInput = $("csvFileInput");
+      const file = fileInput.files[0];
+
+      if (!file) {
+        dom.importStatus.textContent = "Please select a CSV file first.";
+        dom.importStatus.className = "mt-3 text-sm font-bold text-red-600 text-center";
+        return;
       }
 
-      btn.textContent = "Delete All Games";
+      dom.importStatus.textContent = "Parsing CSV...";
+      dom.importStatus.className = "mt-3 text-sm font-bold text-indigo-600 text-center";
+
+      const replaceExisting = confirm(
+        "Import options:\n\nOK = Replace all existing games with this CSV.\nCancel = Merge/update games without deleting existing games."
+      );
+
+      try {
+        let parsed = await parseCsvFile(file);
+        let importedRows = parsed.data || [];
+
+        let gamesToImport = importedRows
+          .map(row => buildGameDataFromCsvObject(row))
+          .filter(game => isLikelyGameRow(game));
+
+        if (gamesToImport.length === 0) {
+          parsed = await parseCsvFileNoHeader(file);
+
+          gamesToImport = (parsed.data || [])
+            .map(row => buildGameDataFromCsvObject({}, row))
+            .filter(game => isLikelyGameRow(game));
+        }
+
+        let skippedCount = 0;
+        const validGames = [];
+
+        gamesToImport.forEach(gameData => {
+          const error = validateGameData(gameData);
+
+          if (error) {
+            skippedCount++;
+            return;
+          }
+
+          validGames.push(gameData);
+        });
+
+        if (validGames.length === 0) {
+          dom.importStatus.textContent = "No valid games were found. Check your CSV headers and columns.";
+          dom.importStatus.className = "mt-3 text-sm font-bold text-red-600 text-center";
+          return;
+        }
+
+        const operations = [];
+
+        if (replaceExisting && state.allGames.length > 0) {
+          downloadGamesBackup();
+
+          state.allGames.forEach(game => {
+            operations.push(batch => {
+              batch.delete(doc(state.db, APP.collections.games, game.id));
+            });
+          });
+        }
+
+        validGames.forEach(gameData => {
+          const gameId = createGameKey(gameData);
+
+          operations.push(batch => {
+            batch.set(
+              doc(state.db, APP.collections.games, gameId),
+              {
+                ...gameData,
+                createdAt: serverTimestamp()
+              },
+              { merge: true }
+            );
+          });
+        });
+
+        await commitInBatches(operations);
+
+        dom.importStatus.textContent = `Success! Imported/updated ${validGames.length} games.${skippedCount ? ` Skipped ${skippedCount} row(s).` : ""}`;
+        dom.importStatus.className = "mt-3 text-sm font-bold text-green-600 text-center";
+        fileInput.value = "";
+      } catch (error) {
+        console.error(error);
+        dom.importStatus.textContent = "CSV import failed. Check the file format.";
+        dom.importStatus.className = "mt-3 text-sm font-bold text-red-600 text-center";
+      }
     }
 
     function attachListeners() {
       ["filterSearch", "filterDivision", "filterField", "filterStatus", "filterDate"].forEach(id => {
-        document.getElementById(id).addEventListener("input", () => {
+        const element = $(id);
+
+        element.addEventListener("input", () => {
           syncHeroFilterButtons();
           renderPublicGames();
         });
 
-        document.getElementById(id).addEventListener("change", () => {
+        element.addEventListener("change", () => {
           syncHeroFilterButtons();
           renderPublicGames();
         });
       });
 
-      document.getElementById("brandHome").addEventListener("click", () => {
+      $("brandHome").addEventListener("click", () => {
+        setRoute("public");
         setMode("next");
       });
 
-      navSchedule.addEventListener("click", () => {
+      dom.navSchedule.addEventListener("click", () => {
+        setRoute("public");
         setMode("next");
       });
 
-      navStandings.addEventListener("click", () => {
+      dom.navStandings.addEventListener("click", () => {
+        setRoute("public");
         setMode("standings");
       });
 
-      document.getElementById("btnClearAllFilters").addEventListener("click", clearAllFilters);
+      dom.navAdmin.addEventListener("click", () => {
+        setRoute("admin");
+      });
+
+      dom.mobileNavSchedule.addEventListener("click", () => {
+        setRoute("public");
+        setMode("next");
+      });
+
+      dom.mobileNavStandings.addEventListener("click", () => {
+        setRoute("public");
+        setMode("standings");
+      });
+
+      dom.mobileNavAdmin.addEventListener("click", () => {
+        setRoute("admin");
+      });
+
+      $("btnClearAllFilters").addEventListener("click", clearAllFilters);
 
       document.querySelectorAll(".hero-division-chip").forEach(button => {
         button.addEventListener("click", () => applyDivisionFilter(button.dataset.division));
@@ -1785,11 +2295,11 @@
         button.addEventListener("click", () => applyFieldFilter(button.dataset.field));
       });
 
-      document.getElementById("btnViewNext").addEventListener("click", () => setMode("next"));
-      document.getElementById("btnViewFull").addEventListener("click", () => setMode("full"));
-      document.getElementById("btnViewStandings").addEventListener("click", () => setMode("standings"));
+      $("btnViewNext").addEventListener("click", () => setMode("next"));
+      $("btnViewFull").addEventListener("click", () => setMode("full"));
+      $("btnViewStandings").addEventListener("click", () => setMode("standings"));
 
-      scheduleContainer.addEventListener("click", event => {
+      dom.scheduleContainer.addEventListener("click", event => {
         if (event.target && event.target.id === "btnClearFilters") {
           clearAllFilters();
         }
@@ -1799,40 +2309,45 @@
         }
       });
 
-      document.getElementById("btnBackToTop").addEventListener("click", () => {
+      $("btnBackToTop").addEventListener("click", () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
 
-      document.getElementById("btnLogin").addEventListener("click", async () => {
-        const email = document.getElementById("adminEmail").value;
-        const pass = document.getElementById("adminPassword").value;
-        const errDiv = document.getElementById("loginError");
+      $("btnLogin").addEventListener("click", async () => {
+        const email = $("adminEmail").value;
+        const password = $("adminPassword").value;
 
         try {
-          await signInWithEmailAndPassword(auth, email, pass);
-          document.getElementById("adminPassword").value = "";
-          errDiv.classList.add("hidden");
+          await signInWithEmailAndPassword(state.auth, email, password);
+          $("adminPassword").value = "";
+          dom.loginError.classList.add("hidden");
         } catch (error) {
           console.error(error);
-          errDiv.textContent = "Login failed. Check the admin email and password.";
-          errDiv.classList.remove("hidden");
+          dom.loginError.textContent = "Login failed. Check the admin email and password.";
+          dom.loginError.classList.remove("hidden");
         }
       });
 
-      document.getElementById("btnLogout").addEventListener("click", () => {
-        signOut(auth);
+      $("adminPassword").addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+          $("btnLogin").click();
+        }
       });
 
-      document.getElementById("btnSaveAlerts").addEventListener("click", async () => {
-        if (!currentUser) return;
+      $("btnLogout").addEventListener("click", () => {
+        signOut(state.auth);
+      });
 
-        const btn = document.getElementById("btnSaveAlerts");
+      $("btnSaveAlerts").addEventListener("click", async () => {
+        if (!state.currentUser) return;
+
+        const btn = $("btnSaveAlerts");
         btn.textContent = "Saving...";
 
         try {
-          await setDoc(doc(db, "siteUpdates", "main"), {
-            scheduleAlert: safeText(document.getElementById("editScheduleAlert").value),
-            weatherUpdate: safeText(document.getElementById("editWeatherUpdate").value),
+          await setDoc(doc(state.db, APP.collections.updates, APP.updateDocId), {
+            scheduleAlert: safeText($("editScheduleAlert").value),
+            weatherUpdate: safeText($("editWeatherUpdate").value),
             updatedAt: serverTimestamp()
           });
 
@@ -1845,32 +2360,30 @@
         }
       });
 
-      document.getElementById("btnSaveGame").addEventListener("click", async () => {
-        if (!currentUser) return;
+      $("btnSaveGame").addEventListener("click", async () => {
+        if (!state.currentUser) return;
 
-        const existingGameId = document.getElementById("gameId").value;
+        const existingGameId = $("gameId").value;
         const gameData = buildGameDataFromForm();
+        const validationError = validateGameData(gameData);
 
-        if (!gameData.date || !gameData.time || !gameData.homeTeam || !gameData.awayTeam) {
-          alert("Please fill in Date, Time, Home Team, and Away Team.");
+        if (validationError) {
+          alert(validationError);
           return;
         }
 
-        if (gameData.status === "Final" && (!isValidScore(gameData.awayScore) || !isValidScore(gameData.homeScore))) {
-          alert("Please enter both scores before marking a game Final.");
-          return;
-        }
-
-        const btn = document.getElementById("btnSaveGame");
+        const btn = $("btnSaveGame");
         btn.textContent = "Saving...";
 
         try {
           if (existingGameId) {
-            await setDoc(doc(db, "games", existingGameId), gameData, { merge: true });
+            await setDoc(doc(state.db, APP.collections.games, existingGameId), gameData, { merge: true });
           } else {
             const gameId = createGameKey(gameData);
-            gameData.createdAt = serverTimestamp();
-            await setDoc(doc(db, "games", gameId), gameData, { merge: true });
+            await setDoc(doc(state.db, APP.collections.games, gameId), {
+              ...gameData,
+              createdAt: serverTimestamp()
+            }, { merge: true });
           }
 
           resetGameForm();
@@ -1878,126 +2391,52 @@
           console.error(error);
           alert("Failed to save game.");
         } finally {
-          btn.textContent = document.getElementById("gameId").value ? "Save Changes" : "Save Game";
+          btn.textContent = $("gameId").value ? "Save Changes" : "Save Game";
         }
       });
 
-      document.getElementById("btnCancelEdit").addEventListener("click", resetGameForm);
+      $("btnCancelEdit").addEventListener("click", resetGameForm);
+      $("btnDownloadBackup").addEventListener("click", downloadGamesBackup);
+      $("btnDeleteAll").addEventListener("click", deleteAllGames);
+      $("btnImportCsv").addEventListener("click", importCsv);
 
-      document.getElementById("btnDownloadBackup").addEventListener("click", downloadGamesBackup);
+      window.addEventListener("hashchange", handleRoute);
+    }
 
-      document.getElementById("btnDeleteAll").addEventListener("click", deleteAllGames);
-
-      document.getElementById("btnImportCsv").addEventListener("click", () => {
-        if (!currentUser) return;
-
-        const fileInput = document.getElementById("csvFileInput");
-        const file = fileInput.files[0];
-        const statusDiv = document.getElementById("importStatus");
-
-        if (!file) {
-          statusDiv.textContent = "Please select a CSV file first.";
-          statusDiv.className = "mt-3 text-sm font-bold text-red-600 text-center";
-          return;
-        }
-
-        statusDiv.textContent = "Parsing CSV...";
-        statusDiv.className = "mt-3 text-sm font-bold text-indigo-600 text-center";
-
-        Papa.parse(file, {
-          skipEmptyLines: true,
-
-          complete: async results => {
-            const rows = results.data;
-
-            let importCount = 0;
-            let skippedCount = 0;
-
-            const replaceExisting = confirm(
-              "Import options:\n\nOK = Replace all existing games with this CSV.\nCancel = Merge/update games without deleting existing games."
-            );
-
-            if (replaceExisting && allGames.length > 0) {
-              downloadGamesBackup();
-
-              try {
-                for (const g of allGames) {
-                  await deleteDoc(doc(db, "games", g.id));
-                }
-              } catch (error) {
-                console.error("Error clearing existing games", error);
-                alert("Could not clear all existing games. Import will continue, but check for old games.");
-              }
-            }
-
-            for (let i = 0; i < rows.length; i++) {
-              const row = rows[i];
-              const timeCell = safeText(row[2]).toUpperCase();
-
-              if (row.length >= 7 && timeCell && (timeCell.includes("PM") || timeCell.includes("AM"))) {
-                const gameData = buildGameDataFromCsvRow(row);
-
-                if (!gameData.date || !gameData.time || !gameData.awayTeam || !gameData.homeTeam) {
-                  skippedCount++;
-                  continue;
-                }
-
-                if (gameData.status === "Final" && (!isValidScore(gameData.awayScore) || !isValidScore(gameData.homeScore))) {
-                  skippedCount++;
-                  continue;
-                }
-
-                try {
-                  const gameId = createGameKey(gameData);
-
-                  await setDoc(doc(db, "games", gameId), {
-                    ...gameData,
-                    createdAt: serverTimestamp()
-                  }, { merge: true });
-
-                  importCount++;
-                } catch (error) {
-                  console.error("Error importing row", i, error);
-                  skippedCount++;
-                }
-              } else {
-                skippedCount++;
-              }
-            }
-
-            statusDiv.textContent = `Success! Imported/updated ${importCount} games.${skippedCount ? ` Skipped ${skippedCount} row(s).` : ""}`;
-            statusDiv.className = "mt-3 text-sm font-bold text-green-600 text-center";
-            fileInput.value = "";
-          },
-
-          error: error => {
-            console.error(error);
-            statusDiv.textContent = "CSV import failed. Check the file format.";
-            statusDiv.className = "mt-3 text-sm font-bold text-red-600 text-center";
-          }
-        });
-      });
+    function startFirebase() {
+      try {
+        state.app = initializeApp(APP.firebaseConfig);
+        state.db = getFirestore(state.app);
+        state.auth = getAuth(state.app);
+        hideConnectionError();
+      } catch (error) {
+        console.error("Firebase initialization error:", error);
+        showConnectionError("Firebase did not connect. Check your firebaseConfig in the code.");
+      }
     }
 
     function startFirebaseListeners() {
-      if (!db) return;
+      if (!state.db) return;
 
       renderAlerts();
 
       onSnapshot(
-        doc(db, "siteUpdates", "main"),
+        doc(state.db, APP.collections.updates, APP.updateDocId),
         snapshot => {
           if (snapshot.exists()) {
-            siteUpdateData = snapshot.data();
+            state.siteUpdateData = {
+              ...APP.defaultSiteUpdate,
+              ...snapshot.data()
+            };
           }
 
           renderAlerts();
 
-          const scheduleAlertBox = document.getElementById("editScheduleAlert");
-          const weatherUpdateBox = document.getElementById("editWeatherUpdate");
+          const scheduleAlertBox = $("editScheduleAlert");
+          const weatherUpdateBox = $("editWeatherUpdate");
 
-          if (scheduleAlertBox) scheduleAlertBox.value = safeText(siteUpdateData.scheduleAlert);
-          if (weatherUpdateBox) weatherUpdateBox.value = safeText(siteUpdateData.weatherUpdate);
+          if (scheduleAlertBox) scheduleAlertBox.value = safeText(state.siteUpdateData.scheduleAlert);
+          if (weatherUpdateBox) weatherUpdateBox.value = safeText(state.siteUpdateData.weatherUpdate);
         },
         error => {
           console.error("siteUpdates read error:", error);
@@ -2006,14 +2445,14 @@
       );
 
       onSnapshot(
-        collection(db, "games"),
+        collection(state.db, APP.collections.games),
         snapshot => {
-          allGames = [];
+          state.allGames = [];
 
           snapshot.forEach(docSnapshot => {
             const data = docSnapshot.data();
 
-            allGames.push({
+            state.allGames.push({
               id: docSnapshot.id,
               ...data,
               field: normalizeField(data.field),
@@ -2024,13 +2463,14 @@
             });
           });
 
-          allGames.sort((a, b) => {
+          state.allGames.sort((a, b) => {
             const dateCompare = safeText(a.date).localeCompare(safeText(b.date));
             if (dateCompare !== 0) return dateCompare;
             return parseTimeToMinutes(a.time) - parseTimeToMinutes(b.time);
           });
 
           populateDateFilter();
+          updateHeroStats();
           renderPublicGames();
           renderAdminGames();
         },
@@ -2039,8 +2479,8 @@
 
           showConnectionError("Could not read games from Firestore. Check Firestore rules and make sure the games collection exists.");
 
-          scheduleContainer.innerHTML = `
-            <div class="glass p-8 rounded-2xl text-center">
+          dom.scheduleContainer.innerHTML = `
+            <div class="glass premium-border p-8 rounded-2xl text-center">
               <h3 class="text-lg font-black text-slate-900">Could not load schedule</h3>
               <p class="mt-1 text-slate-500">Check Firebase config, Firestore rules, and the games collection.</p>
             </div>
@@ -2048,21 +2488,32 @@
         }
       );
 
-      onAuthStateChanged(auth, user => {
-        currentUser = user;
+      onAuthStateChanged(state.auth, user => {
+        state.currentUser = user;
 
         if (user) {
-          document.getElementById("loginSection").classList.add("hidden");
-          document.getElementById("dashboardSection").classList.remove("hidden");
+          dom.loginSection.classList.add("hidden");
+          dom.dashboardSection.classList.remove("hidden");
         } else {
-          document.getElementById("loginSection").classList.remove("hidden");
-          document.getElementById("dashboardSection").classList.add("hidden");
+          dom.loginSection.classList.remove("hidden");
+          dom.dashboardSection.classList.add("hidden");
         }
       });
     }
 
-    attachListeners();
-    startFirebaseListeners();
+    function init() {
+      attachListeners();
+      startFirebase();
+      startFirebaseListeners();
+
+      if (!window.location.hash) {
+        window.location.hash = "public";
+      }
+
+      handleRoute();
+    }
+
+    init();
   </script>
 </body>
 </html>
