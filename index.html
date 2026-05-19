@@ -14,18 +14,20 @@
       theme: {
         extend: {
           colors: {
-            ink: "#050b18",
-            navy: "#071832",
-            navy2: "#0b1d3a",
-            redAccent: "#d32f2f",
+            ink: "#041022",
+            navy: "#061832",
+            navy2: "#0b2348",
+            nflBlue: "#013369",
+            redAccent: "#d71920",
+            redDeep: "#9f1118",
             gold: "#fbbf24",
             skySoft: "#e0f2fe",
             field: "#0f3d2e"
           },
           boxShadow: {
             soft: "0 20px 60px rgba(15, 23, 42, 0.10)",
-            glow: "0 24px 90px rgba(211, 47, 47, 0.18)",
-            stadium: "0 30px 90px rgba(2, 8, 23, 0.28)"
+            glow: "0 24px 90px rgba(215, 25, 32, 0.20)",
+            stadium: "0 30px 90px rgba(2, 8, 23, 0.30)"
           }
         }
       }
@@ -34,10 +36,12 @@
 
   <style>
     :root {
-      --ink: #050b18;
-      --navy: #071832;
-      --navy2: #0b1d3a;
-      --red: #d32f2f;
+      --ink: #041022;
+      --navy: #061832;
+      --navy2: #0b2348;
+      --nflBlue: #013369;
+      --red: #d71920;
+      --redDeep: #9f1118;
       --gold: #fbbf24;
       --sky: #0ea5e9;
       --slate: #64748b;
@@ -58,10 +62,10 @@
       min-height: 100vh;
       font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background:
-        radial-gradient(circle at top left, rgba(14, 165, 233, 0.16), transparent 36rem),
-        radial-gradient(circle at top right, rgba(211, 47, 47, 0.13), transparent 34rem),
-        radial-gradient(circle at 50% -12rem, rgba(251, 191, 36, 0.15), transparent 32rem),
-        linear-gradient(180deg, #f8fafc 0%, #edf2f7 58%, #e5ebf3 100%);
+        radial-gradient(circle at top left, rgba(1, 51, 105, 0.16), transparent 36rem),
+        radial-gradient(circle at top right, rgba(215, 25, 32, 0.14), transparent 34rem),
+        radial-gradient(circle at 50% -12rem, rgba(255, 255, 255, 0.75), transparent 34rem),
+        linear-gradient(180deg, #f8fafc 0%, #eef3f8 58%, #e5ebf3 100%);
       color: #0f172a;
     }
 
@@ -108,8 +112,8 @@
       z-index: -1;
       pointer-events: none;
       background:
-        linear-gradient(90deg, rgba(15, 23, 42, 0.035) 1px, transparent 1px),
-        linear-gradient(180deg, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
+        linear-gradient(90deg, rgba(1, 51, 105, 0.04) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(215, 25, 32, 0.025) 1px, transparent 1px);
       background-size: 44px 44px;
       mask-image: linear-gradient(to bottom, black 0%, transparent 70%);
     }
@@ -132,8 +136,8 @@
     select:focus,
     textarea:focus {
       outline: none;
-      border-color: #0b1d3a;
-      box-shadow: 0 0 0 4px rgba(11, 29, 58, 0.13);
+      border-color: var(--nflBlue);
+      box-shadow: 0 0 0 4px rgba(1, 51, 105, 0.13);
     }
 
     label {
@@ -141,9 +145,9 @@
     }
 
     .glass {
-      background: rgba(255, 255, 255, 0.82);
+      background: rgba(255, 255, 255, 0.84);
       backdrop-filter: blur(18px);
-      border: 1px solid rgba(226, 232, 240, 0.9);
+      border: 1px solid rgba(226, 232, 240, 0.92);
       box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
     }
 
@@ -158,7 +162,7 @@
       inset: 0;
       padding: 1px;
       border-radius: inherit;
-      background: linear-gradient(135deg, rgba(211,47,47,0.45), rgba(251,191,36,0.45), rgba(14,165,233,0.35));
+      background: linear-gradient(135deg, rgba(215, 25, 32, 0.50), rgba(255, 255, 255, 0.55), rgba(1, 51, 105, 0.45));
       -webkit-mask:
         linear-gradient(#000 0 0) content-box,
         linear-gradient(#000 0 0);
@@ -172,7 +176,7 @@
       align-items: center;
       justify-content: center;
       gap: 0.45rem;
-      background: linear-gradient(135deg, #071832, #0b1d3a);
+      background: linear-gradient(135deg, #061832, #013369);
       color: white;
       font-weight: 950;
       padding: 0.78rem 1.12rem;
@@ -196,7 +200,7 @@
     }
 
     .btn-red {
-      background: linear-gradient(135deg, #d32f2f, #991b1b);
+      background: linear-gradient(135deg, #d71920, #9f1118);
     }
 
     .btn-gold {
@@ -206,13 +210,13 @@
 
     .btn-outline {
       background: #ffffff;
-      color: #071832;
-      border: 1px solid rgba(7, 24, 50, 0.18);
+      color: #061832;
+      border: 1px solid rgba(6, 24, 50, 0.18);
       box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
     }
 
     .btn-outline:hover {
-      background: #071832;
+      background: #061832;
       color: #ffffff;
     }
 
@@ -227,10 +231,10 @@
 
     .site-header {
       background:
-        radial-gradient(circle at 10% 0%, rgba(14, 165, 233, 0.18), transparent 18rem),
-        radial-gradient(circle at 80% 0%, rgba(211, 47, 47, 0.22), transparent 18rem),
-        linear-gradient(135deg, #050b18, #071832 56%, #0b1d3a);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        radial-gradient(circle at 10% 0%, rgba(1, 51, 105, 0.42), transparent 18rem),
+        radial-gradient(circle at 80% 0%, rgba(215, 25, 32, 0.30), transparent 18rem),
+        linear-gradient(135deg, #041022, #061832 52%, #2a1430);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.10);
     }
 
     .top-nav-btn {
@@ -253,48 +257,40 @@
     .top-nav-btn:hover,
     .top-nav-btn.active {
       background: #ffffff;
-      color: #071832;
+      color: #061832;
       box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
     }
 
-    .league-shield {
-      width: 50px;
-      height: 50px;
-      border-radius: 16px;
-      background:
-        linear-gradient(135deg, #ffffff, #dbeafe 52%, #fef3c7);
-      color: #071832;
-      display: grid;
-      place-items: center;
-      font-weight: 1000;
-      letter-spacing: -0.05em;
-      box-shadow:
-        inset 0 0 0 3px rgba(11, 29, 58, 0.10),
-        0 14px 30px rgba(0, 0, 0, 0.20);
+    .site-logo {
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+      display: block;
       flex: 0 0 auto;
-      position: relative;
+      filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.22));
     }
 
-    .league-shield::after {
-      content: "";
-      position: absolute;
-      inset: 7px;
-      border-radius: 11px;
-      border: 1px solid rgba(7, 24, 50, 0.14);
-      pointer-events: none;
+    .site-logo-login {
+      width: 110px;
+      height: 110px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 0.85rem;
+      filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.14));
     }
 
     .hero-card {
       background:
-        radial-gradient(circle at 85% 28%, rgba(251, 191, 36, 0.27), transparent 19rem),
-        radial-gradient(circle at 18% 8%, rgba(14, 165, 233, 0.20), transparent 22rem),
-        linear-gradient(135deg, rgba(5, 11, 24, 0.995), rgba(7, 24, 50, 0.985) 52%, rgba(211, 47, 47, 0.92));
+        radial-gradient(circle at 88% 30%, rgba(215, 25, 32, 0.32), transparent 20rem),
+        radial-gradient(circle at 16% 8%, rgba(1, 51, 105, 0.28), transparent 22rem),
+        radial-gradient(circle at 58% 18%, rgba(255, 255, 255, 0.12), transparent 17rem),
+        linear-gradient(135deg, rgba(4, 16, 34, 0.995), rgba(6, 24, 50, 0.985) 52%, rgba(215, 25, 32, 0.90));
       color: white;
       border-radius: 1.7rem;
       box-shadow: 0 32px 95px rgba(2, 8, 23, 0.26);
       overflow: hidden;
       position: relative;
-      border: 1px solid rgba(255, 255, 255, 0.11);
+      border: 1px solid rgba(255, 255, 255, 0.12);
     }
 
     .hero-card::before {
@@ -314,7 +310,7 @@
       position: absolute;
       inset: auto -10% -50% -10%;
       height: 55%;
-      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.09), transparent 68%);
+      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.10), transparent 68%);
       pointer-events: none;
     }
 
@@ -323,9 +319,9 @@
       align-items: center;
       gap: 0.45rem;
       border-radius: 999px;
-      background: rgba(255,255,255,0.11);
-      border: 1px solid rgba(255,255,255,0.14);
-      color: rgba(255,255,255,0.88);
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.16);
+      color: rgba(255,255,255,0.90);
       font-weight: 900;
       padding: 0.5rem 0.75rem;
       font-size: 0.78rem;
@@ -340,7 +336,7 @@
       font-weight: 950;
       letter-spacing: 0.09em;
       font-size: 0.72rem;
-      color: #d32f2f;
+      color: var(--red);
     }
 
     .section-kicker::before {
@@ -353,13 +349,13 @@
     }
 
     .section-kicker-light {
-      color: #bae6fd;
+      color: #bfdbfe;
     }
 
     .quick-btn,
     .filter-chip {
-      border: 1px solid rgba(7, 24, 50, 0.16);
-      color: #071832;
+      border: 1px solid rgba(6, 24, 50, 0.16);
+      color: #061832;
       background: #ffffff;
       padding: 0.72rem 1rem;
       border-radius: 999px;
@@ -375,15 +371,15 @@
     .quick-btn.active,
     .filter-chip:hover,
     .filter-chip.active {
-      background: linear-gradient(135deg, #071832, #0b1d3a);
+      background: linear-gradient(135deg, #061832, #013369);
       color: #ffffff;
-      border-color: #071832;
+      border-color: #061832;
       transform: translateY(-1px);
     }
 
     .filter-chip-red.active {
-      background: linear-gradient(135deg, #d32f2f, #991b1b);
-      border-color: #d32f2f;
+      background: linear-gradient(135deg, #d71920, #9f1118);
+      border-color: #d71920;
       color: #ffffff;
     }
 
@@ -412,7 +408,7 @@
     }
 
     .badge-Canceled {
-      background-color: #d32f2f;
+      background-color: #d71920;
       color: white;
     }
 
@@ -446,7 +442,7 @@
     .game-card:hover {
       transform: translateY(-2px);
       box-shadow: 0 24px 54px rgba(15, 23, 42, 0.13);
-      border-color: rgba(7, 24, 50, 0.18);
+      border-color: rgba(6, 24, 50, 0.18);
     }
 
     .game-card::before {
@@ -456,7 +452,7 @@
       left: 0;
       height: 5px;
       width: 100%;
-      background: linear-gradient(90deg, #d32f2f, #fbbf24, #0ea5e9);
+      background: linear-gradient(90deg, #013369, #ffffff, #d71920);
     }
 
     .card-Canceled {
@@ -476,7 +472,7 @@
       border-radius: 1rem;
       background: linear-gradient(180deg, #f8fafc, #eef2f7);
       font-weight: 950;
-      color: #071832;
+      color: #061832;
       border: 1px solid #e2e8f0;
     }
 
@@ -489,7 +485,7 @@
     }
 
     .table-header {
-      background: linear-gradient(135deg, #071832, #0b1d3a);
+      background: linear-gradient(135deg, #061832, #013369);
       color: white;
     }
 
@@ -536,9 +532,9 @@
         z-index: 60;
         padding: 0.55rem;
         border-radius: 1.25rem;
-        background: rgba(5, 11, 24, 0.92);
+        background: rgba(4, 16, 34, 0.94);
         backdrop-filter: blur(16px);
-        border: 1px solid rgba(255,255,255,0.12);
+        border: 1px solid rgba(255,255,255,0.13);
         box-shadow: 0 20px 60px rgba(2, 8, 23, 0.35);
       }
 
@@ -549,10 +545,14 @@
         padding: 0.55rem 0.4rem;
       }
 
-      .league-shield {
-        width: 42px;
-        height: 42px;
-        border-radius: 13px;
+      .site-logo {
+        width: 48px;
+        height: 48px;
+      }
+
+      .site-logo-login {
+        width: 88px;
+        height: 88px;
       }
 
       .hero-card {
@@ -577,7 +577,12 @@
     <div class="max-w-6xl mx-auto px-4 py-3">
       <div class="flex items-center justify-between gap-3">
         <button id="brandHome" type="button" class="flex items-center gap-3 min-w-0 text-left">
-          <div class="league-shield">BC</div>
+          <img
+            src="F0D3C035-2592-4070-9E55-3A1B9D678FBF.png"
+            alt="Brooke County NFL Flag Football logo"
+            class="site-logo"
+          />
+
           <div class="min-w-0">
             <h1 class="text-base sm:text-2xl font-black leading-tight tracking-tight truncate">
               Brooke County NFL Flag
@@ -631,12 +636,10 @@
             </div>
           </div>
 
-          <div class="grid sm:flex sm:flex-wrap gap-2 mt-6">
+          <div class="grid sm:grid-cols-3 gap-3 mt-6">
             <button class="filter-chip filter-chip-red hero-division-chip" type="button" data-division="Peewee">Peewee</button>
             <button class="filter-chip filter-chip-red hero-division-chip" type="button" data-division="Junior">Junior</button>
             <button class="filter-chip filter-chip-red hero-division-chip" type="button" data-division="Senior">Senior</button>
-            <button class="filter-chip hero-field-chip" type="button" data-field="Field 1">Field 1 · Front</button>
-            <button class="filter-chip hero-field-chip" type="button" data-field="Field 2">Field 2 · Back</button>
           </div>
         </div>
       </div>
@@ -754,7 +757,12 @@
 
       <div id="loginSection" class="max-w-md mx-auto glass premium-border p-7 sm:p-8 rounded-2xl mt-8">
         <div class="text-center mb-6">
-          <div class="league-shield mx-auto mb-3">BC</div>
+          <img
+            src="F0D3C035-2592-4070-9E55-3A1B9D678FBF.png"
+            alt="Brooke County NFL Flag Football logo"
+            class="site-logo-login"
+          />
+
           <h2 class="text-2xl font-black text-navy">League Admin Login</h2>
           <p class="text-sm text-slate-500 mt-1">Manage games, scores, alerts, and standings.</p>
         </div>
@@ -902,12 +910,15 @@
               <p class="text-xs text-indigo-700 mb-4 leading-relaxed">
                 Header-based import is supported. Recommended columns:
                 Date, Day, Time, Field, Division, Away, Home, Away Score, Home Score, Status, Notes.
+                Re-importing the same schedule will update matching games, but changing a game’s date, time, field, or teams may create a new record.
               </p>
 
               <input type="file" id="csvFileInput" accept=".csv" class="mb-3 text-sm" />
+
               <button id="btnImportCsv" type="button" class="btn w-full !bg-indigo-700 hover:!bg-indigo-800">
                 Import / Update Games
               </button>
+
               <div id="importStatus" class="mt-3 text-sm font-bold text-center" aria-live="polite"></div>
             </div>
 
@@ -1223,6 +1234,45 @@
       });
     }
 
+    function isPlaceholderTeamName(teamName) {
+      const team = safeText(teamName).toLowerCase();
+
+      if (!team) return true;
+      if (team === "tbd") return true;
+
+      const blockedWords = [
+        "championship",
+        "peewee championship",
+        "junior championship",
+        "senior championship",
+        "playoff",
+        "playoffs",
+        "semifinal",
+        "semi-final",
+        "finals",
+        "winner",
+        "loser"
+      ];
+
+      return blockedWords.some(word => team.includes(word));
+    }
+
+    function shouldCountGameInStandings(game) {
+      const away = safeText(game.awayTeam);
+      const home = safeText(game.homeTeam);
+      const notes = safeText(game.notes).toLowerCase();
+
+      if (isPlaceholderTeamName(away)) return false;
+      if (isPlaceholderTeamName(home)) return false;
+
+      if (notes.includes("championship")) return false;
+      if (notes.includes("playoff")) return false;
+      if (notes.includes("semifinal")) return false;
+      if (notes.includes("semi-final")) return false;
+
+      return true;
+    }
+
     function getUniqueTeams() {
       const teams = new Set();
 
@@ -1230,8 +1280,8 @@
         const away = safeText(game.awayTeam);
         const home = safeText(game.homeTeam);
 
-        if (away && away.toLowerCase() !== "tbd") teams.add(away);
-        if (home && home.toLowerCase() !== "tbd") teams.add(home);
+        if (!isPlaceholderTeamName(away)) teams.add(away);
+        if (!isPlaceholderTeamName(home)) teams.add(home);
       });
 
       return teams;
@@ -1311,7 +1361,7 @@
       $("filterStatus").value = "";
       $("filterDate").value = "";
 
-      document.querySelectorAll(".hero-division-chip, .hero-field-chip").forEach(button => {
+      document.querySelectorAll(".hero-division-chip").forEach(button => {
         button.classList.remove("active");
       });
 
@@ -1329,27 +1379,11 @@
       dom.scheduleContainer.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
-    function applyFieldFilter(field) {
-      setMode("full");
-
-      const filter = $("filterField");
-      filter.value = filter.value === field ? "" : field;
-
-      syncHeroFilterButtons();
-      renderPublicGames();
-      dom.scheduleContainer.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-
     function syncHeroFilterButtons() {
       const division = $("filterDivision").value;
-      const field = $("filterField").value;
 
       document.querySelectorAll(".hero-division-chip").forEach(button => {
         button.classList.toggle("active", button.dataset.division === division);
-      });
-
-      document.querySelectorAll(".hero-field-chip").forEach(button => {
-        button.classList.toggle("active", button.dataset.field === field);
       });
     }
 
@@ -1367,9 +1401,9 @@
 
       if (safeText(state.siteUpdateData.weatherUpdate)) {
         dom.alertsContainer.innerHTML += `
-          <div class="bg-sky-50 border-l-4 border-sky-400 p-4 sm:p-5 rounded-2xl shadow-soft">
-            <h3 class="text-sm font-black text-sky-800 uppercase tracking-[0.18em]">Weather & Update Center</h3>
-            <p class="mt-2 text-sky-700 leading-relaxed">${escapeHtml(state.siteUpdateData.weatherUpdate)}</p>
+          <div class="bg-sky-50 border-l-4 border-blue-700 p-4 sm:p-5 rounded-2xl shadow-soft">
+            <h3 class="text-sm font-black text-blue-900 uppercase tracking-[0.18em]">Weather & Update Center</h3>
+            <p class="mt-2 text-blue-800 leading-relaxed">${escapeHtml(state.siteUpdateData.weatherUpdate)}</p>
           </div>
         `;
       }
@@ -1536,6 +1570,8 @@
         grouped[date].push(game);
       });
 
+      let html = "";
+
       Object.keys(grouped).sort().forEach(date => {
         const games = grouped[date].sort((a, b) => parseTimeToMinutes(a.time) - parseTimeToMinutes(b.time));
 
@@ -1559,12 +1595,14 @@
           </div>
         `;
 
-        if (append) {
-          dom.scheduleContainer.innerHTML += groupHTML;
-        } else {
-          dom.scheduleContainer.innerHTML = groupHTML;
-        }
+        html += groupHTML;
       });
+
+      if (append) {
+        dom.scheduleContainer.innerHTML += html;
+      } else {
+        dom.scheduleContainer.innerHTML = html;
+      }
     }
 
     function renderGameCard(game) {
@@ -1627,7 +1665,7 @@
               <div class="text-slate-500 text-xs font-black uppercase tracking-wide">Kickoff</div>
               <span class="text-navy text-lg font-black">${escapeHtml(safeText(game.time) || "Time TBD")}</span>
               <span class="mx-2 text-slate-300">|</span>
-              <span class="text-sky-700 text-sm font-black uppercase">${escapeHtml(safeDivision(game.division))}</span>
+              <span class="text-blue-800 text-sm font-black uppercase">${escapeHtml(safeDivision(game.division))}</span>
             </div>
 
             <span class="badge ${statusClass}">${escapeHtml(status)}</span>
@@ -1660,8 +1698,7 @@
     function addTeamToStandings(standings, division, teamName) {
       const team = safeText(teamName);
 
-      if (!team) return;
-      if (team.toLowerCase() === "tbd") return;
+      if (isPlaceholderTeamName(team)) return;
       if (!standings[division]) return;
 
       if (!standings[division][team]) {
@@ -1677,12 +1714,16 @@
       };
 
       state.allGames.forEach(game => {
+        if (!shouldCountGameInStandings(game)) return;
+
         const division = safeDivision(game.division);
         addTeamToStandings(standings, division, game.awayTeam);
         addTeamToStandings(standings, division, game.homeTeam);
       });
 
       state.allGames.forEach(game => {
+        if (!shouldCountGameInStandings(game)) return;
+
         const status = safeStatus(game.status);
         const division = safeDivision(game.division);
         const awayTeam = safeText(game.awayTeam);
@@ -1692,7 +1733,6 @@
         if (!standings[division]) return;
         if (!awayTeam || !homeTeam) return;
         if (!isValidScore(game.awayScore) || !isValidScore(game.homeScore)) return;
-        if (awayTeam.toLowerCase() === "tbd" || homeTeam.toLowerCase() === "tbd") return;
 
         const awayScore = Number(game.awayScore);
         const homeScore = Number(game.homeScore);
@@ -1702,6 +1742,8 @@
 
         const away = standings[division][awayTeam];
         const home = standings[division][homeTeam];
+
+        if (!away || !home) return;
 
         away.gp += 1;
         home.gp += 1;
@@ -1754,7 +1796,7 @@
             <div class="section-kicker section-kicker-light mb-1">League Table</div>
             <h3 class="text-2xl font-black">Standings</h3>
             <p class="text-slate-200 mt-1">
-              Teams appear once they are listed on the schedule. Records update when games are marked Final with valid scores.
+              Teams appear once they are listed on the schedule. Records update when regular season games are marked Final with valid scores.
             </p>
           </div>
         </div>
@@ -1798,7 +1840,7 @@
 
           rows.forEach((row, index) => {
             html += `
-              <tr class="${index === 0 && row.gp > 0 ? "bg-amber-50" : "bg-white"}">
+              <tr class="${index === 0 && row.gp > 0 ? "bg-red-50" : "bg-white"}">
                 <td class="p-3 font-black text-navy">
                   <span class="text-slate-400 mr-2">${index + 1}.</span>${escapeHtml(row.team)}
                 </td>
@@ -1889,10 +1931,13 @@
         }
       }
 
+      if (fallbackIndex < 0) return "";
+
       return originalRow[fallbackIndex] ?? "";
     }
 
     function buildGameDataFromCsvObject(row, originalRow = []) {
+      const gameId = getCsvValue(row, ["game id", "gameid", "id"], -1, originalRow);
       const date = getCsvValue(row, ["date", "game date"], 0, originalRow);
       const time = getCsvValue(row, ["time", "game time", "kickoff"], 2, originalRow);
       const field = getCsvValue(row, ["field", "location"], 3, originalRow);
@@ -1907,6 +1952,7 @@
       const cleanStatus = safeStatus(status || "Scheduled");
 
       return {
+        importId: slugify(gameId),
         date: parseCsvDate(date),
         time: safeText(time),
         field: normalizeField(field),
@@ -1920,6 +1966,11 @@
         notes: safeText(notes),
         updatedAt: serverTimestamp()
       };
+    }
+
+    function cleanGameDataForFirestore(gameData) {
+      const { importId, ...cleanData } = gameData;
+      return cleanData;
     }
 
     function isLikelyGameRow(gameData) {
@@ -1997,7 +2048,7 @@
           </td>
 
           <td class="p-3 border-t border-slate-100 text-right space-x-2">
-            <button class="text-sky-600 hover:underline font-black text-sm btn-edit" type="button">Edit</button>
+            <button class="text-blue-700 hover:underline font-black text-sm btn-edit" type="button">Edit</button>
             <button class="text-redAccent hover:underline font-black text-sm btn-delete" type="button">Delete</button>
           </td>
         `;
@@ -2211,13 +2262,14 @@
         }
 
         validGames.forEach(gameData => {
-          const gameId = createGameKey(gameData);
+          const gameId = gameData.importId || createGameKey(gameData);
+          const firestoreGameData = cleanGameDataForFirestore(gameData);
 
           operations.push(batch => {
             batch.set(
               doc(state.db, APP.collections.games, gameId),
               {
-                ...gameData,
+                ...firestoreGameData,
                 createdAt: serverTimestamp()
               },
               { merge: true }
@@ -2289,10 +2341,6 @@
 
       document.querySelectorAll(".hero-division-chip").forEach(button => {
         button.addEventListener("click", () => applyDivisionFilter(button.dataset.division));
-      });
-
-      document.querySelectorAll(".hero-field-chip").forEach(button => {
-        button.addEventListener("click", () => applyFieldFilter(button.dataset.field));
       });
 
       $("btnViewNext").addEventListener("click", () => setMode("next"));
@@ -2373,6 +2421,7 @@
         }
 
         const btn = $("btnSaveGame");
+        let savedSuccessfully = false;
         btn.textContent = "Saving...";
 
         try {
@@ -2386,12 +2435,17 @@
             }, { merge: true });
           }
 
+          savedSuccessfully = true;
           resetGameForm();
         } catch (error) {
           console.error(error);
           alert("Failed to save game.");
         } finally {
-          btn.textContent = $("gameId").value ? "Save Changes" : "Save Game";
+          if (savedSuccessfully) {
+            btn.textContent = "Save Game";
+          } else {
+            btn.textContent = existingGameId ? "Save Changes" : "Save Game";
+          }
         }
       });
 
