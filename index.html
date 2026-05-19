@@ -1,795 +1,1061 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brooke County NFL Flag Football | 2026 Summer Schedule</title>
-    
-    <!-- Tailwind CSS for styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- PapaParse for CSV Bulk Importing -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        navy: '#0b1d3a',
-                        redAccent: '#d32f2f',
-                        lightBlue: '#e0f2fe',
-                    }
-                }
-            }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Brooke County NFL Flag Football | 2026 Summer Schedule</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- PapaParse for CSV Import -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: "#0b1d3a",
+            redAccent: "#d32f2f",
+            lightBlue: "#e0f2fe"
+          }
         }
-    </script>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        .hidden { display: none !important; }
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        /* Form Inputs */
-        input, select, textarea { 
-            width: 100%; padding: 0.75rem; margin-top: 0.25rem; border: 1px solid #cbd5e1; 
-            border-radius: 0.375rem; box-sizing: border-box; background: #fff;
-        }
-        input:focus, select:focus, textarea:focus { outline: 2px solid #0b1d3a; border-color: transparent; }
-        .btn { display: inline-block; background-color: #0b1d3a; color: white; font-weight: 600; padding: 0.75rem 1.5rem; border-radius: 0.375rem; cursor: pointer; text-align: center; border: none; }
-        .btn:hover { background-color: #1e3a8a; }
-        .btn-red { background-color: #d32f2f; }
-        .btn-red:hover { background-color: #b91c1c; }
-        .btn-outline { background-color: transparent; color: #0b1d3a; border: 2px solid #0b1d3a; }
-        .btn-outline:hover { background-color: #0b1d3a; color: white; }
-        /* Badges */
-        .badge { padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
-        .badge-Updated { background-color: #0ea5e9; color: white; }
-        .badge-Postponed { background-color: #64748b; color: white; }
-        .badge-Canceled { background-color: #d32f2f; color: white; }
-        .badge-Final { background-color: #1e293b; color: white; }
-        .badge-Scheduled { background-color: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
-        /* Card States */
-        .card-Canceled { background-color: #fef2f2; opacity: 0.8; }
-        .card-Postponed { background-color: #f8fafc; opacity: 0.8; }
-    </style>
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.25rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.375rem;
+      box-sizing: border-box;
+      background: #fff;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: 2px solid #0b1d3a;
+      border-color: transparent;
+    }
+
+    .btn {
+      display: inline-block;
+      background-color: #0b1d3a;
+      color: white;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      text-align: center;
+      border: none;
+    }
+
+    .btn:hover {
+      background-color: #1e3a8a;
+    }
+
+    .btn-red {
+      background-color: #d32f2f;
+    }
+
+    .btn-red:hover {
+      background-color: #b91c1c;
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: #0b1d3a;
+      border: 2px solid #0b1d3a;
+    }
+
+    .btn-outline:hover {
+      background-color: #0b1d3a;
+      color: white;
+    }
+
+    .badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+
+    .badge-Updated {
+      background-color: #0ea5e9;
+      color: white;
+    }
+
+    .badge-Postponed {
+      background-color: #64748b;
+      color: white;
+    }
+
+    .badge-Canceled {
+      background-color: #d32f2f;
+      color: white;
+    }
+
+    .badge-Final {
+      background-color: #1e293b;
+      color: white;
+    }
+
+    .badge-Scheduled {
+      background-color: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+
+    .card-Canceled {
+      background-color: #fef2f2;
+      opacity: 0.85;
+    }
+
+    .card-Postponed {
+      background-color: #f8fafc;
+      opacity: 0.85;
+    }
+  </style>
 </head>
+
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-    <!-- Navigation -->
-    <header class="bg-navy text-white shadow-md sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="text-center sm:text-left">
-                <h1 class="text-2xl font-bold tracking-tight">Brooke County NFL Flag Football</h1>
-                <p class="text-sky-200 text-sm font-medium">2026 Summer Season Schedule</p>
-            </div>
-            <nav class="flex gap-4">
-                <a href="#public" class="text-white hover:text-sky-200 font-semibold transition">Schedule</a>
-                <a href="#admin" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-md font-semibold transition">Admin</a>
-            </nav>
+  <header class="bg-navy text-white shadow-md sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="text-center sm:text-left">
+        <h1 class="text-2xl font-bold tracking-tight">Brooke County NFL Flag Football</h1>
+        <p class="text-sky-200 text-sm font-medium">2026 Summer Season Schedule</p>
+      </div>
+
+      <nav class="flex gap-4">
+        <a href="#public" class="text-white hover:text-sky-200 font-semibold transition">Schedule</a>
+        <a href="#admin" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-md font-semibold transition">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-grow max-w-5xl mx-auto w-full px-4 py-8">
+
+    <!-- PUBLIC VIEW -->
+    <section id="public-view" class="fade-in">
+
+      <div class="mb-8 text-center sm:text-left">
+        <h2 class="text-3xl font-bold text-navy mb-2">2026 Summer Season Schedule Hub</h2>
+        <p class="text-slate-600 max-w-3xl">
+          Welcome to the official 2026 Summer Season Schedule Hub for Brooke County NFL Flag Football.
+          Use the filters below to quickly find games by date, division, team, field, or status.
+        </p>
+      </div>
+
+      <div id="connectionError" class="hidden bg-red-100 border-l-4 border-redAccent text-red-800 p-4 rounded mb-6 text-sm"></div>
+
+      <div id="alertsContainer" class="space-y-4 mb-8"></div>
+
+      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-8">
+        <h3 class="font-semibold text-slate-700 mb-3 flex items-center gap-2">
+          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z">
+            </path>
+          </svg>
+          Filter Games
+        </h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+          <input type="text" id="filterSearch" placeholder="Search teams..." class="lg:col-span-2" />
+
+          <select id="filterDivision">
+            <option value="">All Divisions</option>
+            <option value="Peewee">Peewee</option>
+            <option value="Junior">Junior</option>
+            <option value="Senior">Senior</option>
+          </select>
+
+          <select id="filterField">
+            <option value="">All Fields</option>
+            <option value="Field 1 — Peewee / Front Field">Field 1</option>
+            <option value="Field 2 — Junior/Senior / Back Field">Field 2</option>
+          </select>
+
+          <select id="filterStatus">
+            <option value="">All Statuses</option>
+            <option value="Scheduled">Scheduled</option>
+            <option value="Updated">Updated</option>
+            <option value="Postponed">Postponed</option>
+            <option value="Canceled">Canceled</option>
+            <option value="Final">Final</option>
+          </select>
+
+          <select id="filterDate">
+            <option value="">All Dates</option>
+          </select>
         </div>
-    </header>
+      </div>
 
-    <!-- MAIN CONTENT AREA -->
-    <main class="flex-grow max-w-5xl mx-auto w-full px-4 py-8">
+      <div id="scheduleContainer" class="space-y-8 min-h-[300px]">
+        <div class="text-center text-slate-500 py-12">Loading schedule from database...</div>
+      </div>
 
-        <!-- ============================================== -->
-        <!-- PUBLIC VIEW                                    -->
-        <!-- ============================================== -->
-        <section id="public-view" class="fade-in">
-            
-            <div class="mb-8 text-center sm:text-left">
-                <h2 class="text-3xl font-bold text-navy mb-2">2026 Summer Season Schedule Hub</h2>
-                <p class="text-slate-600 max-w-3xl">Welcome to the official 2026 Summer Season Schedule Hub for Brooke County NFL Flag Football. Use the filters below to quickly find games by date, division, team, field, or status.</p>
-            </div>
+      <div class="mt-12 bg-lightBlue p-6 rounded-xl border border-sky-200">
+        <h3 class="text-xl font-bold text-navy mb-4">Field Information & Directions</h3>
 
-            <!-- Alerts Section -->
-            <div id="alertsContainer" class="space-y-4 mb-8">
-                <!-- Populated via Firebase -->
-            </div>
+        <div class="grid md:grid-cols-2 gap-6 text-slate-700">
+          <div>
+            <ul class="space-y-2">
+              <li><strong>Field 1:</strong> Peewee / Front Field</li>
+              <li><strong>Field 2:</strong> Junior/Senior / Back Field</li>
+            </ul>
+          </div>
 
-            <!-- Filters -->
-            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-8">
-                <h3 class="font-semibold text-slate-700 mb-3 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
-                    Filter Games
-                </h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-                    <input type="text" id="filterSearch" placeholder="Search teams..." class="lg:col-span-2">
-                    <select id="filterDivision">
-                        <option value="">All Divisions</option>
-                        <option value="Peewee">Peewee</option>
-                        <option value="Junior">Junior</option>
-                        <option value="Senior">Senior</option>
-                    </select>
-                    <select id="filterField">
-                        <option value="">All Fields</option>
-                        <option value="Field 1 — Peewee / Front Field">Field 1</option>
-                        <option value="Field 2 — Junior/Senior / Back Field">Field 2</option>
-                    </select>
-                    <select id="filterStatus">
-                        <option value="">All Statuses</option>
-                        <option value="Scheduled">Scheduled</option>
-                        <option value="Updated">Updated</option>
-                        <option value="Postponed">Postponed</option>
-                        <option value="Canceled">Canceled</option>
-                        <option value="Final">Final</option>
-                    </select>
-                    <select id="filterDate">
-                        <option value="">All Dates</option>
-                        <!-- Dynamic dates populated via JS -->
-                    </select>
-                </div>
-            </div>
-
-            <!-- Schedule List -->
-            <div id="scheduleContainer" class="space-y-8 min-h-[300px]">
-                <div class="text-center text-slate-500 py-12">Loading schedule from database...</div>
-            </div>
-
-            <!-- Field Info -->
-            <div class="mt-12 bg-lightBlue p-6 rounded-xl border border-sky-200">
-                <h3 class="text-xl font-bold text-navy mb-4">Field Information & Directions</h3>
-                <div class="grid md:grid-cols-2 gap-6 text-slate-700">
-                    <div>
-                        <ul class="space-y-2">
-                            <li><strong>Field 1:</strong> Peewee / Front Field</li>
-                            <li><strong>Field 2:</strong> Junior/Senior / Back Field</li>
-                        </ul>
-                    </div>
-                    <div class="bg-white/60 p-4 rounded-lg text-sm">
-                        <p><strong>Location Note:</strong> Please use the official <em>Wellsburg Riverfront Fields / 4th Ward Park area</em> for directions.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center mt-8">
-                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="btn btn-outline text-sm">↑ Back to Top</button>
-            </div>
-        </section>
-
-        <!-- ============================================== -->
-        <!-- ADMIN VIEW                                     -->
-        <!-- ============================================== -->
-        <section id="admin-view" class="hidden fade-in">
-            
-            <!-- Login State -->
-            <div id="loginSection" class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-md border border-slate-200 mt-12">
-                <h2 class="text-2xl font-bold text-navy mb-6 text-center">Admin Login</h2>
-                <div id="loginError" class="hidden bg-red-100 text-red-700 p-3 rounded mb-4 text-sm"></div>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700">Email</label>
-                        <input type="email" id="adminEmail" placeholder="admin@example.com">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700">Password</label>
-                        <input type="password" id="adminPassword" placeholder="••••••••">
-                    </div>
-                    <button id="btnLogin" class="btn w-full mt-4">Log In</button>
-                </div>
-            </div>
-
-            <!-- Dashboard State -->
-            <div id="dashboardSection" class="hidden">
-                <div class="flex flex-col sm:flex-row justify-between items-center mb-8 border-b border-slate-200 pb-4">
-                    <div>
-                        <h2 class="text-3xl font-bold text-navy">Admin Dashboard</h2>
-                        <p class="text-slate-500 text-sm">Manage schedule and site updates.</p>
-                    </div>
-                    <button id="btnLogout" class="btn btn-outline mt-4 sm:mt-0">Logout</button>
-                </div>
-
-                <div class="grid lg:grid-cols-3 gap-8">
-                    <!-- Left Column: Forms -->
-                    <div class="lg:col-span-1 space-y-8">
-                        
-                        <!-- Site Updates Form -->
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                            <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">Site Alerts</h3>
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-700">Schedule Alert (Red box)</label>
-                                    <textarea id="editScheduleAlert" rows="3" placeholder="Important schedule changes..."></textarea>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-700">Weather/Cancellation Update (Blue box)</label>
-                                    <textarea id="editWeatherUpdate" rows="3" placeholder="Weather conditions..."></textarea>
-                                </div>
-                                <button id="btnSaveAlerts" class="btn w-full">Update Alerts</button>
-                            </div>
-                        </div>
-
-                        <!-- Game Form -->
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                            <h3 id="gameFormTitle" class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">Add New Game</h3>
-                            <input type="hidden" id="gameId">
-                            <div class="space-y-3">
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div>
-                                        <label class="block text-sm font-medium text-slate-700">Date</label>
-                                        <input type="date" id="gameDate">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-slate-700">Time</label>
-                                        <input type="text" id="gameTime" placeholder="e.g. 1:00 PM">
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-700">Division</label>
-                                    <select id="gameDivision">
-                                        <option value="Peewee">Peewee</option>
-                                        <option value="Junior">Junior</option>
-                                        <option value="Senior">Senior</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-700">Field</label>
-                                    <select id="gameField">
-                                        <option value="Field 1 — Peewee / Front Field">Field 1 — Peewee / Front Field</option>
-                                        <option value="Field 2 — Junior/Senior / Back Field">Field 2 — Junior/Senior / Back Field</option>
-                                    </select>
-                                </div>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div>
-                                        <label class="block text-sm font-medium text-slate-700">Away Team</label>
-                                        <input type="text" id="awayTeam" placeholder="Away">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-slate-700">Home Team</label>
-                                        <input type="text" id="homeTeam" placeholder="Home">
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-700">Status</label>
-                                    <select id="gameStatus">
-                                        <option value="Scheduled">Scheduled</option>
-                                        <option value="Updated">Updated</option>
-                                        <option value="Postponed">Postponed</option>
-                                        <option value="Canceled">Canceled</option>
-                                        <option value="Final">Final</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-700">Notes (Optional)</label>
-                                    <input type="text" id="gameNotes" placeholder="e.g. Moved from May 3">
-                                </div>
-                                <div class="pt-2 flex gap-2">
-                                    <button id="btnSaveGame" class="btn flex-1">Save Game</button>
-                                    <button id="btnCancelEdit" class="btn btn-outline hidden">Cancel</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Bulk CSV Import -->
-                        <div class="bg-indigo-50 p-6 rounded-xl shadow-sm border border-indigo-200">
-                            <h3 class="text-lg font-bold text-indigo-900 mb-2 border-b border-indigo-200 pb-2">Bulk Import (CSV)</h3>
-                            <p class="text-xs text-indigo-700 mb-4">Upload the <strong>"Public Schedule.csv"</strong> file to automatically import all games into the database.</p>
-                            <input type="file" id="csvFileInput" accept=".csv" class="mb-3 text-sm">
-                            <button id="btnImportCsv" class="btn w-full !bg-indigo-700 hover:!bg-indigo-800">Import Games</button>
-                            <div id="importStatus" class="mt-3 text-sm font-semibold text-center"></div>
-                        </div>
-
-                    </div>
-
-                    <!-- Right Column: Game List -->
-                    <div class="lg:col-span-2">
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                            <div class="flex justify-between items-center mb-4 border-b pb-2">
-                                <h3 class="text-lg font-bold text-slate-800">Manage Games</h3>
-                                <button id="btnDeleteAll" class="text-sm text-red-600 hover:text-red-800 font-medium hidden">Delete All Games</button>
-                            </div>
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-left text-sm whitespace-nowrap">
-                                    <thead class="bg-slate-50 text-slate-600">
-                                        <tr>
-                                            <th class="p-3">Date/Time</th>
-                                            <th class="p-3">Teams</th>
-                                            <th class="p-3">Div/Field</th>
-                                            <th class="p-3">Status</th>
-                                            <th class="p-3 text-right">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="adminGameList" class="divide-y divide-slate-100">
-                                        <tr><td colspan="5" class="p-4 text-center text-slate-500">Loading games...</td></tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="bg-navy text-white py-6 mt-auto">
-        <div class="max-w-5xl mx-auto px-4 text-center text-sm text-slate-400">
-            &copy; 2026 Brooke County NFL Flag Football. All rights reserved.
+          <div class="bg-white/60 p-4 rounded-lg text-sm">
+            <p>
+              <strong>Location Note:</strong>
+              Please use the official <em>Wellsburg Riverfront Fields / 4th Ward Park area</em> for directions.
+              Do not use Brooke Hills Park for directions.
+            </p>
+          </div>
         </div>
-    </footer>
+      </div>
 
-    <!-- FIREBASE AND APP LOGIC -->
-    <script type="module">
-        // 1. IMPORT FIREBASE MODULAR SDK
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, getDocs, doc, setDoc, addDoc, deleteDoc, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+      <div class="text-center mt-8">
+        <button id="btnBackToTop" class="btn btn-outline text-sm">↑ Back to Top</button>
+      </div>
+    </section>
 
-        // =========================================================================
-        // PLACEHOLDER FIREBASE CONFIG
-        // Replace these values with your actual Firebase Project config!
-        // =========================================================================
-        export const firebaseConfig = {
-            apiKey: "PASTE_YOUR_API_KEY_HERE",
-            authDomain: "PASTE_YOUR_PROJECT.firebaseapp.com",
-            projectId: "PASTE_YOUR_PROJECT_ID",
-            storageBucket: "PASTE_YOUR_PROJECT.appspot.com",
-            messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID",
-            appId: "PASTE_YOUR_APP_ID"
-        };
-        // =========================================================================
+    <!-- ADMIN VIEW -->
+    <section id="admin-view" class="hidden fade-in">
 
-        // Initialize Firebase
-        let app, db, auth;
+      <div id="loginSection" class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-md border border-slate-200 mt-12">
+        <h2 class="text-2xl font-bold text-navy mb-6 text-center">Admin Login</h2>
+
+        <div id="loginError" class="hidden bg-red-100 text-red-700 p-3 rounded mb-4 text-sm"></div>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-700">Email</label>
+            <input type="email" id="adminEmail" placeholder="admin@example.com" />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700">Password</label>
+            <input type="password" id="adminPassword" placeholder="••••••••" />
+          </div>
+
+          <button id="btnLogin" class="btn w-full mt-4">Log In</button>
+        </div>
+      </div>
+
+      <div id="dashboardSection" class="hidden">
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-8 border-b border-slate-200 pb-4">
+          <div>
+            <h2 class="text-3xl font-bold text-navy">Admin Dashboard</h2>
+            <p class="text-slate-500 text-sm">Manage schedule and site updates.</p>
+          </div>
+
+          <button id="btnLogout" class="btn btn-outline mt-4 sm:mt-0">Logout</button>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+
+          <div class="lg:col-span-1 space-y-8">
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+              <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">Site Alerts</h3>
+
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-slate-700">Schedule Alert</label>
+                  <textarea id="editScheduleAlert" rows="3"></textarea>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-slate-700">Weather/Cancellation Update</label>
+                  <textarea id="editWeatherUpdate" rows="3"></textarea>
+                </div>
+
+                <button id="btnSaveAlerts" class="btn w-full">Update Alerts</button>
+              </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+              <h3 id="gameFormTitle" class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">Add New Game</h3>
+
+              <input type="hidden" id="gameId" />
+
+              <div class="space-y-3">
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-sm font-medium text-slate-700">Date</label>
+                    <input type="date" id="gameDate" />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-slate-700">Time</label>
+                    <input type="text" id="gameTime" placeholder="1:00 PM" />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-slate-700">Division</label>
+                  <select id="gameDivision">
+                    <option value="Peewee">Peewee</option>
+                    <option value="Junior">Junior</option>
+                    <option value="Senior">Senior</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-slate-700">Field</label>
+                  <select id="gameField">
+                    <option value="Field 1 — Peewee / Front Field">Field 1 — Peewee / Front Field</option>
+                    <option value="Field 2 — Junior/Senior / Back Field">Field 2 — Junior/Senior / Back Field</option>
+                  </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-sm font-medium text-slate-700">Away Team</label>
+                    <input type="text" id="awayTeam" placeholder="Away" />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-slate-700">Home Team</label>
+                    <input type="text" id="homeTeam" placeholder="Home" />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-slate-700">Status</label>
+                  <select id="gameStatus">
+                    <option value="Scheduled">Scheduled</option>
+                    <option value="Updated">Updated</option>
+                    <option value="Postponed">Postponed</option>
+                    <option value="Canceled">Canceled</option>
+                    <option value="Final">Final</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-slate-700">Notes</label>
+                  <input type="text" id="gameNotes" placeholder="Optional note" />
+                </div>
+
+                <div class="pt-2 flex gap-2">
+                  <button id="btnSaveGame" class="btn flex-1">Save Game</button>
+                  <button id="btnCancelEdit" class="btn btn-outline hidden">Cancel</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-indigo-50 p-6 rounded-xl shadow-sm border border-indigo-200">
+              <h3 class="text-lg font-bold text-indigo-900 mb-2 border-b border-indigo-200 pb-2">Bulk Import CSV</h3>
+              <p class="text-xs text-indigo-700 mb-4">
+                CSV columns should be: Date, Day, Time, Field, Division, Away, Home
+              </p>
+
+              <input type="file" id="csvFileInput" accept=".csv" class="mb-3 text-sm" />
+              <button id="btnImportCsv" class="btn w-full !bg-indigo-700 hover:!bg-indigo-800">Import Games</button>
+              <div id="importStatus" class="mt-3 text-sm font-semibold text-center"></div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-2">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+              <div class="flex justify-between items-center mb-4 border-b pb-2">
+                <h3 class="text-lg font-bold text-slate-800">Manage Games</h3>
+                <button id="btnDeleteAll" class="text-sm text-red-600 hover:text-red-800 font-medium hidden">
+                  Delete All Games
+                </button>
+              </div>
+
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm whitespace-nowrap">
+                  <thead class="bg-slate-50 text-slate-600">
+                    <tr>
+                      <th class="p-3">Date/Time</th>
+                      <th class="p-3">Teams</th>
+                      <th class="p-3">Div/Field</th>
+                      <th class="p-3">Status</th>
+                      <th class="p-3 text-right">Actions</th>
+                    </tr>
+                  </thead>
+
+                  <tbody id="adminGameList" class="divide-y divide-slate-100">
+                    <tr>
+                      <td colspan="5" class="p-4 text-center text-slate-500">Loading games...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-navy text-white py-6 mt-auto">
+    <div class="max-w-5xl mx-auto px-4 text-center text-sm text-slate-400">
+      &copy; 2026 Brooke County NFL Flag Football. All rights reserved.
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+    import {
+      getFirestore,
+      collection,
+      doc,
+      setDoc,
+      addDoc,
+      deleteDoc,
+      serverTimestamp,
+      onSnapshot
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAX09dEYmWX3ex4QBBdKCmSi-69vBf7HnQ",
+      authDomain: "bcnfl-dd46b.firebaseapp.com",
+      projectId: "bcnfl-dd46b",
+      storageBucket: "bcnfl-dd46b.firebasestorage.app",
+      messagingSenderId: "386684761741",
+      appId: "1:386684761741:web:3db2b172232551a88214c4"
+    };
+
+    let app;
+    let db;
+    let auth;
+
+    let allGames = [];
+    let siteUpdateData = {
+      scheduleAlert: "All games originally scheduled for Sunday, May 3, 2026 have been moved to Sunday, May 17, 2026.",
+      weatherUpdate: "All games are currently scheduled as planned."
+    };
+    let currentUser = null;
+
+    const publicView = document.getElementById("public-view");
+    const adminView = document.getElementById("admin-view");
+    const scheduleContainer = document.getElementById("scheduleContainer");
+    const connectionError = document.getElementById("connectionError");
+
+    function showConnectionError(message) {
+      connectionError.textContent = message;
+      connectionError.classList.remove("hidden");
+    }
+
+    function hideConnectionError() {
+      connectionError.classList.add("hidden");
+      connectionError.textContent = "";
+    }
+
+    try {
+      app = initializeApp(firebaseConfig);
+      db = getFirestore(app);
+      auth = getAuth(app);
+      hideConnectionError();
+    } catch (error) {
+      console.error("Firebase initialization error:", error);
+      showConnectionError("Firebase did not connect. Check your firebaseConfig in the code.");
+    }
+
+    function safeText(value) {
+      return String(value || "").trim();
+    }
+
+    function handleRoute() {
+      if (window.location.hash === "#admin") {
+        publicView.classList.add("hidden");
+        adminView.classList.remove("hidden");
+      } else {
+        adminView.classList.add("hidden");
+        publicView.classList.remove("hidden");
+        renderPublicGames();
+      }
+    }
+
+    window.addEventListener("hashchange", handleRoute);
+    handleRoute();
+
+    function renderAlerts() {
+      const container = document.getElementById("alertsContainer");
+      container.innerHTML = "";
+
+      if (safeText(siteUpdateData.scheduleAlert)) {
+        container.innerHTML += `
+          <div class="bg-red-50 border-l-4 border-redAccent p-4 rounded-r-md shadow-sm">
+            <h3 class="text-sm font-bold text-red-800">Important Schedule Alert</h3>
+            <p class="mt-2 text-sm text-red-700">${siteUpdateData.scheduleAlert}</p>
+          </div>
+        `;
+      }
+
+      if (safeText(siteUpdateData.weatherUpdate)) {
+        container.innerHTML += `
+          <div class="bg-sky-50 border-l-4 border-sky-400 p-4 rounded-r-md shadow-sm">
+            <h3 class="text-sm font-bold text-sky-800">Weather & Update Center</h3>
+            <p class="mt-2 text-sm text-sky-700">${siteUpdateData.weatherUpdate}</p>
+          </div>
+        `;
+      }
+    }
+
+    function formatDate(dateValue) {
+      if (!dateValue) return "Date TBD";
+
+      const d = new Date(dateValue + "T12:00:00");
+
+      if (isNaN(d.getTime())) {
+        return dateValue;
+      }
+
+      return d.toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric"
+      });
+    }
+
+    function populateDateFilter() {
+      const dateSelect = document.getElementById("filterDate");
+      const currentValue = dateSelect.value;
+
+      const uniqueDates = [...new Set(allGames.map(g => safeText(g.date)).filter(Boolean))].sort();
+
+      dateSelect.innerHTML = `<option value="">All Dates</option>`;
+
+      uniqueDates.forEach(date => {
+        const label = formatDate(date);
+        dateSelect.innerHTML += `<option value="${date}">${label}</option>`;
+      });
+
+      dateSelect.value = currentValue;
+    }
+
+    function getFilteredGames() {
+      const sSearch = safeText(document.getElementById("filterSearch").value).toLowerCase();
+      const sDiv = document.getElementById("filterDivision").value;
+      const sField = document.getElementById("filterField").value;
+      const sStatus = document.getElementById("filterStatus").value;
+      const sDate = document.getElementById("filterDate").value;
+
+      return allGames.filter(g => {
+        const home = safeText(g.homeTeam).toLowerCase();
+        const away = safeText(g.awayTeam).toLowerCase();
+        const division = safeText(g.division);
+        const field = safeText(g.field);
+        const status = safeText(g.status || "Scheduled");
+        const date = safeText(g.date);
+
+        if (sSearch && !home.includes(sSearch) && !away.includes(sSearch) && !field.toLowerCase().includes(sSearch)) return false;
+        if (sDiv && division !== sDiv) return false;
+        if (sField && field !== sField) return false;
+        if (sStatus && status !== sStatus) return false;
+        if (sDate && date !== sDate) return false;
+
+        return true;
+      });
+    }
+
+    function renderPublicGames() {
+      if (!scheduleContainer) return;
+      if (window.location.hash === "#admin") return;
+
+      const filtered = getFilteredGames();
+
+      scheduleContainer.innerHTML = "";
+
+      if (filtered.length === 0) {
+        scheduleContainer.innerHTML = `
+          <div class="bg-white p-8 rounded-xl border border-slate-200 text-center shadow-sm">
+            <div class="text-5xl mb-4 text-slate-300">☹</div>
+            <h3 class="mt-2 text-lg font-medium text-slate-900">No games found</h3>
+            <p class="mt-1 text-slate-500">
+              The database is currently empty or no games match your filters.
+            </p>
+            <button id="btnClearFilters" class="mt-4 text-sky-600 hover:text-sky-800 font-medium">
+              Clear Filters
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      const grouped = {};
+
+      filtered.forEach(g => {
+        const date = safeText(g.date) || "Date TBD";
+        if (!grouped[date]) grouped[date] = [];
+        grouped[date].push(g);
+      });
+
+      Object.keys(grouped).sort().forEach(date => {
+        const games = grouped[date];
+
+        let groupHTML = `
+          <div class="mb-8">
+            <h3 class="text-xl font-bold text-navy mb-4 border-b-2 border-slate-200 pb-2">${formatDate(date)}</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        `;
+
+        games.forEach(g => {
+          const status = safeText(g.status || "Scheduled");
+          const statusClass = `badge-${status}`;
+          const cardClass = status === "Canceled" || status === "Postponed"
+            ? `card-${status}`
+            : "bg-white shadow-sm border-slate-200";
+
+          const field = safeText(g.field);
+          const shortField = field.includes("—") ? field.split("—")[0].trim() : field;
+
+          const notesHtml = safeText(g.notes)
+            ? `<div class="mt-3 text-sm text-red-600 bg-red-50 p-2 rounded border border-red-100"><strong>Note:</strong> ${g.notes}</div>`
+            : "";
+
+          groupHTML += `
+            <div class="${cardClass} border rounded-xl p-5 hover:shadow-md transition relative overflow-hidden">
+              <div class="flex justify-between items-start mb-3 gap-3">
+                <div>
+                  <span class="text-slate-500 text-sm font-semibold">${safeText(g.time) || "Time TBD"}</span>
+                  <span class="mx-2 text-slate-300">|</span>
+                  <span class="text-sky-700 text-sm font-bold">${safeText(g.division) || "Division TBD"}</span>
+                </div>
+
+                <span class="badge ${statusClass}">${status}</span>
+              </div>
+
+              <div class="flex flex-col gap-1 my-4">
+                <div class="flex justify-between items-center bg-slate-50 p-2 rounded text-lg font-bold text-navy gap-3">
+                  <span>Away:</span>
+                  <span class="text-slate-600 text-right">${safeText(g.awayTeam) || "Away Team"}</span>
+                </div>
+
+                <div class="flex justify-between items-center bg-slate-50 p-2 rounded text-lg font-bold text-navy gap-3">
+                  <span>Home:</span>
+                  <span class="text-right">${safeText(g.homeTeam) || "Home Team"}</span>
+                </div>
+              </div>
+
+              <div class="text-sm text-slate-500">
+                📍 ${shortField || "Field TBD"}
+              </div>
+
+              ${notesHtml}
+            </div>
+          `;
+        });
+
+        groupHTML += `
+            </div>
+          </div>
+        `;
+
+        scheduleContainer.innerHTML += groupHTML;
+      });
+    }
+
+    function renderAdminGames() {
+      const tbody = document.getElementById("adminGameList");
+      const btnDeleteAll = document.getElementById("btnDeleteAll");
+
+      tbody.innerHTML = "";
+
+      if (allGames.length === 0) {
+        btnDeleteAll.classList.add("hidden");
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" class="p-4 text-center text-slate-500">
+              No games found. Add one or import a CSV.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      btnDeleteAll.classList.remove("hidden");
+
+      allGames.forEach(g => {
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+          <td class="p-3 border-t border-slate-100">
+            <div class="font-medium text-navy">${safeText(g.date)}</div>
+            <div class="text-xs text-slate-500">${safeText(g.time)}</div>
+          </td>
+
+          <td class="p-3 border-t border-slate-100 font-semibold">
+            <span class="text-slate-600">${safeText(g.awayTeam)}</span>
+            @
+            <span class="text-navy">${safeText(g.homeTeam)}</span>
+          </td>
+
+          <td class="p-3 border-t border-slate-100">
+            <div>${safeText(g.division)}</div>
+            <div class="text-xs text-slate-500 truncate max-w-[150px]">${safeText(g.field)}</div>
+          </td>
+
+          <td class="p-3 border-t border-slate-100">
+            <span class="badge badge-${safeText(g.status || "Scheduled")}">${safeText(g.status || "Scheduled")}</span>
+          </td>
+
+          <td class="p-3 border-t border-slate-100 text-right space-x-2">
+            <button class="text-sky-600 hover:underline font-medium text-sm btn-edit">Edit</button>
+            <button class="text-redAccent hover:underline font-medium text-sm btn-delete">Delete</button>
+          </td>
+        `;
+
+        tr.querySelector(".btn-edit").addEventListener("click", () => loadGameIntoForm(g));
+        tr.querySelector(".btn-delete").addEventListener("click", () => deleteGame(g.id));
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function loadGameIntoForm(g) {
+      document.getElementById("gameFormTitle").textContent = "Edit Game";
+      document.getElementById("gameId").value = g.id;
+      document.getElementById("gameDate").value = safeText(g.date);
+      document.getElementById("gameTime").value = safeText(g.time);
+      document.getElementById("gameDivision").value = safeText(g.division) || "Junior";
+      document.getElementById("gameField").value = safeText(g.field) || "Field 2 — Junior/Senior / Back Field";
+      document.getElementById("homeTeam").value = safeText(g.homeTeam);
+      document.getElementById("awayTeam").value = safeText(g.awayTeam);
+      document.getElementById("gameStatus").value = safeText(g.status) || "Scheduled";
+      document.getElementById("gameNotes").value = safeText(g.notes);
+
+      document.getElementById("btnSaveGame").textContent = "Save Changes";
+      document.getElementById("btnCancelEdit").classList.remove("hidden");
+      document.getElementById("gameFormTitle").scrollIntoView({ behavior: "smooth" });
+    }
+
+    function resetGameForm() {
+      document.getElementById("gameFormTitle").textContent = "Add New Game";
+      document.getElementById("gameId").value = "";
+      document.getElementById("gameDate").value = "";
+      document.getElementById("gameTime").value = "";
+      document.getElementById("gameDivision").value = "Peewee";
+      document.getElementById("gameField").value = "Field 1 — Peewee / Front Field";
+      document.getElementById("homeTeam").value = "";
+      document.getElementById("awayTeam").value = "";
+      document.getElementById("gameStatus").value = "Scheduled";
+      document.getElementById("gameNotes").value = "";
+
+      document.getElementById("btnSaveGame").textContent = "Save Game";
+      document.getElementById("btnCancelEdit").classList.add("hidden");
+    }
+
+    async function deleteGame(id) {
+      if (!currentUser) return;
+
+      if (!confirm("Are you sure you want to delete this game?")) return;
+
+      try {
+        await deleteDoc(doc(db, "games", id));
+      } catch (error) {
+        console.error(error);
+        alert("Failed to delete game.");
+      }
+    }
+
+    function attachListeners() {
+      ["filterSearch", "filterDivision", "filterField", "filterStatus", "filterDate"].forEach(id => {
+        document.getElementById(id).addEventListener("input", renderPublicGames);
+      });
+
+      scheduleContainer.addEventListener("click", event => {
+        if (event.target && event.target.id === "btnClearFilters") {
+          document.getElementById("filterSearch").value = "";
+          document.getElementById("filterDivision").value = "";
+          document.getElementById("filterField").value = "";
+          document.getElementById("filterStatus").value = "";
+          document.getElementById("filterDate").value = "";
+          renderPublicGames();
+        }
+      });
+
+      document.getElementById("btnBackToTop").addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      document.getElementById("btnLogin").addEventListener("click", async () => {
+        const email = document.getElementById("adminEmail").value;
+        const pass = document.getElementById("adminPassword").value;
+        const errDiv = document.getElementById("loginError");
+
         try {
-            app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
-        } catch (e) {
-            console.error("Firebase Init Error (Check config): ", e);
+          await signInWithEmailAndPassword(auth, email, pass);
+          errDiv.classList.add("hidden");
+        } catch (error) {
+          errDiv.textContent = error.message;
+          errDiv.classList.remove("hidden");
+        }
+      });
+
+      document.getElementById("btnLogout").addEventListener("click", () => {
+        signOut(auth);
+      });
+
+      document.getElementById("btnSaveAlerts").addEventListener("click", async () => {
+        if (!currentUser) return;
+
+        const btn = document.getElementById("btnSaveAlerts");
+        btn.textContent = "Saving...";
+
+        try {
+          await setDoc(doc(db, "siteUpdates", "main"), {
+            scheduleAlert: document.getElementById("editScheduleAlert").value,
+            weatherUpdate: document.getElementById("editWeatherUpdate").value,
+            updatedAt: serverTimestamp()
+          });
+
+          btn.textContent = "Saved!";
+          setTimeout(() => btn.textContent = "Update Alerts", 2000);
+        } catch (error) {
+          console.error(error);
+          alert("Failed to save alerts.");
+          btn.textContent = "Update Alerts";
+        }
+      });
+
+      document.getElementById("btnSaveGame").addEventListener("click", async () => {
+        if (!currentUser) return;
+
+        const gameId = document.getElementById("gameId").value;
+
+        const gameData = {
+          date: document.getElementById("gameDate").value,
+          time: document.getElementById("gameTime").value,
+          division: document.getElementById("gameDivision").value,
+          field: document.getElementById("gameField").value,
+          homeTeam: document.getElementById("homeTeam").value,
+          awayTeam: document.getElementById("awayTeam").value,
+          status: document.getElementById("gameStatus").value,
+          notes: document.getElementById("gameNotes").value,
+          updatedAt: serverTimestamp()
+        };
+
+        if (!gameData.date || !gameData.time || !gameData.homeTeam || !gameData.awayTeam) {
+          alert("Please fill in Date, Time, Home Team, and Away Team.");
+          return;
         }
 
-        // Global State
-        let allGames = [];
-        let siteUpdateData = {};
-        let currentUser = null;
+        const btn = document.getElementById("btnSaveGame");
+        btn.textContent = "Saving...";
 
-        // Routing Logic
-        const publicView = document.getElementById('public-view');
-        const adminView = document.getElementById('admin-view');
-        
-        function handleRoute() {
-            if (window.location.hash === '#admin') {
-                publicView.classList.add('hidden');
-                adminView.classList.remove('hidden');
-            } else {
-                adminView.classList.add('hidden');
-                publicView.classList.remove('hidden');
-                renderPublicGames(); // Re-render if coming back
-            }
+        try {
+          if (gameId) {
+            await setDoc(doc(db, "games", gameId), gameData, { merge: true });
+          } else {
+            gameData.createdAt = serverTimestamp();
+            await addDoc(collection(db, "games"), gameData);
+          }
+
+          resetGameForm();
+        } catch (error) {
+          console.error(error);
+          alert("Failed to save game.");
+        } finally {
+          btn.textContent = gameId ? "Save Changes" : "Save Game";
         }
-        window.addEventListener('hashchange', handleRoute);
-        handleRoute();
+      });
 
-        // Data Fetching and Listeners
-        if(db) {
-            // Listen to Site Updates Realtime
-            const updatesDocRef = doc(db, 'siteUpdates', 'main');
-            onSnapshot(updatesDocRef, (docSnap) => {
-                if (docSnap.exists()) {
-                    siteUpdateData = docSnap.data();
-                    renderAlerts();
-                    document.getElementById('editScheduleAlert').value = siteUpdateData.scheduleAlert || '';
-                    document.getElementById('editWeatherUpdate').value = siteUpdateData.weatherUpdate || '';
-                }
-            }, (error) => console.log("Firestore read error (Check rules):", error));
+      document.getElementById("btnCancelEdit").addEventListener("click", resetGameForm);
 
-            // Listen to Games Realtime
-            const gamesColRef = collection(db, 'games');
-            onSnapshot(gamesColRef, (snapshot) => {
-                allGames = [];
-                snapshot.forEach((doc) => {
-                    allGames.push({ id: doc.id, ...doc.data() });
-                });
-                // Sort by date then time
-                allGames.sort((a, b) => {
-                    if (a.date !== b.date) return a.date.localeCompare(b.date);
-                    return a.time.localeCompare(b.time); 
-                });
-                populateDateFilter();
-                renderPublicGames();
-                renderAdminGames();
-            }, (error) => console.log("Firestore read error:", error));
+      document.getElementById("btnImportCsv").addEventListener("click", () => {
+        if (!currentUser) return;
+
+        const fileInput = document.getElementById("csvFileInput");
+        const file = fileInput.files[0];
+        const statusDiv = document.getElementById("importStatus");
+
+        if (!file) {
+          statusDiv.textContent = "Please select a CSV file first.";
+          statusDiv.className = "mt-3 text-sm font-semibold text-red-600 text-center";
+          return;
         }
 
-        // --- PUBLIC PAGE LOGIC ---
+        statusDiv.textContent = "Parsing CSV...";
+        statusDiv.className = "mt-3 text-sm font-semibold text-indigo-600 text-center";
 
-        function renderAlerts() {
-            const container = document.getElementById('alertsContainer');
-            container.innerHTML = '';
-            
-            if (siteUpdateData.scheduleAlert && siteUpdateData.scheduleAlert.trim() !== '') {
-                container.innerHTML += `
-                    <div class="bg-red-50 border-l-4 border-redAccent p-4 rounded-r-md shadow-sm">
-                        <div class="flex">
-                            <div class="flex-shrink-0"><svg class="h-5 w-5 text-redAccent" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg></div>
-                            <div class="ml-3"><h3 class="text-sm font-medium text-red-800">Important Schedule Alert</h3>
-                                <div class="mt-2 text-sm text-red-700"><p>${siteUpdateData.scheduleAlert}</p></div>
-                            </div>
-                        </div>
-                    </div>`;
-            }
-            if (siteUpdateData.weatherUpdate && siteUpdateData.weatherUpdate.trim() !== '') {
-                container.innerHTML += `
-                    <div class="bg-sky-50 border-l-4 border-sky-400 p-4 rounded-r-md shadow-sm">
-                        <div class="flex">
-                            <div class="flex-shrink-0"><svg class="h-5 w-5 text-sky-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM9 9V5a1 1 0 112 0v4h3a1 1 0 110 2h-3v4a1 1 0 11-2 0v-4H6a1 1 0 110-2h3z" clip-rule="evenodd"/></svg></div>
-                            <div class="ml-3"><h3 class="text-sm font-medium text-sky-800">Weather & Update Center</h3>
-                                <div class="mt-2 text-sm text-sky-700"><p>${siteUpdateData.weatherUpdate}</p></div>
-                            </div>
-                        </div>
-                    </div>`;
-            }
-        }
+        Papa.parse(file, {
+          skipEmptyLines: true,
+          complete: async results => {
+            const rows = results.data;
+            let importCount = 0;
 
-        function populateDateFilter() {
-            const dateSelect = document.getElementById('filterDate');
-            const uniqueDates = [...new Set(allGames.map(g => g.date))].sort();
-            
-            dateSelect.innerHTML = '<option value="">All Dates</option>';
-            uniqueDates.forEach(date => {
-                if(!date) return;
-                const d = new Date(date + 'T12:00:00'); // Prevent timezone shift
-                const label = isNaN(d) ? date : d.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', year:'numeric'});
-                dateSelect.innerHTML += `<option value="${date}">${label}</option>`;
-            });
-        }
+            for (let i = 0; i < rows.length; i++) {
+              const row = rows[i];
 
-        function renderPublicGames() {
-            if(window.location.hash === '#admin') return;
+              if (row.length >= 7 && row[2] && (String(row[2]).includes("PM") || String(row[2]).includes("AM"))) {
+                let formattedDate = "";
 
-            const container = document.getElementById('scheduleContainer');
-            container.innerHTML = '';
-
-            const sSearch = document.getElementById('filterSearch').value.toLowerCase();
-            const sDiv = document.getElementById('filterDivision').value;
-            const sField = document.getElementById('filterField').value;
-            const sStatus = document.getElementById('filterStatus').value;
-            const sDate = document.getElementById('filterDate').value;
-
-            let filtered = allGames.filter(g => {
-                if(sSearch && !g.homeTeam.toLowerCase().includes(sSearch) && !g.awayTeam.toLowerCase().includes(sSearch)) return false;
-                if(sDiv && g.division !== sDiv) return false;
-                if(sField && g.field !== sField) return false;
-                if(sStatus && g.status !== sStatus) return false;
-                if(sDate && g.date !== sDate) return false;
-                return true;
-            });
-
-            if (filtered.length === 0) {
-                container.innerHTML = `
-                    <div class="bg-white p-8 rounded-xl border border-slate-200 text-center shadow-sm">
-                        <svg class="mx-auto h-12 w-12 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                        <h3 class="mt-2 text-lg font-medium text-slate-900">No games found</h3>
-                        <p class="mt-1 text-slate-500">The database is currently empty or no games match your filters.</p>
-                        <button onclick="document.querySelectorAll('select, input').forEach(el=>el.value=''); renderPublicGames();" class="mt-4 text-sky-600 hover:text-sky-800 font-medium">Clear Filters</button>
-                    </div>`;
-                return;
-            }
-
-            let grouped = {};
-            filtered.forEach(g => {
-                if(!grouped[g.date]) grouped[g.date] = [];
-                grouped[g.date].push(g);
-            });
-
-            for (const date in grouped) {
-                const d = new Date(date + 'T12:00:00');
-                const dateHeader = isNaN(d) ? date : d.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric', year:'numeric'});
-                
-                let groupHTML = `
-                    <div class="mb-8">
-                        <h3 class="text-xl font-bold text-navy mb-4 border-b-2 border-slate-200 pb-2">${dateHeader}</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                `;
-
-                grouped[date].forEach(g => {
-                    const statusClass = g.status && g.status !== 'Scheduled' ? `badge-${g.status}` : 'badge-Scheduled';
-                    const cardClass = g.status === 'Canceled' || g.status === 'Postponed' ? `card-${g.status}` : 'bg-white shadow-sm border-slate-200';
-                    const notesHtml = g.notes ? `<div class="mt-3 text-sm text-red-600 bg-red-50 p-2 rounded border border-red-100"><strong>Note:</strong> ${g.notes}</div>` : '';
-                    
-                    groupHTML += `
-                        <div class="${cardClass} border rounded-xl p-5 hover:shadow-md transition relative overflow-hidden">
-                            <div class="flex justify-between items-start mb-3">
-                                <div>
-                                    <span class="text-slate-500 text-sm font-semibold">${g.time}</span>
-                                    <span class="mx-2 text-slate-300">|</span>
-                                    <span class="text-sky-700 text-sm font-bold">${g.division}</span>
-                                </div>
-                                <span class="badge ${statusClass}">${g.status || 'Scheduled'}</span>
-                            </div>
-                            
-                            <div class="flex flex-col gap-1 my-4">
-                                <div class="flex justify-between items-center bg-slate-50 p-2 rounded text-lg font-bold text-navy">
-                                    <span>Away:</span> <span class="text-slate-600">${g.awayTeam}</span>
-                                </div>
-                                <div class="flex justify-between items-center bg-slate-50 p-2 rounded text-lg font-bold text-navy">
-                                    <span>Home:</span> <span>${g.homeTeam}</span>
-                                </div>
-                            </div>
-                            
-                            <div class="text-sm text-slate-500 flex items-center gap-1">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                ${g.field.split('—')[0].trim()}
-                            </div>
-                            ${notesHtml}
-                        </div>
-                    `;
-                });
-
-                groupHTML += `</div></div>`;
-                container.innerHTML += groupHTML;
-            }
-        }
-
-        ['filterSearch', 'filterDivision', 'filterField', 'filterStatus', 'filterDate'].forEach(id => {
-            document.getElementById(id).addEventListener('input', renderPublicGames);
-        });
-
-        // --- ADMIN AUTH & LOGIC ---
-
-        if(auth) {
-            onAuthStateChanged(auth, user => {
-                currentUser = user;
-                if (user) {
-                    document.getElementById('loginSection').classList.add('hidden');
-                    document.getElementById('dashboardSection').classList.remove('hidden');
-                } else {
-                    document.getElementById('loginSection').classList.remove('hidden');
-                    document.getElementById('dashboardSection').classList.add('hidden');
-                }
-            });
-        }
-
-        // Login
-        document.getElementById('btnLogin').addEventListener('click', () => {
-            const email = document.getElementById('adminEmail').value;
-            const pass = document.getElementById('adminPassword').value;
-            const errDiv = document.getElementById('loginError');
-            
-            signInWithEmailAndPassword(auth, email, pass)
-                .then(() => { errDiv.classList.add('hidden'); })
-                .catch((error) => {
-                    errDiv.textContent = error.message;
-                    errDiv.classList.remove('hidden');
-                });
-        });
-
-        document.getElementById('btnLogout').addEventListener('click', () => signOut(auth));
-
-        // Save Alerts
-        document.getElementById('btnSaveAlerts').addEventListener('click', async () => {
-            if(!currentUser) return;
-            const btn = document.getElementById('btnSaveAlerts');
-            btn.textContent = 'Saving...';
-            try {
-                await setDoc(doc(db, 'siteUpdates', 'main'), {
-                    scheduleAlert: document.getElementById('editScheduleAlert').value,
-                    weatherUpdate: document.getElementById('editWeatherUpdate').value,
-                    updatedAt: serverTimestamp()
-                });
-                btn.textContent = 'Saved!';
-                setTimeout(() => btn.textContent = 'Update Alerts', 2000);
-            } catch (error) {
-                alert("Failed to save alerts.");
-                btn.textContent = 'Update Alerts';
-            }
-        });
-
-        // Save Individual Game
-        document.getElementById('btnSaveGame').addEventListener('click', async () => {
-            if(!currentUser) return;
-            
-            const gameId = document.getElementById('gameId').value;
-            const gameData = {
-                date: document.getElementById('gameDate').value,
-                time: document.getElementById('gameTime').value,
-                division: document.getElementById('gameDivision').value,
-                field: document.getElementById('gameField').value,
-                homeTeam: document.getElementById('homeTeam').value,
-                awayTeam: document.getElementById('awayTeam').value,
-                status: document.getElementById('gameStatus').value,
-                notes: document.getElementById('gameNotes').value,
-                updatedAt: serverTimestamp()
-            };
-
-            if(!gameData.date || !gameData.time || !gameData.homeTeam || !gameData.awayTeam) {
-                alert("Please fill in Date, Time, Home, and Away teams.");
-                return;
-            }
-
-            const btn = document.getElementById('btnSaveGame');
-            btn.textContent = 'Saving...';
-
-            try {
-                if (gameId) {
-                    await setDoc(doc(db, 'games', gameId), gameData, { merge: true });
-                } else {
-                    gameData.createdAt = serverTimestamp();
-                    await addDoc(collection(db, 'games'), gameData);
-                }
-                resetGameForm();
-            } catch(e) {
-                alert("Failed to save game.");
-            } finally {
-                btn.textContent = 'Save Game';
-            }
-        });
-
-        // --- BULK CSV IMPORT LOGIC ---
-        document.getElementById('btnImportCsv').addEventListener('click', () => {
-            if(!currentUser) return;
-            const fileInput = document.getElementById('csvFileInput');
-            const file = fileInput.files[0];
-            const statusDiv = document.getElementById('importStatus');
-
-            if (!file) {
-                statusDiv.textContent = "Please select a CSV file first.";
-                statusDiv.className = "mt-3 text-sm font-semibold text-red-600 text-center";
-                return;
-            }
-
-            statusDiv.textContent = "Parsing CSV...";
-            statusDiv.className = "mt-3 text-sm font-semibold text-indigo-600 text-center";
-
-            Papa.parse(file, {
-                complete: async function(results) {
-                    const rows = results.data;
-                    let importCount = 0;
-                    statusDiv.textContent = `Found ${rows.length} rows. Importing to database...`;
-
-                    for (let i = 0; i < rows.length; i++) {
-                        const row = rows[i];
-                        
-                        // Validate this row looks like a game (must have at least 7 columns and contain AM/PM in time slot)
-                        // Based on the format: Date, Day, Time, Field, Division, Away, Home
-                        if (row.length >= 7 && row[2] && (row[2].includes("PM") || row[2].includes("AM"))) {
-                            
-                            // Convert Date text like "Sat, Jun 27, 2026" to HTML5 Input format "2026-06-27"
-                            let formattedDate = "";
-                            try {
-                                const d = new Date(row[0]);
-                                if (!isNaN(d.getTime())) {
-                                    formattedDate = d.toISOString().split('T')[0];
-                                } else {
-                                    formattedDate = row[0]; // fallback
-                                }
-                            } catch(e) {
-                                formattedDate = row[0]; // fallback
-                            }
-
-                            const gameData = {
-                                date: formattedDate,
-                                time: row[2].trim(),
-                                field: row[3].trim(),
-                                division: row[4].trim(),
-                                awayTeam: row[5].trim(),
-                                homeTeam: row[6].trim(),
-                                status: "Scheduled",
-                                notes: "",
-                                createdAt: serverTimestamp(),
-                                updatedAt: serverTimestamp()
-                            };
-
-                            try {
-                                await addDoc(collection(db, 'games'), gameData);
-                                importCount++;
-                            } catch(e) {
-                                console.error("Error adding row", i, e);
-                            }
-                        }
-                    }
-                    statusDiv.textContent = `Success! Imported ${importCount} games.`;
-                    statusDiv.className = "mt-3 text-sm font-semibold text-green-600 text-center";
-                    fileInput.value = ""; 
-                }
-            });
-        });
-
-        // Delete All Games (Helper)
-        document.getElementById('btnDeleteAll').addEventListener('click', async () => {
-            if(!currentUser) return;
-            if(confirm("Are you sure you want to delete ALL games? This cannot be undone.")) {
-                const btn = document.getElementById('btnDeleteAll');
-                btn.textContent = "Deleting...";
                 try {
-                    for(const g of allGames) {
-                        await deleteDoc(doc(db, 'games', g.id));
-                    }
-                } catch(e) {}
-                btn.textContent = "Delete All Games";
-            }
-        });
-
-        // Render Admin Table
-        function renderAdminGames() {
-            const tbody = document.getElementById('adminGameList');
-            const btnDeleteAll = document.getElementById('btnDeleteAll');
-            tbody.innerHTML = '';
-            
-            if(allGames.length === 0) {
-                btnDeleteAll.classList.add('hidden');
-                tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-slate-500">No games found. Add one or import a CSV.</td></tr>';
-                return;
-            }
-
-            btnDeleteAll.classList.remove('hidden');
-
-            allGames.forEach(g => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="p-3 border-t border-slate-100">
-                        <div class="font-medium text-navy">${g.date}</div>
-                        <div class="text-xs text-slate-500">${g.time}</div>
-                    </td>
-                    <td class="p-3 border-t border-slate-100 font-semibold">
-                        <span class="text-slate-600">${g.awayTeam}</span> @ <span class="text-navy">${g.homeTeam}</span>
-                    </td>
-                    <td class="p-3 border-t border-slate-100">
-                        <div>${g.division}</div>
-                        <div class="text-xs text-slate-500 truncate max-w-[150px]">${g.field.split('—')[0]}</div>
-                    </td>
-                    <td class="p-3 border-t border-slate-100">
-                        <span class="badge badge-${g.status || 'Scheduled'}">${g.status || 'Scheduled'}</span>
-                    </td>
-                    <td class="p-3 border-t border-slate-100 text-right space-x-2">
-                        <button class="text-sky-600 hover:underline font-medium text-sm btn-edit">Edit</button>
-                        <button class="text-redAccent hover:underline font-medium text-sm btn-delete">Delete</button>
-                    </td>
-                `;
-                
-                tr.querySelector('.btn-edit').addEventListener('click', () => loadGameIntoForm(g));
-                tr.querySelector('.btn-delete').addEventListener('click', () => deleteGame(g.id));
-                tbody.appendChild(tr);
-            });
-        }
-
-        function loadGameIntoForm(g) {
-            document.getElementById('gameFormTitle').textContent = 'Edit Game';
-            document.getElementById('gameId').value = g.id;
-            document.getElementById('gameDate').value = g.date;
-            document.getElementById('gameTime').value = g.time;
-            document.getElementById('gameDivision').value = g.division;
-            document.getElementById('gameField').value = g.field;
-            document.getElementById('homeTeam').value = g.homeTeam;
-            document.getElementById('awayTeam').value = g.awayTeam;
-            document.getElementById('gameStatus').value = g.status || 'Scheduled';
-            document.getElementById('gameNotes').value = g.notes || '';
-            
-            document.getElementById('btnSaveGame').textContent = 'Save Changes';
-            document.getElementById('btnCancelEdit').classList.remove('hidden');
-            
-            document.getElementById('gameFormTitle').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function resetGameForm() {
-            document.getElementById('gameFormTitle').textContent = 'Add New Game';
-            document.getElementById('gameId').value = '';
-            document.getElementById('gameDate').value = '';
-            document.getElementById('gameTime').value = '';
-            document.getElementById('homeTeam').value = '';
-            document.getElementById('awayTeam').value = '';
-            document.getElementById('gameStatus').value = 'Scheduled';
-            document.getElementById('gameNotes').value = '';
-            
-            document.getElementById('btnSaveGame').textContent = 'Save Game';
-            document.getElementById('btnCancelEdit').classList.add('hidden');
-        }
-
-        document.getElementById('btnCancelEdit').addEventListener('click', resetGameForm);
-
-        async function deleteGame(id) {
-            if(!currentUser) return;
-            if(confirm("Are you sure you want to delete this game? This cannot be undone.")) {
-                try {
-                    await deleteDoc(doc(db, 'games', id));
-                } catch(e) {
-                    alert("Failed to delete game.");
+                  const d = new Date(row[0]);
+                  formattedDate = !isNaN(d.getTime()) ? d.toISOString().split("T")[0] : row[0];
+                } catch (error) {
+                  formattedDate = row[0];
                 }
+
+                const gameData = {
+                  date: safeText(formattedDate),
+                  time: safeText(row[2]),
+                  field: safeText(row[3]),
+                  division: safeText(row[4]),
+                  awayTeam: safeText(row[5]),
+                  homeTeam: safeText(row[6]),
+                  status: "Scheduled",
+                  notes: "",
+                  createdAt: serverTimestamp(),
+                  updatedAt: serverTimestamp()
+                };
+
+                try {
+                  await addDoc(collection(db, "games"), gameData);
+                  importCount++;
+                } catch (error) {
+                  console.error("Error adding row", i, error);
+                }
+              }
             }
+
+            statusDiv.textContent = `Success! Imported ${importCount} games.`;
+            statusDiv.className = "mt-3 text-sm font-semibold text-green-600 text-center";
+            fileInput.value = "";
+          }
+        });
+      });
+
+      document.getElementById("btnDeleteAll").addEventListener("click", async () => {
+        if (!currentUser) return;
+
+        if (!confirm("Are you sure you want to delete ALL games? This cannot be undone.")) return;
+
+        const btn = document.getElementById("btnDeleteAll");
+        btn.textContent = "Deleting...";
+
+        try {
+          for (const g of allGames) {
+            await deleteDoc(doc(db, "games", g.id));
+          }
+        } catch (error) {
+          console.error(error);
+          alert("Some games may not have deleted.");
         }
-    </script>
+
+        btn.textContent = "Delete All Games";
+      });
+    }
+
+    function startFirebaseListeners() {
+      if (!db) return;
+
+      renderAlerts();
+
+      onSnapshot(
+        doc(db, "siteUpdates", "main"),
+        snapshot => {
+          if (snapshot.exists()) {
+            siteUpdateData = snapshot.data();
+          }
+
+          renderAlerts();
+
+          const scheduleAlertBox = document.getElementById("editScheduleAlert");
+          const weatherUpdateBox = document.getElementById("editWeatherUpdate");
+
+          if (scheduleAlertBox) scheduleAlertBox.value = safeText(siteUpdateData.scheduleAlert);
+          if (weatherUpdateBox) weatherUpdateBox.value = safeText(siteUpdateData.weatherUpdate);
+        },
+        error => {
+          console.error("siteUpdates read error:", error);
+          showConnectionError("Could not read site updates from Firestore. Check Firestore rules and project config.");
+        }
+      );
+
+      onSnapshot(
+        collection(db, "games"),
+        snapshot => {
+          allGames = [];
+
+          snapshot.forEach(docSnapshot => {
+            allGames.push({
+              id: docSnapshot.id,
+              ...docSnapshot.data()
+            });
+          });
+
+          allGames.sort((a, b) => {
+            const dateCompare = safeText(a.date).localeCompare(safeText(b.date));
+            if (dateCompare !== 0) return dateCompare;
+            return safeText(a.time).localeCompare(safeText(b.time));
+          });
+
+          populateDateFilter();
+          renderPublicGames();
+          renderAdminGames();
+        },
+        error => {
+          console.error("games read error:", error);
+          showConnectionError("Could not read games from Firestore. Check Firestore rules and make sure the games collection exists.");
+          scheduleContainer.innerHTML = `
+            <div class="bg-white p-8 rounded-xl border border-slate-200 text-center shadow-sm">
+              <h3 class="text-lg font-medium text-slate-900">Could not load schedule</h3>
+              <p class="mt-1 text-slate-500">Check Firebase config, Firestore rules, and the games collection.</p>
+            </div>
+          `;
+        }
+      );
+
+      onAuthStateChanged(auth, user => {
+        currentUser = user;
+
+        if (user) {
+          document.getElementById("loginSection").classList.add("hidden");
+          document.getElementById("dashboardSection").classList.remove("hidden");
+        } else {
+          document.getElementById("loginSection").classList.remove("hidden");
+          document.getElementById("dashboardSection").classList.add("hidden");
+        }
+      });
+    }
+
+    attachListeners();
+    startFirebaseListeners();
+  </script>
 </body>
 </html>
-
-
-```
